@@ -1,0 +1,22 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <https://w3c.github.io/N3/tests/test.n3#> .
+@base <http://example.org/> .
+
+# print inferences
+{ :actual!:output^log:uri!log:semantics log:inferences ?actual } => { :actual :semantics ?actual } .
+
+
+# check output
+
+{ 	:expected!:output^log:uri log:semantics ?expected .
+	:actual!:output^log:uri!log:semantics log:inferences ?actual .
+	?actual log:includes ?expected .
+	
+} => { :actual :includes :expected } . # no missing inferences
+
+
+{ 	:expected!:output^log:uri log:semantics ?expected .
+	:actual!:output^log:uri!log:semantics log:inferences ?actual .
+	?expected log:includes ?actual .
+	
+} => { :expected :includes :actual } . # no extra inferences

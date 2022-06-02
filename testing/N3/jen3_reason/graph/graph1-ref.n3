@@ -1,0 +1,28 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<graph1.n3#test1> <graph1.n3#has> "2"^^xsd:long .
+<graph1.n3#test2>
+        <graph1.n3#has> {
+    <graph1.n3#d>
+        <graph1.n3#e> <graph1.n3#f> .
+} .
+    <graph1.n3#test5>
+        <graph1.n3#has> {
+    <graph1.n3#ed>
+        <graph1.n3#name> "ed" .
+} .
+    <graph1.n3#test3>
+        <graph1.n3#has> {
+    <graph1.n3#d>
+        <graph1.n3#e> <graph1.n3#f> .
+} .
+    <graph1.n3#test1>
+        <graph1.n3#has> "2"^^xsd:long .
+    <graph1.n3#test6>
+        <graph1.n3#has> {
+    <graph1.n3#will>
+        <graph1.n3#name> "will" .
+} .
+    <graph1.n3#test4>
+        <graph1.n3#has> {
+} .

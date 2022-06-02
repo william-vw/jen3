@@ -1,0 +1,30 @@
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix log: <http://www.w3.org/2000/10/swap/log#>
+prefix list: <http://www.w3.org/2000/10/swap/list#>
+prefix state: <http://niche.cs.dal.ca/ns/state#>
+prefix cig: <http://niche.cs.dal.ca/ns/cig_workflow.owl#>
+@prefix : <linear3.n3#> .
+
+:tA cig:conditionMet true ;
+	state:in cig:Inactive .
+	
+
+cig:Done state:unionOf ( cig:Completed cig:Discarded ) .	
+cig:Idle state:unionOf ( cig:Inactive cig:Completed cig:Discarded ) .
+cig:NotDone state:unionOf ( cig:Inactive cig:Active ) .
+
+
+{	?task state:in ?state .
+	?compositeState!state:unionOf list:member ?state .
+
+} => { ?task state:in ?compositeState } .
+
+
+{	{	?task cig:conditionMet true .
+		?composite!state:unionOf list:member cig:Inactive
+	
+	} a log:StableTruth .
+	
+	?task state:in cig:Inactive , ?composite .
+
+} log:becomes { ?task state:in cig:Active } . 

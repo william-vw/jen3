@@ -1,0 +1,19 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <linear1.n3#> .
+
+:taskA :state :Inactive ;
+	:conditionMet true ;
+	:isCool true ;
+	:isCoolioAndTheGang true .
+	
+{	?task :state :Inactive .
+	{ ?task :conditionMet true ; :isCool true } a log:StableTruth 
+
+} log:becomes { ?task :state :Active } .
+
+
+{	?task :state :Active .
+	{ ?task :isCoolioAndTheGang true } a log:StableTruth 
+
+} log:becomes { ?task :state :Completed } .

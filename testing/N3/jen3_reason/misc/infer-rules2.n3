@@ -1,0 +1,33 @@
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix math: <http://www.w3.org/2000/10/swap/math#>
+prefix : <infer-rules2.n3#>
+
+<#> rdfs:comment "Infer your own rules - more difficult cases" .
+
+
+:will :hasHR 155 .
+
+:tA :nextTask :tB .
+:tA :state :Completed .
+
+:tB :state :Inactive ;
+	:condition { :will :hasHR ?hr . ?hr math:greaterThan 150 } .
+
+
+{	?task :condition ?condition . 
+	
+} => { ?condition => { ?task :conditionMet true } } .
+
+
+{	?t1 :nextTask ?t2 . 
+	?t1 :state :Completed .
+	
+	?t2 :state :Inactive .
+
+} => { ?t2 :state :Ready } .
+
+
+{	?t :state :Ready ;
+		:conditionMet true .
+		
+} => { :test1 a :SUCCESS } .

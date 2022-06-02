@@ -1,0 +1,92 @@
+@prefix ex: <http://example.org/> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix graph: <http://www.w3.org/2000/10/swap/graph#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix test: <https://w3c.github.io/N3/tests/test.n3#> .
+@prefix rdft: <http://www.w3.org/ns/rdftest#> .
+@prefix mf:   <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
+@prefix : <clause-reorder.n3#>.
+
+<#> rdfs:comment """Test internal clause re-ordering and bindings-table. Needs to be tested manually - 
+	check output for clause sorting and how often log:semantics gets called.""" .
+
+:x :value 1 .
+:y :value 2 .
+
+:a :value 1 .
+:b :value 2, 3 .
+
+#{ (?val 1) math:sum ?sum . :x :value ?val . :y :value ?val2 } => 
+#	{ :test1 :has ?sum } .
+	
+#{ <> log:semantics ?sem . (?val 1) math:sum ?sum . :x :value ?val . :y :value ?val2 } => 
+#	{ :test2 :has ?sum } .
+	
+#{ <> log:semantics ?sem . (?val 1) math:sum ?sum . :a :value ?val . :b :value ?val2 } => 
+#	{ :test3 :has ?sum } .
+
+<#example>
+    a   test:TestN3Reason ;
+    mf:action <example.n3> ;
+    mf:result <example-ref.n3> ;
+    rdft:approval rdft:Approved .
+    
+<#example2>
+    a   test:TestN3Reason ;
+    mf:action <example2.n3> ;
+    mf:result <example2-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#example3>
+    a   test:TestN3Reason ;
+    mf:action <example3.n3> ;
+    mf:result <example3-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+#{	?reasonTest a test:TestN3Reason ;
+#		rdft:approval rdft:Approved ;
+#		mf:action ?testAction .
+#	?testAction!log:semantics log:includes { ?x <http://example.org/b> <http://example.org/c> } .
+#	
+#} => { :test4 :has ?x } .
+
+<#data-var>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <rule-data-var.n3> ;
+    mf:result <rule-data-var-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options [ test:conclusions true ] .
+
+#{	?reasonTest a test:TestN3Reason ;
+#		rdft:approval rdft:Approved ;
+#		mf:action ?testAction ;
+#		mf:result ?testResult ;
+#		test:options [ test:conclusions true ] .
+#
+#	?testAction!log:semantics log:inferences ?actualData .
+#	?testResult log:semantics ?expectedData .
+#
+#	(?actualData ?expectedData) graph:difference ?extraData .
+#	(?expectedData ?actualData) graph:difference ?missingData .
+#
+#} => { ?reasonTest :actual ?actualData ; :hasExtra ?extraData ; :hasMissing ?missingData } .
+
+
+:tests :loadComments true .
+
+{	:tests :loadComments true .
+	
+	?uri a test:TestN3Reason ;
+		mf:action ?pathUri .
+	
+	?pathUri log:uri ?path .
+	?baseUri log:uri (?path "#")!string:concatenation .
+	
+	?pathUri!log:semantics
+		log:includes { ?baseUri rdfs:comment ?comment }	.
+
+} => { ?uri rdfs:comment ?comment } .

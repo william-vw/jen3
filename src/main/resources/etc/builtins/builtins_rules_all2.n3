@@ -1,0 +1,95 @@
+{ 	?r a ?t .
+	?t rdfs:subClassOf :Restriction .
+	?s log:uri ?t .
+	(?s "List") string:concatenation ?s2 .
+	?s2 log:uri ?t2
+
+} => {
+	{ :_input_ ?p ?l . ?l log:rawType log:List . ({ ?l list:member ?m } { ?m :meets ?r }) log:forAllIn _:x } } 
+	=> 
+	{ ?l :meets ?t2 } .
+} .
+
+{ ?list :meets ?r ; list:length ?l } => { ?list :meets [ :listType ?r ; :size ?l, :anySize ] } .
+
+# propagation down
+
+{	:_builtin_ :hasInput ?i ;
+		:hasTypeRestriction ?tr .
+
+} => { ?tr :hasInput ?i } .
+
+{	?tr :hasInput ?i .
+	?tr ?p ?r . ?i ?p ?t .
+
+} => { ?r :hasInput ?t } .
+
+{	?tr :hasInput ?i ;
+		:subjectObject ?r .
+	
+} => { ?r :hasInput ?i } .
+
+{	?r :hasInput ?i .
+	?r!:oneOf list:member ?m .
+
+} => { ?m :hasInput ?i } .
+
+{	?tr :listElementType ?r ;
+		:hasInput ?i .
+	
+} => { ?r :hasInput ?i } .
+
+# checks
+
+{	?r :hasInput ?i ; 
+		:restricts ?i!:meets .
+
+} => { ?i :meets ?r } .
+
+{ 	?r :hasInput ?li ;
+		:listElements ?lr .
+	?li list:length ?lr!list:length .
+	{ (?li ?i) list:memberAt ?mi } => { (?lr ?i) list:memberAt ?mr . ?mr :restricts ?mi:!meets } log:forAllIn _:x .
+
+} => { ?li :meets ?tr } .
+
+{ 	?r :hasInput ?li ; 
+		:listElementType ?mr .
+	{ (?li ?i) list:memberAt ?mi } => { ?mr :restricts ?mi!:meets } log:forAllIn _:x .
+
+} => { ?li :meets ?tr } .
+
+## cardinalities
+
+{	?tr :type :Variable ; :exactCardinality 1 ;
+		:hasInput ?i .
+	?i :subject ?t ; :object ?t .
+	?t log:isConstant false .
+	
+} => { ?i :meets ?tr } .
+
+{	?tr :type :Variable ; :maxCardinality 1 ;
+		:hasInput ?l .
+	?l log:rawType log:List .
+	(?m { ?l list:member ?m . ?m log:isConstant false } ?sl) log:collectAllIn _:x .
+	?sl!list:length math:le 1 .
+	
+} => { ?i :meets ?tr } .
+
+# propagation up
+
+{	?r :hasInput ?i . 
+	?i :meets ?r:oneOf!list:member .
+
+} => { ?i :meets ?r } .
+
+{ 	?r :hasInput ?i .
+	?i!:subject :meets ?r!:subject .
+	?i!:object :meets ?r!:object
+
+} => { ?i :meets ?r } .
+
+{	?r :hasInput ?i .
+	?i :meets ?r!:subjectObject
+	
+} => { ?i :meets ?r } .

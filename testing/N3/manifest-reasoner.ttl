@@ -1,0 +1,653 @@
+@prefix :        <file:///home/william-vw/projects/n3/jena_n3/testing/N3/list_tests.n3#> .
+@prefix test:    <https://w3c.github.io/N3/tests/test.n3#> .
+@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
+@prefix log:     <http://www.w3.org/2000/10/swap/log#> .
+@prefix in:      <http://n3.w3c.org/builtin/input#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix list:    <http://www.w3.org/2000/10/swap/list#> .
+@prefix graph:   <http://www.w3.org/2000/10/swap/graph#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdft:    <http://www.w3.org/ns/rdftest#> .
+@prefix mf:      <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
+@prefix earl:    <https://www.w3.org/TR/EARL10-Schema/#> .
+@prefix math:    <http://www.w3.org/2000/10/swap/math#> .
+@prefix dc:      <http://purl.org/dc/terms/> .
+
+<#jen3_reason_misc_rule_head_body>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/rule_head_body.n3> ;
+    rdfs:comment "Rules where heads and/or bodies are not cited formulas" ;
+    mf:result <jen3_reason/misc/rule_head_body-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options [ test:conclusions "true"^^xsd:boolean ] .
+
+<#jen3_reason_misc_nested-clauses2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/nested-clauses2.n3> ;
+    rdfs:comment "Pulling formulas into a rule that themselves have variables - should be treated as if they were in the rule at compile-time (2)" ;
+    mf:result <jen3_reason/misc/nested-clauses2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b1 .
+
+<#jen3_reason_misc_clause-reorder1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/clause-reorder1.n3> ;
+    rdfs:comment "Internal clause re-ordering required to resolve this." ;
+    mf:result <jen3_reason/misc/clause-reorder1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b2 .
+
+<#jen3_reason_log_forallin>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/forallin.n3> ;
+    rdfs:comment "Tests for log:forAllIn" ;
+    mf:result <jen3_reason/log/forallin-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b3 .
+
+<#jen3_reason_misc_rule2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/rule2.n3> ;
+    rdfs:comment "Rules that pattern-match with collections + some chaining" ;
+    mf:result <jen3_reason/misc/rule2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b4 .
+
+_:b5  test:conclusions "true"^^xsd:boolean .
+
+#<#jen3_reason_misc_containers>
+#    a   test:TestN3Reason ;
+#    a   test:TestN3 ;
+#    a   test:TestN3Positive ;
+#    mf:action <jen3_reason/misc/containers.n3> ;
+#    rdfs:comment "Pattern-matching with containers (collections and formulas)." ;
+#    mf:result <jen3_reason/misc/containers-ref.n3> ;
+#    rdft:approval rdft:Approved ;
+#    test:options _:b6 .
+
+<#jen3_reason_misc_static-builtin-assert1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/static-builtin-assert1.n3> ;
+    mf:result <jen3_reason/misc/static-builtin-assert1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b7 .
+
+_:b8  test:conclusions "true"^^xsd:boolean .
+
+_:b9  test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_log_rawtype>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/rawtype.n3> ;
+    rdfs:comment "Tests for log:rawType" ;
+    mf:result <jen3_reason/log/rawtype-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b10 .
+
+<#jen3_reason_misc_gen-bnodes>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/gen-bnodes.n3> ;
+    mf:result <jen3_reason/misc/gen-bnodes-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b11 .
+
+_:b6  test:conclusions "true"^^xsd:boolean .
+
+_:b12
+    test:conclusions "true"^^xsd:boolean .
+
+_:b13
+    test:conclusions "true"^^xsd:boolean .
+
+_:b3  test:conclusions "true"^^xsd:boolean .
+
+_:b14
+    test:conclusions "true"^^xsd:boolean .
+
+_:b1  test:conclusions "true"^^xsd:boolean .
+
+_:b15
+    test:conclusions "true"^^xsd:boolean .
+
+_:b16
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_misc_nested-clauses1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/nested-clauses1.n3> ;
+    rdfs:comment "Pulling formulas into a rule that themselves have variables - should be treated as if they were in the rule at compile-time" ;
+    mf:result <jen3_reason/misc/nested-clauses1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b17 .
+
+_:b18
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_misc_rule3>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/rule3.n3> ;
+    rdfs:comment "Rules that pattern-match with collections + some chaining (2)" ;
+    mf:result <jen3_reason/misc/rule3-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b19 .
+
+<#jen3_reason_misc_static-builtin-assert2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/static-builtin-assert2.n3> ;
+    rdfs:comment "Assertions involving static builtins not allowed (albeit explicitly stated or inferred)" ;
+    mf:result <jen3_reason/misc/static-builtin-assert2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b12 .
+
+<#jen3_reason_misc_rule-match-rule>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/rule-match-rule.n3> ;
+    rdfs:comment "Rule matching itself - should not lead to infinite loops" ;
+    mf:result <jen3_reason/misc/rule-match-rule-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b20 .
+
+<#jen3_reason_log_equalto>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/equalto.n3> ;
+    rdfs:comment "Tests for log:(not)equalTo for cited formulas" ;
+    mf:result <jen3_reason/log/equalto-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b15 .
+    
+<#jen3_reason_log_equalto2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/equalto2.n3> ;
+    rdfs:comment "Tests for log:(not)equalTo for cited formulas (2)" ;
+    mf:result <jen3_reason/log/equalto2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b15 .
+
+<#jen3_reason_time_time1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/time/time1.n3> ;
+    rdfs:comment "Tests for time builtins" ;
+    mf:result <jen3_reason/time/time1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b21 .
+
+_:b22
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_math_trig1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/math/trig1.n3> ;
+    rdfs:comment "Tests for trigonometry builtins" ;
+    mf:result <jen3_reason/math/trig1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b13 .
+
+<file:///home/william-vw/projects/n3/jena_n3/testing/N3/list_tests.n3>
+    a   mf:Manifest ;
+    mf:name "Notation3 Reasoner tests" ;
+    mf:entries ( <#jen3_reason_string_string1> <#jen3_reason_math_math3> <#jen3_reason_math_math2> <#jen3_reason_math_math1> <#jen3_reason_math_trig1> <#jen3_reason_list_list-iterate> <#jen3_reason_list_list1> <#jen3_reason_log_includes1> <#jen3_reason_log_includes2> <#jen3_reason_log_includes3> <#jen3_reason_log_includes4> <#jen3_reason_log_includes5> <#jen3_reason_log_includes_input1> <#jen3_reason_log_includes_input2> <#jen3_reason_log_universals_input> <#jen3_reason_log_uri> <#jen3_reason_log_forallin> <#jen3_reason_log_langlit> <#jen3_reason_log_collectallin2> <#jen3_reason_log_concl1> <#jen3_reason_log_equalto> <#jen3_reason_log_equalto2> <#jen3_reason_log_rawtype> <#jen3_reason_log_getter-builtins> <#jen3_reason_log_collectallin1> <#jen3_reason_log_dtlit> <#jen3_reason_crypto_crypto1> <#jen3_reason_time_time1> <#jen3_reason_graph_graph1> <#jen3_reason_graph_graph2> <#jen3_reason_misc_containers> <#jen3_reason_misc_data-var> <#jen3_reason_misc_formula1> <#jen3_reason_misc_static-builtin-assert1> <#jen3_reason_misc_var-builtin> <#jen3_reason_misc_rule2> <#jen3_reason_misc_gen-bnodes> <#jen3_reason_misc_rule-match-rule> <#jen3_reason_misc_rule-data-var> <#jen3_reason_misc_rule3> <#jen3_reason_misc_nested-clauses1> <#jen3_reason_misc_clause-reorder> <#jen3_reason_misc_static-builtin-assert2> <#jen3_reason_misc_rule1> <#jen3_reason_misc_infer-rules> <#jen3_reason_misc_infer-rules2> <#jen3_reason_misc_rule4> <#jen3_reason_misc_nested-clauses2> <#jen3_reason_misc_univout1> <#jen3_reason_misc_cls-resol> <#jen3_reason_log_linear1> <#jen3_reason_log_linear2>) .
+
+_:b23
+    test:conclusions "true"^^xsd:boolean .
+
+_:b24
+    test:conclusions "true"^^xsd:boolean .
+
+_:b25
+    test:conclusions "true"^^xsd:boolean .
+
+_:b19
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_log_uri>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/uri.n3> ;
+    rdfs:comment "Tests for log:uri" ;
+    mf:result <jen3_reason/log/uri-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b18 .
+
+<#jen3_reason_string_string1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/string/string1.n3> ;
+    rdfs:comment "Tests for string builtins" ;
+    mf:result <jen3_reason/string/string1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b8 .
+
+_:b10
+    test:conclusions "true"^^xsd:boolean .
+
+_:b4  test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_math_math1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/math/math1.n3> ;
+    rdfs:comment "Tests for math:equalTo" ;
+    mf:result <jen3_reason/math/math1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b26 .
+
+<#jen3_reason_log_collectallin2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/collectallin2.n3> ;
+    rdfs:comment "Tests for log:collectAllIn (2)" ;
+    mf:result <jen3_reason/log/collectallin2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b27 .
+
+_:b28
+    test:conclusions "true"^^xsd:boolean .
+
+_:b29
+    test:conclusions "true"^^xsd:boolean .
+
+_:b30
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_graph_graph1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/graph/graph1.n3> ;
+    rdfs:comment "Tests for graph builtins - i.e., graph:length and graph:difference" ;
+    mf:result <jen3_reason/graph/graph1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b31 .
+    
+<#jen3_reason_graph_graph2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/graph/graph2.n3> ;
+    mf:result <jen3_reason/graph/graph2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b31 .
+
+<#jen3_reason_log_concl1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/concl1.n3> ;
+    rdfs:comment "Test for log:conclusion" ;
+    mf:result <jen3_reason/log/concl1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b32 .
+
+<#jen3_reason_misc_rule-data-var>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/rule-data-var.n3> ;
+    rdfs:comment "Test that matches rule var to data var" ;
+    mf:result <jen3_reason/misc/rule-data-var-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b9 .
+
+<#jen3_reason_misc_data-var>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/data-var.n3> ;
+    rdfs:comment "Match concrete rule terms to data vars" ;
+    mf:result <jen3_reason/misc/data-var-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b25 .
+
+<#jen3_reason_misc_rule4>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/rule4.n3> ;
+    rdfs:comment "Rules that pattern-match with collections + some chaining (3)" ;
+    mf:result <jen3_reason/misc/rule4-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b33 .
+
+<#jen3_reason_misc_univout1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/univout1.n3> ;
+    rdfs:comment "Tests where statements with variables are inferred - should be converted to witnesses" ;
+    mf:result <jen3_reason/misc/univout1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b30 .
+
+_:b34
+    test:conclusions "true"^^xsd:boolean .
+
+_:b35
+    test:conclusions "true"^^xsd:boolean .
+
+_:b27
+    test:conclusions "true"^^xsd:boolean .
+
+_:b21
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_misc_infer-rules>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/infer-rules.n3> ;
+    rdfs:comment "Infer your own domain-specific rules!" ;
+    mf:result <jen3_reason/misc/infer-rules-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b36 .
+
+<#jen3_reason_misc_infer-rules2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/infer-rules2.n3> ;
+    mf:result <jen3_reason/misc/infer-rules2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b36 .
+
+_:b37
+    test:conclusions "true"^^xsd:boolean .
+
+_:b17
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_math_math2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/math/math2.n3> ;
+    rdfs:comment "Tests for math builtins" ;
+    mf:result <jen3_reason/math/math2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b35 .
+
+<#jen3_reason_misc_formula1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/formula1.n3> ;
+    mf:result <jen3_reason/misc/formula1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b38 .
+
+_:b39
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_log_langlit>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/langlit.n3> ;
+    rdfs:comment "Tests for log:langlit" ;
+    mf:result <jen3_reason/log/langlit-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b23 .
+
+<#jen3_reason_log_includes2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/includes2.n3> ;
+    rdfs:comment "Tests for log:includes (2)" ;
+    mf:result <jen3_reason/log/includes2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b5 .
+    
+<#jen3_reason_log_includes3>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/includes3.n3> ;
+    rdfs:comment "Tests for log:includes (3)" ;
+    mf:result <jen3_reason/log/includes3-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b5 .
+    
+<#jen3_reason_log_includes4>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/includes4.n3> ;
+    rdfs:comment "Tests for log:includes (4)" ;
+    mf:result <jen3_reason/log/includes4-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b5 .
+
+<#jen3_reason_log_includes5>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/includes5.n3> ;
+    mf:result <jen3_reason/log/includes5-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b5 .
+    
+<#jen3_reason_log_includes_input1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/includes_input1.n3> ;
+    mf:result <jen3_reason/log/includes_input1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b5 .
+    
+<#jen3_reason_log_includes_input2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/includes_input2.n3> ;
+    mf:result <jen3_reason/log/includes_input2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b5 .
+
+<#jen3_reason_log_universals_input>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/universals_input.n3> ;
+    mf:result <jen3_reason/log/universals_input-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b5 .
+
+<#jen3_reason_crypto_crypto1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/crypto/crypto1.n3> ;
+    rdfs:comment "Tests for crypto:sha" ;
+    mf:result <jen3_reason/crypto/crypto1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b29 .
+
+_:b38
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_log_collectallin1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/collectallin1.n3> ;
+    rdfs:comment "Tests for log:collectAllIn" ;
+    mf:result <jen3_reason/log/collectallin1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b40 .
+
+_:b36
+    test:conclusions "true"^^xsd:boolean .
+
+_:b11
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_list_list-iterate>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/list/list-iterate.n3> ;
+    rdfs:comment "Tests for list:iterate" ;
+    mf:result <jen3_reason/list/list-iterate-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b24 .
+
+<#jen3_reason_misc_rule1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/rule1.n3> ;
+    rdfs:comment "Some initial rule tests - incl. pattern-matching with formulas" ;
+    mf:result <jen3_reason/misc/rule1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b28 .
+
+<#jen3_reason_list_list1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/list/list1.n3> ;
+    rdfs:comment "Tests for list builtins" ;
+    mf:result <jen3_reason/list/list1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b37 .
+
+<#jen3_reason_log_dtlit>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/dtlit.n3> ;
+    rdfs:comment "Tests for log:dtlit" ;
+    mf:result <jen3_reason/log/dtlit-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b16 .
+
+_:b26
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_misc_var-builtin>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/var-builtin.n3> ;
+    rdfs:comment "Matching predicate variables to builtins should work" ;
+    mf:result <jen3_reason/misc/var-builtin-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b14 .
+
+_:b2  test:conclusions "true"^^xsd:boolean .
+
+_:b41
+    test:conclusions "true"^^xsd:boolean .
+
+_:b31
+    test:conclusions "true"^^xsd:boolean .
+
+_:b33
+    test:conclusions "true"^^xsd:boolean .
+
+_:b32
+    test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_log_getter-builtins>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/getter-builtins.n3> ;
+    rdfs:comment "Tests for 'getter builtins' - i.e., log:content, log:semantics(OrError)" ;
+    mf:result <jen3_reason/log/getter-builtins-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b39 .
+
+_:b7  test:conclusions "true"^^xsd:boolean .
+
+<#jen3_reason_misc_cls-resol>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/misc/cls-resol.n3> ;
+    rdfs:comment "Early attempt at dogfooding - not used in the end but still a neat test." ;
+    mf:result <jen3_reason/misc/cls-resol-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b34 .
+
+<#jen3_reason_math_math3>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/math/math3.n3> ;
+    rdfs:comment "More tests for math builtins" ;
+    mf:result <jen3_reason/math/math3-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b22 .
+
+<#jen3_reason_log_includes1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/includes1.n3> ;
+    rdfs:comment "Tests for log:(not)includes" ;
+    mf:result <jen3_reason/log/includes1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b41 .
+
+_:b40
+    test:conclusions "true"^^xsd:boolean .
+
+_:b20
+    test:conclusions "true"^^xsd:boolean .
+    
+<#jen3_reason_log_linear1>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/linear1.n3> ;
+    mf:result <jen3_reason/log/linear1-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b41 .
+
+<#jen3_reason_log_linear2>
+    a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/log/linear2.n3> ;
+    mf:result <jen3_reason/log/linear2-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b41 .

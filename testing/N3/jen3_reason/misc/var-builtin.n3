@@ -1,0 +1,14 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <var-builtin.n3#> .
+
+
+<#> rdfs:comment "Matching predicate variables to builtins should work" .
+
+:a :b :c .
+math:sum a :Builtin .
+
+{ ?p a :Builtin . (2 2) ?p ?result } => { :test1 :has ?result } .
+{ (3 3) ?p ?result . ?p a :Builtin } => { :test2 :has ?result } .
+{ ?x ?y ?z . (1 2) ?y ?result } => { :test3 :has ?result } .

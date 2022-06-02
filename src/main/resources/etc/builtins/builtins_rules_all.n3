@@ -1,0 +1,155 @@
+{ log:forAllIn ({ ?list list:member ?member } { ?member :meets :Numeric }) <input.n3> } 
+	=> 
+{ ?list :meets :NumericList } .
+
+{ log:forAllIn ({ ?list list:member ?member } { ?member :meets :NumericOrVariable }) <input.n3> } 
+	=> 
+{ ?list :meets :NumericOrVariableList } .
+
+{ log:forAllIn ({ ?list list:member ?member } { ?member :meets :String }) <input.n3> } 
+	=> 
+{ ?list :meets :StringList } .
+
+{ log:forAllIn ({ ?list list:member ?member } { ?member :meets :StringOrVariable }) <input.n3> } 
+	=> 
+{ ?list :meets :StringOrVariableList } .
+
+{ ?list :meets ?r ; list:length ?l } => { ?list :meets [ :listType ?r ; :size ?l, :anySize ] } .
+
+
+{ ?t math:dtlit xsd:number } => { ?t :meets :Numeric, :NumericOrVariable } .
+{ ?t math:dtlit xsd:string } => { ?t :meets :String, :StringOrVariable } .
+{ ?t log:isUri true } => { ?t :meets :Resource, :ResourceOrVariable } .
+{ ?t log:isBound false } => { ?t :restrict :Variable, :NumericOrVariable, :StringOrVariable, :ResourceOrVariable } .
+
+
+{ <input.n3> log:semantics ?semantics } => { <> :input ?semantics } .
+
+# "magic" variables ?_b refers to builtin predicate;
+# 	?_s and ?_o refer to s/o of builtin statement
+# assumes relevant property hierarchies are materialized
+
+{	?_b!:hasTypeRestriction ?p ?t . 
+	?p rdfs:subPropertyOf :subjectOrObject .
+	?_so ?p ?i .
+
+} => { ?t :context [ :input ?i ] } .
+
+{	?_b!:hasTypeRestriction :subject ?s ; :object ?o .
+	?s!:context :success true . ?o!:context :success true
+
+} => { ?tr :success :true } .
+
+{	?t!:oneOf list:member ?m .
+	?t :context!:input ?i
+
+} => { ?m :context [ :input ?i ] } .
+
+{	?t :context ?c .
+	?t :restricts ?r .
+	?c!:input :meets ?r .
+
+} => { ?c :success true } .
+
+{	?t!:oneOf!list:member!:context :success true .
+	?t :context ?c .
+	
+} => { ?c :success true } .
+
+
+## Lists
+
+# restriction sizes
+
+{ ?t :size :anySize } => { ?t :sizeOk true } .
+
+{ 	?t :context ?c ;
+		:size ?l .
+	?c!:input list:length ?l
+
+} => { ?c :sizeOk true } .
+
+# simple list restriction (listType)
+
+{	?t :context ?c ;
+		:listType ?r .
+	?c :sizeOk true ;
+		:input :meets ?r .
+
+} => { ?c :success true } .
+
+# list restriction elements (listElements)
+
+{	?t :context ?c ;
+		:listElements ?l .
+	?c :sizeOk true .
+	
+	?c :input ?i .
+	# lists have same length?
+	?i list:length ?len . 
+	?l!list:length math:equalTo ?len .
+	
+	# we're starting from the end
+	?i list:last ?ie .
+	(?len 1) math:difference ?idx .
+
+} => { 
+	# start propagating "checks" through input list
+	?ie :check [ :input ?i ; :index ?idx ; :listElements ?l ] 
+} .
+
+{	?ie :check ?c . 
+	?c :listElements ?l ; :index ?idx .
+	(?l ?idx) list:memberAt ?tr .
+	
+} => { ?tr :context [ :input ?ie ; :check ?c ] } .
+
+# list element type restriction (listElementType)
+
+{	?t :context ?c ;
+		:listElementType ?tr .
+	?c :sizeOk true ;
+		:input ?i .
+	
+	# we're starting from the end
+	?i list:last ?ie .
+	(?len 1) math:difference ?idx .
+
+} => { 
+	# start propagating "checks" through input list
+	?ie :check [ :index ?idx ; :input ?i ; :listElementType ?tr ] 
+} .
+
+{	?ie :checkWith ?c . 
+	?cw :listElementType ?tr .
+	
+} => { ?tr :context [ :input ?ie ; :check ?c ] } .
+
+# (shared between list restriction elements, list element type restriction)
+
+{	# restriction was succesfully checked
+	?tr :context [ :success true ; :check ?c ] .
+	
+	?c :input ?i ; :index ?idx .
+	# if needed, propagate check to prior input list entry
+	?idx math:greaterThan 0 .
+	(?idx 1) math:difference ?idx_1 .
+	(?i ?idx_1) list:memberAt ?ie_1 .
+	
+	?p rdfs:subPropertyOf :listRestriction .
+	?c ?p ?tr .
+
+} => { ?ie_1 :check [ :input ?i ; :index ?idx_1 ; ?p ?tr ] } .
+
+{	# restriction was succesfully checked
+	?tr :context [ :success true ; :check ?c ] .
+	
+	?c :input ?i ; :index ?idx .
+	?idx math:equalTo 0 . # we're done here
+	
+	?p rdfs:subPropertyOf :listRestriction .
+	?c ?p ?tr .
+
+	?t ?p ?tr ; :context!:input ?i .
+
+} => { ?c :success true } .

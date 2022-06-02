@@ -1,0 +1,101 @@
+@prefix :        <file://D:/git/n3dev/jena-core/testing/N3/list_tests.n3#> .
+@prefix test:    <https://w3c.github.io/N3/tests/test.n3#> .
+@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
+@prefix log:     <http://www.w3.org/2000/10/swap/log#> .
+@prefix in:      <http://n3.w3c.org/builtin/input#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix list:    <http://www.w3.org/2000/10/swap/list#> .
+@prefix graph:   <http://www.w3.org/2000/10/swap/graph#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdft:    <http://www.w3.org/ns/rdftest#> .
+@prefix mf:      <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
+@prefix earl:    <https://www.w3.org/TR/EARL10-Schema/#> .
+@prefix math:    <http://www.w3.org/2000/10/swap/math#> .
+@prefix dc:      <http://purl.org/dc/terms/> .
+
+<#jen3_syntax_neg_iri3>
+    mf:action <jen3_syntax/neg/iri3.n3> ;
+    a   test:TestN3NegativeSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Negative ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/neg/iri3-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#jen3_syntax_neg_iri2>
+    mf:action <jen3_syntax/neg/iri2.n3> ;
+    a   test:TestN3NegativeSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Negative ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/neg/iri2-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#jen3_syntax_neg_at1>
+    mf:action <jen3_syntax/neg/at1.n3> ;
+    a   test:TestN3NegativeSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Negative ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/neg/at1-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<file://D:/git/n3dev/jena-core/testing/N3/list_tests.n3>
+    a   mf:Manifest ;
+    mf:name "Notation3 Syntax tests" ;
+    mf:entries ( <#jen3_syntax_neg_at1> <#jen3_syntax_neg_iri1> <#jen3_syntax_neg_iri2> <#jen3_syntax_neg_iri3> <#jen3_syntax_pos_inv_pred1> <#jen3_syntax_pos_iri2> <#jen3_syntax_pos_path1> <#jen3_syntax_pos_prefix1> <#jen3_syntax_pos_spo1> ) .
+
+<#jen3_syntax_neg_iri1>
+    mf:action <jen3_syntax/neg/iri1.n3> ;
+    a   test:TestN3NegativeSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Negative ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/neg/iri1-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#jen3_syntax_pos_inv_pred1>
+    mf:action <jen3_syntax/pos/inv_pred1.n3> ;
+    a   test:TestN3PositiveSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Positive ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/pos/inv_pred1-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#jen3_syntax_pos_prefix1>
+    mf:action <jen3_syntax/pos/prefix1.n3> ;
+    a   test:TestN3PositiveSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Positive ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/pos/prefix1-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#jen3_syntax_pos_spo1>
+    mf:action <jen3_syntax/pos/spo1.n3> ;
+    a   test:TestN3PositiveSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Positive ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/pos/spo1-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#jen3_syntax_pos_iri2>
+    mf:action <jen3_syntax/pos/iri2.n3> ;
+    a   test:TestN3PositiveSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Positive ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/pos/iri2-ref.n3> ;
+    rdft:approval rdft:Approved .
+
+<#jen3_syntax_pos_path1>
+    mf:action <jen3_syntax/pos/path1.n3> ;
+    a   test:TestN3PositiveSyntax ;
+    a   test:TestN3Syntax ;
+    a   test:TestN3Positive ;
+    a   test:TestN3 ;
+    mf:result <jen3_syntax/pos/path1-ref.n3> ;
+    rdft:approval rdft:Approved .

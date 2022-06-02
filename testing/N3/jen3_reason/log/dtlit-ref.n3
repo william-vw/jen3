@@ -1,0 +1,5 @@
+<dtlit.n3#log1> <dtlit.n3#has> "123"^^<http://www.w3.org/2001/XMLSchema#string> .
+<dtlit.n3#log2> <dtlit.n3#has> ( "hello" <http://www.w3.org/2001/XMLSchema#string> ) .
+<dtlit.n3#log3> <dtlit.n3#has> ( "2.3" <http://www.w3.org/2001/XMLSchema#double> ) .
+<dtlit.n3#log4> <dtlit.n3#has> ( "2.3" <http://www.w3.org/2001/XMLSchema#doubleee> ) .
+<dtlit.n3#log5> a <dtlit.n3#SUCCESS> .

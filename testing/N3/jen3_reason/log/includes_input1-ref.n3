@@ -1,0 +1,10 @@
+@prefix : <includes_input1.n3#> .
+
+:test2
+    :has :a .
+
+:test3
+    a   :SUCCESS .
+
+:test1
+    :has :k .

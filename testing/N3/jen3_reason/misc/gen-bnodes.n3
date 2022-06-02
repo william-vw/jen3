@@ -1,0 +1,16 @@
+@prefix : <gen_bnodes.n3#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<#> rdfs:comment "Generate the same blank node for the same universal values within a rule." .
+
+:a :b :c .
+:d :b :c .
+
+{ ?x :b :c } => { _:b0 :p1 ?x . _:b0 :p2 ?x } .
+{ ?x :b :c } => { [ :p3 ?x ; :p4 ?x ] } .
+
+{ :i :am :cool } a :Lie .
+{ :i :am :uncool } a :Lie .
+
+{ ?graph a :Lie } => { _:b0 :some ?graph . _:b0 :other ?graph } .
+{ ?graph a :Lie } => { _:b0 :bloeh ?graph . _:b1 :blah ?graph } .

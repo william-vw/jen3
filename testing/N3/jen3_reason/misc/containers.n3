@@ -1,0 +1,39 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <containers.n3#>.
+
+<#> rdfs:comment "Pattern-matching with containers (collections and formulas)." .
+
+{ :hello :at :world } :timestamp "123" .
+{ :i :wrote :war_and_peace } :is :false ; :claimedBy :william .
+{ :i :wrote :war_and_peace . :war_and_peace :wrote :i } a :Statement .
+
+{ { :hello :at :world } :timestamp ?timestamp . { :i :wrote :war_and_peace } :is ?answer } log:implies { :test1 a :SUCCESS } .
+{ { :hello :at ?planet } :timestamp ?timestamp } log:implies { :test2 :has ?planet } .
+{ { ?person :wrote ?book . ?book :wrote ?person } a :Statement } => { :test3 :has ?person, ?book } .
+{ { :war_and_peace :wrote ?person . ?person :wrote :war_and_peace } a :Statement } => { :test4 :has ?person, :war_and_peace } .
+
+
+( 1 2 3 4 ) a :SomeCollection .
+( "a" ?x "c" "d") a :SomeCollection .
+
+{ (1 2 3 4) a :SomeCollection . ("a" ?y "c" "d") a ?someType } log:implies { :test5 a :SUCCESS } .
+{ (2 1 3 4) a :SomeCollection } log:implies { :test6 a :FAILED } .
+
+
+# unification of formulas needs to support backtracking
+
+{ :i :wrote :war_and_peace . :i :wrote :of_mice_and_men . :of_mice_and_men a :GoodBook } a :Statement .
+
+{ { :i :wrote ?something . ?something a :GoodBook . :i :wrote :war_and_peace . } a :Statement } => { :test7 :has ?something } .
+
+
+# unification needs to be reciprocal (patterns include data, data includes patterns)
+# (in both directions, use same bindings for variables)
+
+{	:i :wrote :hobbit . :i :wrote :lotr . :lotr a :GoodBook . 
+	:i :wrote :1984 . :1984 a :GoodBook
+
+} a :Statement .
+
+{ { :i :wrote ?something . ?something a :GoodBook . :i :wrote :hobbit . } a :Statement } => { :test8 :has ?something } .

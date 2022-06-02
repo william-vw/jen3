@@ -1,0 +1,36 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <collectallin2.n3#> .
+
+<#> rdfs:comment "Tests for log:collectAllIn (2)" .
+
+(:c1 :c2 :c3) a :ConstantList .
+
+:c1 :constant true .
+:c2 :constant true .
+:c3 :constant true.
+
+{	?l a :ConstantList .
+	(?m { ?l list:member ?m . ?m :constant false } ()) log:collectAllIn _:x .
+
+} => { :test1 a :SUCCESS } .
+
+
+(:d1 :d2 :d3) a :DynamicList .
+
+:d1 :value 1 ; :constant true .
+:d2 :constant true .
+:d3 :constant true.
+
+# should only be tried at the end, i.e., after rule adding `constant:false` to the KB was fired
+{	?l a :DynamicList .
+	(?m { ?l list:member ?m . ?m :constant false } ()) log:collectAllIn _:x .
+
+} => { :test2 a :FAILED } .
+
+{ ?l a :DynamicList ; list:member ?m . ?m :value 1  } => { ?m :constant false } .

@@ -1,0 +1,18 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix ex: <http://example.org/> .
+@prefix : <uri.n3#> .
+
+<#> rdfs:comment "Tests for log:uri" .
+
+{ <http://example.org/hello_world> log:uri ?s } => { :log11 :has ?s } .
+{ ?u log:uri "http://example.org/hello_world" } => { :log12 :has ?u } .
+{ <http://example.org/hello_world> log:uri "http://example.org/hello_world" } => { :log13 a :SUCCESS } .
+{ "http://example.org/hello_world" log:uri ?u } => { :log14 :has ?u } .
+
+{ <http://example.org/hello_world> log:nameSpace ?ns } => { :log15 :has ?ns } .
+{ <http://example.org/hello_world> log:localName ?ln } => { :log16 :has ?ln } .
+
+{ <http://example.org/> log:prefix ?prefix } => { :log17 :has ?prefix } .
+{ ?ns log:prefix "ex" } => { :log18 :has ?ns } .

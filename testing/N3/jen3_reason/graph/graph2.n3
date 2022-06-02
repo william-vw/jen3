@@ -1,0 +1,28 @@
+@prefix graph: <http://www.w3.org/2000/10/swap/graph#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <graph2.n3#> .
+
+{ ({ :a :b _:b0 . :d :e :f } { :a :b _:b1 }) graph:difference ?d } => { :test1 :has ?d } .
+
+
+{ :a :b _:b0 . :d :e :f } a :Clause1 .
+{ :a :b _:b1 } a :Clause2 .
+
+{	?c1 a :Clause1 .
+	?c2 a :Clause2 . 
+
+	( ?c1 ?c2 ) graph:difference ?d 
+
+} => { :test2 :has ?d } .
+
+
+{ :a :b _:b0 . :d :e :f } a :Clause3 .
+{ :a :b :c } a :Clause4 .
+
+{	?c3 a :Clause3 .
+	?c4 a :Clause4 . 
+
+	( ?c3 ?c4 ) graph:difference ?d 
+
+} => { :test3 :has ?d } .

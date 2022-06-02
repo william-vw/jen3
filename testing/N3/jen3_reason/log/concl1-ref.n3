@@ -1,0 +1,22 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+<concl1.n3#test> <concl1.n3#has> {
+<concl1.n3#we>
+        <concl1.n3#thought>
+            {<concl1.n3#will>
+                <concl1.n3#is>
+                    <concl1.n3#cool> .
+        } .
+    {?x  <concl1.n3#thought>
+            {<concl1.n3#will>
+                <concl1.n3#is>
+                    <concl1.n3#cool> .
+        } .
+}  <http://www.w3.org/2000/10/swap/log#implies>
+            {?x  <concl1.n3#is>
+            <concl1.n3#wrong> .
+} .
+    <concl1.n3#we>
+        <concl1.n3#is>
+            <concl1.n3#wrong> .
+} .

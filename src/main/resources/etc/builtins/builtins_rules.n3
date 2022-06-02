@@ -1,0 +1,95 @@
+@prefix ex: <http://example.org/> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix in: <http://n3.w3c.org/builtin/input#> .
+@base <http://n3.w3c.org/builtin/input#> .
+
+{ ?x ?p ?y . ?p rdfs:subPropertyOf ?p2  } => { ?x ?p2 ?y } .
+
+:domain rdfs:subPropertyOf :hasTypeRestriction .
+:checkFor rdfs:subPropertyOf :hasTypeRestriction .
+:trueFor rdfs:subPropertyOf :hasTypeRestriction .
+:falseFor rdfs:subPropertyOf :hasTypeRestriction .
+
+math:equalTo
+	a :Builtin ;
+	:domain [
+		:subject [ :restricts :NumericOrVariable ] ;
+		:object [ :restricts :NumericOrVariable ]
+	] ;
+	:checkFor [
+		:subject [ :restricts :Numeric ] ;
+		:object [ :restricts :Numeric ]
+	] ;
+	:trueFor [
+		:subjectObject [ :restricts [ :type :Variable ; :exactCardinality 1 ] ]
+	] ;
+	
+	:hasInput [
+		:subject ?a ;
+		:object ?a
+	] .
+
+{ ?b a :Builtin ; :hasInput ?i . ?i ?p ?t . ?t log:dt xsd:numeric } 
+	=> { ?t :meets :Numeric, :NumericOrVariable } .
+{ ?b a :Builtin ; :hasInput ?i . ?i ?p ?t . ?t log:dt xsd:string } 
+	=> { ?t :meets :String, :StringOrVariable } .
+{ ?b a :Builtin ; :hasInput ?i . ?i ?p ?t . ?t log:isUri true } 
+	=> { ?t :meets :Resource, :ResourceOrVariable } .
+{ ?b a :Builtin ; :hasInput ?i . ?i ?p ?t . ?t log:isConstant false } 
+	=> { ?t :meets :Variable, :NumericOrVariable, :StringOrVariable, :ResourceOrVariable } .
+
+# propagation down
+
+{	?b a :Builtin ; :hasInput ?i ;
+		:hasTypeRestriction ?tr .
+
+} => { ?tr :hasInput ?i } .
+
+{	?tr :hasInput ?i .
+	?tr ?p ?r . ?i ?p ?t .
+
+} => { ?r :hasInput ?t } .
+
+{	?tr :hasInput ?i ;
+		:subjectObject ?r .
+	
+} => { ?r :hasInput ?i } .
+
+# checks
+
+{	?r :hasInput ?i ; 
+		:restricts ?i!:meets .
+
+} => { ?i :meets ?r } .
+
+{	?r :hasInput ?i ; :restricts ?cr .
+	?cr :type :Variable ; :exactCardinality 1 .
+	?i :subject ?t ; :object ?t .
+	?t log:isConstant false .
+	
+} => { ?i :meets ?r } .
+
+# propagation up
+
+{ 	?r :hasInput ?i .
+	?i!:subject :meets ?r!:subject .
+	?i!:object :meets ?r!:object
+
+} => { ?i :meets ?r } .
+
+{	?r :hasInput ?i .
+	?i :meets ?r!:subjectObject
+	
+} => { ?i :meets ?r } .
+
+{	?b ?p ?r ;
+		:hasInput ?i .
+	?p rdfs:subPropertyOf :hasTypeRestriction .
+	?i :meets ?r .	
+	
+} => { ?b :success ?p } .

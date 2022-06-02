@@ -1,0 +1,5 @@
+@prefix : <linear1.n3#> .
+
+:taskA
+    :state
+        :Completed .

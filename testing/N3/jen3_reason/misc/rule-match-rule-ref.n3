@@ -1,0 +1,11 @@
+<rule-match-rule.n3#test1> <rule-match-rule.n3#has> {
+    ?x  <rule-match-rule.n3#b>
+            <rule-match-rule.n3#c> .
+    <rule-match-rule.n3#d>
+        <rule-match-rule.n3#e>
+            <rule-match-rule.n3#f> .
+} .
+<rule-match-rule.n3#test1> <rule-match-rule.n3#has> {
+    ?x  <rule-match-rule.n3#b>
+            <rule-match-rule.n3#c> .
+} .

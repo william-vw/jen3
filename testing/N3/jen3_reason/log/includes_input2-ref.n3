@@ -1,0 +1,4 @@
+@prefix : <includes_input2.n3#> .
+
+:test1
+    a   :SUCCESS .

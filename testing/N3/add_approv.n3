@@ -1,0 +1,10 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix test: <https://w3c.github.io/N3/tests/test.n3#> .
+@prefix rdft: <http://www.w3.org/ns/rdftest#> .
+@prefix :     <#>.
+@base <http://example.org/> .
+
+{	?test a test:TestN3 .
+#	<#> log:notIncludes { ?test rdft:approval rdft:Rejected } .
+	
+} => { ?test rdft:approval rdft:Approved } .

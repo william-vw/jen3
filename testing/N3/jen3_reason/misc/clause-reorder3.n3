@@ -1,0 +1,14 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <http:www.example.org#> .
+
+:cmp0 a :task.
+:cmp1 a :task.
+
+:cmp0 :subTask :task99.
+
+{ ?x a :task. (?task {?x :subTask ?task} ?ys) log:collectAllIn ?Scope. ?ys log:equalTo () } => { ?x :empty1 :true }.
+{ ?x a :task. ?ys log:equalTo (). (?task {?x :subTask ?task} ?ys) log:collectAllIn ?Scope } => { ?x :empty2 :true }.
+{ (?task {?x :subTask ?task} ?ys) log:collectAllIn ?Scope. ?x a :task. ?ys log:equalTo () } => { ?x :empty3 :true }.
+{ (?task {?x :subTask ?task} ?ys) log:collectAllIn ?Scope. ?ys log:equalTo (). ?x a :task } => { ?x :empty4 :true }.
+{ ?ys log:equalTo (). ?x a :task. (?task {?x :subTask ?task} ?ys) log:collectAllIn ?Scope } => { ?x :empty5 :true }.
+{ ?ys log:equalTo (). (?task {?x :subTask ?task} ?ys) log:collectAllIn ?Scope. ?x a :task } => { ?x :empty6 :true }.

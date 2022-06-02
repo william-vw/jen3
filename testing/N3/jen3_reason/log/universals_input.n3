@@ -1,0 +1,84 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <universals-input.n3#> .
+
+
+(:c1 :c2 :c3) a :ResourceList .
+
+:c1 :isConstant false .
+:c2 :isConstant true .
+:c3 :isConstant false .
+
+{	:taskA a :CompositeTask ; :member ?mem . # add this part to check sorting of "universal" clauses
+	?l a :ResourceList .
+	(?m { ?l list:member ?m . ?m :isConstant false } ?result) log:collectAllIn _:x .
+	
+} => { :test1 :has ?result } .
+
+
+{	:taskA a :CompositeTask ; :member ?mem .
+	?l a :ResourceList .
+	(?m { ?l list:member ?m . ?m :isConstant false } ?result) log:collectAllIn <> . # or <#> 
+	
+} => { :test2 :has ?result } .
+
+
+{	:taskA a :CompositeTask ; :member ?mem .
+	(?m { ?l a :ResourceList . ?l list:member ?m . ?m :isDynamic true } ?result) log:collectAllIn { 
+		(:d1 :d2 :d3) a :ResourceList .	
+		:d1 :isDynamic true .
+		:d2 :isDynamic false .
+		:d3 :isDynamic true
+	} .
+ 
+} => { :test3 :has ?result } .
+
+
+:taskA a :CompositeTask ;
+	:member :taskA1 ;
+	:member :taskA2 .
+:taskA1 a :Completed .
+:taskA2 a :Completed .
+
+
+{ 	:taskA a :CompositeTask ; :member ?mem . # add this part to check sorting of "universal" clauses
+	?t a :CompositeTask . 
+  	({ ?t :member ?t2 } { ?t2 a :Completed }) log:forAllIn _:x . 
+
+} => { :test4 :has ?t } .
+
+
+{ 	:taskA a :CompositeTask ; :member ?mem .
+	?t a :CompositeTask . 
+ 	({ ?t :member ?t2 } { ?t2 a :Completed }) log:forAllIn <#> . 
+
+} => { :test5 :has ?t } .
+
+
+{ 	:taskA a :CompositeTask ; :member ?mem .
+	({ ?t a :CompositeTask . ?t :member2 ?t2 } { ?t2 a :Completed }) log:forAllIn {
+		:taskB a :CompositeTask ;
+			:member2 :taskB1 ;
+			:member2 :taskB2 .
+		:taskB1 a :Completed .
+		:taskB2 a :Completed .
+	} . 
+
+} => { :test6 a :SUCCESS } .
+
+
+{ 	:taskA a :CompositeTask ; :member ?mem .
+	({ ?t a :CompositeTask . ?t :member2 ?t2 } { ?t2 a :Completed }) log:forAllIn {
+		:taskB a :CompositeTask ;
+			:member2 :taskB1 ;
+			:member2 :taskB2 .
+		:taskB1 a :NotCompleted .
+		:taskB2 a :Completed .
+	} . 
+
+} => { :test7 a :FAILED } .

@@ -1,0 +1,10 @@
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <http://example.org/> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log:     <http://www.w3.org/2000/10/swap/log#> .
+@base <http://example.org/> .
+
+@forSome :x.
+:x :p4 :o4.
+@forAll :x.
+{ :x :p :o. @forSome :x. :x :p2 :o2 } => { :x :p3 :o3. }.

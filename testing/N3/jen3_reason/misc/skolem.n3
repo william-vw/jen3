@@ -1,0 +1,12 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <skolem.n3#>.
+
+:a :b :c .
+# :x :y :z .
+
+{ (?t
+   { ?t :y :z }
+   ?tests ) log:collectAllIn _:x .
+ 
+} => { :test1 :has ?t } .

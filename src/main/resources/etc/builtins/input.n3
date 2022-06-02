@@ -1,0 +1,29 @@
+@prefix ex: <http://example.org/> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://n3.w3c.org/builtin/input#> .
+
+#math:lessThan
+#	:input [ 
+#		:subject 1 ;
+#		:object 2
+#	] .
+	
+#math:lessThan
+#	:input [ 
+#		:subject "1" ;
+#		:object "2"
+#	] .
+	
+#math:lessThan
+#	:input [ 
+#		:subject ex:hello ;
+#		:object ex:world
+#	] .
+
+math:lessThan
+	:input [ 
+		:subject ?s ;
+		:object ?o
+	] .

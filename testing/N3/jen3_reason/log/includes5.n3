@@ -1,0 +1,21 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <includes5.n3#> .
+
+{ 	:report :activities ( _:b0 _:b1 _:b2 ) .
+	_:b0 a :Activity ; rdfs:label "nested-activity 1" .
+	_:b1 a :Activity ; rdfs:label "nested-activity 2" .
+	_:b2 a :Activity ; rdfs:label "nested-activity 3" .
+	 
+} :recordedAt 123 .
+
+
+{	?formula :recordedAt ?timestamp ;
+		log:includes { ?report :activities ?activities } .
+
+	?activity list:in ?activities .
+	?formula log:includes { ?activity rdfs:label ?label } .
+	
+} => { <#> :activityLabel2 ?label } .

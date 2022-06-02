@@ -1,0 +1,26 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <rule_head_body.n3#>.
+
+<#> rdfs:comment "Rules where heads and/or bodies are not cited formulas" .
+
+true => { :a :b :c } .
+{} => { :d :e :f } .
+
+# ignored
+false => { :u :v :w } .
+
+
+# should throw exceptions (based on model-spec)
+#:x :y :x .
+#{ :x :y ?z } => false .
+
+#:k :l false .
+#{ :k :l ?m } => ?m .
+
+
+{ :i :wrote :war_and_peace } a :Truth .
+{ ?x a :Truth } => ?x .
+
+{ :g :h :i } a :Assertion .
+{ { ?x :h ?y } a :Assertion ; log:equalTo ?f } => ?f .

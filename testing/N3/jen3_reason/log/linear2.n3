@@ -1,0 +1,24 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <linear2.n3#> .
+
+
+:tA :activateRightNow true ;
+	:state :Inactive .
+
+:tB :activateRightNow true ;
+	:state :Completed .
+
+
+:Idle owl:equivalentClass [ owl:unionOf ( :Inactive :Completed ) ] .
+
+{	?cls!owl:equivalentClass!owl:unionOf list:member ?m .
+	
+} => { 
+	{ 	{ ?t :activateRightNow true } a log:StableTruth .
+		?t :state ?m 
+		
+	} log:becomes { ?t :state :Active } 
+} . 

@@ -1,0 +1,87 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <equalto.n3#>.
+
+<#> rdfs:comment "Tests for log:(not)equalTo for cited formulas" .
+
+{ { 
+	?x :hasName "will" ;
+		:hasAge ?y ;
+		:hasColor "perrywinkle blue"
+
+} log:equalTo {
+	:will :hasName "will" ;
+		:hasAge 36 .
+	
+} } => {
+	:test1 a :FAILED
+} .
+
+
+{ { 
+	?x :hasName "will" ;
+		:hasAge ?y ;
+		:hasColor "perrywinkle blue"
+
+} log:notEqualTo {
+	:will :hasName "will" ;
+		:hasAge 36 .
+	
+} } => {
+	:test1i a :SUCCESS
+} .
+
+
+{ { 
+	?x :hasName "will" ;
+		:hasAge ?y
+} log:equalTo {
+	:will :hasName "will" ;
+		:hasAge 36
+	
+} } => {
+	:test2 a :SUCCESS
+} .
+
+
+{ {
+	?x :hasName "will" ;
+		:hasAge ?y .
+	?z :hasName ?name ; 
+		:hasAge ?age .
+
+} log:equalTo {
+	:will :hasName "will" ;
+		:hasAge 36 .
+	
+} } => {
+	:test3 a :SUCCESS
+} .
+
+
+{ {
+	?x :hasName "will" ;
+		:hasAge ?y .
+
+} log:equalTo {
+	:will :hasName "will" ;
+		:hasAge 36 .
+	:will :hasAddress ?addr .
+	
+} } => {
+	:test4 a :FAILED
+} .
+
+
+{ {
+	?x :hasName "will" ;
+		:hasAge ?y .
+
+} log:equalTo {
+	:will :hasName "will" ;
+		:hasAge 36 .
+	:will :hasName ?name .
+	
+} } => {
+	:test5 a :SUCCESS
+} .

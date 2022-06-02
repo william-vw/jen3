@@ -1,0 +1,18 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <skolem2.n3#>.
+
+
+{	:will :lives _:b0 . _:b0 :place :buckinham_palace ; :number 12  } a :Lie .
+
+{ { ?person :lives ?place. ?place :place :buckinham_palace ; :number 12 } a :Lie 
+
+} => { ?place a :NestedIncorrectPlace } .
+
+
+:will :lives _:b0 . 
+_:b0 :place :buckinham_palace ; :number 12  .
+
+{ ?person :lives ?place. ?place :place :buckinham_palace 
+
+} => { ?place a :TopLevelIncorrectPlace } .

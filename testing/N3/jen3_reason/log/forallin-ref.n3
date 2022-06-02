@@ -1,0 +1,8 @@
+<forallin.n3#test1> <forallin.n3#has> ( <forallin.n3#taskA1> <forallin.n3#taskA2> ) .
+<forallin.n3#test1> <forallin.n3#has> ( <forallin.n3#taskB1> <forallin.n3#taskB2> <forallin.n3#taskB3> <forallin.n3#taskB4> ) .
+<forallin.n3#test1> <forallin.n3#has> <forallin.n3#taskB> .
+<forallin.n3#test2> <forallin.n3#has> _:b3 .
+<forallin.n3#test5> <forallin.n3#has> ( <forallin.n3#taskB1> <forallin.n3#taskB2> <forallin.n3#taskB3> <forallin.n3#taskB4> ) .
+<forallin.n3#test5> <forallin.n3#has> <forallin.n3#taskA> .
+<forallin.n3#test5> <forallin.n3#has> <forallin.n3#taskB> .
+<forallin.n3#test6> a <forallin.n3#SUCCESS> .

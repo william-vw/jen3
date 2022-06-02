@@ -1,0 +1,4 @@
+<langlit.n3#log7> <langlit.n3#has> "hello"@en .
+<langlit.n3#log8> <langlit.n3#has> ( "hello" "n" ) .
+<langlit.n3#log9> <langlit.n3#has> ( "goedendag" "l" ) .
+<langlit.n3#log10> a <langlit.n3#SUCCESS> .

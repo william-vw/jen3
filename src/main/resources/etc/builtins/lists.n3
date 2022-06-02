@@ -1,0 +1,19 @@
+#:r a :Variable . 
+#:Variable rdfs:subClassOf :AtomicRestriction .
+#:AtomicRestriction rdfs:subClassOf :Restriction .
+#:VariableList rdfs:subClassOf :ListRestriction .
+
+#(1 2 3) :meets <http://n3.w3c.org/builtin/input#VariableList> .
+
+#{ 	?t rdfs:subClassOf :AtomicRestriction .
+#	?s log:uri ?t .
+#	(?s "List") string:concatenation ?s2 .
+#	?s2 log:uri ?t2
+#
+#} => {
+#	{ :_input_ ?p ?l . ?l log:rawType log:List . ({ ?l list:member ?m } { ?m :meets ?t }) log:forAllIn _:x }
+#	=> 
+#	{ ?l :meets ?t2 } .
+#} .
+
+#{ ?list :meets ?r ; list:length ?l . ?r rdfs:subClassOf :ListRestriction } => { ?list :meets [ :listType ?r ; :size ?l, :anySize ] } .

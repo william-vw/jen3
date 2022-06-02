@@ -1,0 +1,9 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <equalto2.n3#>.
+
+<#> rdfs:comment "Tests for log:(not)equalTo for cited formulas (3)" .
+
+{ {_:x :p :o. _:y :p :o} log:equalTo {_:z :p :o.}
+ 
+} => { :test1 :success true } . 

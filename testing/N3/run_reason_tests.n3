@@ -1,0 +1,112 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix mf:   <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
+@prefix rdft: <http://www.w3.org/ns/rdftest#> .
+@prefix test: <https://w3c.github.io/N3/tests/test.n3#> .
+@prefix earl: <https://www.w3.org/TR/EARL10-Schema/#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix graph: <http://www.w3.org/2000/10/swap/graph#> .
+@prefix :     <#>.
+
+test:N3System rdfs:subClassOf earl:Software .
+test:jen3 a test:N3System .
+
+test:N3ReasonFailed rdfs:subClassOf earl:Fail .
+test:missing a test:N3ReasonFailed .
+test:extra a test:N3ReasonFailed .
+
+test:N3ReasonPass rdfs:subClassOf earl:Pass .
+test:reasonPass a test:N3ReasonPass .
+
+# heavy lifting
+
+{	?reasonTest a test:TestN3Reason ;
+		rdft:approval rdft:Approved ;
+		mf:action ?testAction ;
+		mf:result ?testResult ;
+		test:options [ test:conclusions true ] .
+
+	?testAction!log:semantics log:inferences ?actualInf .
+	?testResult log:semantics ?expectedInf .
+
+	(?actualInf ?expectedInf) graph:difference ?extraInf .
+	(?expectedInf ?actualInf) graph:difference ?missingInf .
+
+} => { ?reasonTest :actual ?actualInf ; :hasExtra ?extraInf ; :hasMissing ?missingInf } .
+
+
+{	?reasonTest a test:TestN3Reason ;
+		rdft:approval rdft:Approved ;
+		mf:action ?testAction ;
+		mf:result ?testResult ;
+		test:options [ test:data true ] .
+
+	?testAction!log:semantics log:conclusion ?actualData .
+	?testResult log:semantics ?expectedData .
+
+	(?actualData ?expectedData) graph:difference ?extraData .
+	(?expectedData ?actualData) graph:difference ?missingData .
+
+} => { ?reasonTest :actual ?actualData ; :hasExtra ?extraData ; :hasMissing ?missingData } .
+
+
+# positive tests
+
+{ 	?reasonSystem a test:N3System .
+
+	?reasonTest :hasMissing ?missingInf .
+	?missingInf!graph:length math:equalTo 0 .
+	
+	?reasonTest :hasExtra ?extraInf .
+	?extraInf!graph:length math:equalTo 0 .
+	
+	<> log:notIncludes { ?x earl:test ?reasonTest } .
+	
+} => {
+	[ 	a earl:Assertion ;
+		earl:assertedBy <#> ;
+		earl:subject ?reasonSystem ;
+		earl:test ?reasonTest ;
+		earl:result [ earl:outcome test:reasonPass ]	
+	]
+} .
+
+
+# negative tests
+
+{ 	?reasonSystem a test:N3System .
+
+	?reasonTest :hasMissing ?missingInf .
+	?missingInf!graph:length math:greaterThan 0 .
+	
+	# TODO full check is not working 
+	<> log:notIncludes { ?x earl:test ?reasonTest } . #; earl:result ?result . ?result earl:outcome test:missing } .
+	
+} => {
+	[ 	a earl:Assertion ;
+		earl:assertedBy <#> ;
+		earl:subject ?reasonSystem ;
+		earl:test ?reasonTest ;
+		earl:blah test:missing ;
+		earl:result [ earl:outcome test:missing ; rdf:value ?missingInf ]	
+	]
+} .
+
+{ 	?reasonSystem a test:N3System .
+
+	?reasonTest :hasExtra ?extraInf .
+	?extraInf!graph:length math:greaterThan 0 .
+	
+	<> log:notIncludes { ?x earl:test ?reasonTest } . #; earl:result ?result . ?result earl:outcome test:extra } .
+	
+} => {
+	[ 	a earl:Assertion ;
+		earl:assertedBy <#> ;
+		earl:subject ?reasonSystem ;
+		earl:test ?reasonTest ;
+		earl:result [ earl:outcome test:extra ; rdf:value ?extraInf ]	
+	]
+} .

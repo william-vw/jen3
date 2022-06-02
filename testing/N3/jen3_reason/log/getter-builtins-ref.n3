@@ -1,0 +1,24 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#test1> a <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#SUCCESS> .
+<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#test2> a <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#SUCCESS> .
+<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#test4> <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#has> {
+    {
+    <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#k>
+        <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#l>
+            <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#m> .
+	}  <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#Thing> .
+} .
+<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#test5> <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#has> {
+	<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#will> <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#hasAge> "36"^^xsd:int .
+} .
+<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#test7>
+	<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#has> 
+		"[N3Parser]: parserError at line 5 (char 0) - mismatched input '<EOF>' expecting {'[', '(', '{', BooleanLiteral, String, IRIREF, PNAME_NS, PNAME_LN, BLANK_NODE_LABEL, INTEGER, DECIMAL, DOUBLE, ANON, QuickVarName})" .
+		
+<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#test8>
+	<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#has> "[ERROR] FileNotFoundException: https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/quick_test_failll.n3" .
+	
+<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#test9> <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#has> {
+	<https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#will> <https://raw.githubusercontent.com/w3c/N3/master/tests/N3Tests/builtin3.n3#hasAge> "36"^^xsd:int .
+} .

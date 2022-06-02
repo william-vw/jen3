@@ -1,0 +1,11 @@
+@prefix : <formula1.n3#>.
+
+{	?x :y :z 
+
+} => { :a :b :c } ;
+	:reason :someReason .
+
+
+{	?g :reason ?reason
+
+} => { ?g :hasReason true } .

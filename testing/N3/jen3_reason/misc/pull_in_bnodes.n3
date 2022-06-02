@@ -1,0 +1,25 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <pull_in_bnodes.n3#> .
+
+<#> rdfs:comment """Blank nodes should not be considered as \"rule variables\"  
+	(this would lead to each label being in the \"activityLabels\" list three times)""" .
+
+:report :activities ( _:b0 _:b1 _:b2 ) .
+
+_:b0 a :Activity ; rdfs:label "activity 1" .
+_:b1 a :Activity ; rdfs:label "activity 2" .
+_:b2 a :Activity ; rdfs:label "activity 3" . 
+
+{	?report :activities ?activities .
+
+	(?label
+	{
+		?activity list:in ?activities ;
+			rdfs:label ?label .
+	}
+	?labels) log:collectAllIn _:x .
+
+	
+} => { ?report :activityLabels ?labels } .

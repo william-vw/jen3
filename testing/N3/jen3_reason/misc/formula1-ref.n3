@@ -1,0 +1,3 @@
+@prefix : <formula1.n3#>.
+
+:it  :is :true .

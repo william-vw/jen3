@@ -1,0 +1,8 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<collectallin2.n3#d1>
+    <collectallin2.n3#constant>
+        "false"^^xsd:boolean .
+<collectallin2.n3#test1>
+    rdf:type <collectallin2.n3#SUCCESS> .

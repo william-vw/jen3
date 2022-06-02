@@ -1,0 +1,4 @@
+@base <http://ex.org/> .
+
+?a :is :variable .
+{ ?x :is :variable } => { ?x :is :notConcrete } .

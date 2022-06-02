@@ -1,0 +1,7 @@
+[R0:
+    (?a <http://example.org/p2> ?b) <- (?a <http://example.org/p1> ?b)
+]
+
+[R1:
+    (?k <http://example.org/p3> ?l) <- (?k <http://example.org/p2> ?l)
+]

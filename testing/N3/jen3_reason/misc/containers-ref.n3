@@ -1,0 +1,25 @@
+<containers.n3#test7>
+    <containers.n3#has>
+        <containers.n3#of_mice_and_men> .
+
+<containers.n3#test5>
+    a   <containers.n3#SUCCESS> .
+
+<containers.n3#test4>
+    <containers.n3#has>
+        <containers.n3#i> ;
+    <containers.n3#has>
+        <containers.n3#war_and_peace> .
+
+<containers.n3#test2>
+    <containers.n3#has>
+        <containers.n3#world> .
+
+<containers.n3#test3>
+    <containers.n3#has>
+        <containers.n3#war_and_peace> ;
+    <containers.n3#has>
+        <containers.n3#i> .
+
+<containers.n3#test1>
+    a   <containers.n3#SUCCESS> .

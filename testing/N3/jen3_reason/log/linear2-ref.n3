@@ -1,0 +1,35 @@
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log:     <http://www.w3.org/2000/10/swap/log#> .
+@prefix in:      <http://n3.w3c.org/builtin/input#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix sk:      <https://w3c.github.io/N3/.well-known/genid/pFt3sVssA6OTUkDc6Ng0CA#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix math:    <http://www.w3.org/2000/10/swap/math#> .
+@prefix list:    <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <linear2.n3#> .
+
+{
+    {
+    ?t  :activateRightNow
+            "true"^^xsd:boolean .}  rdf:type log:StableTruth .
+    ?t  :state
+            :Completed .}  log:becomes {
+            ?t  :state
+                    :Active .        } .
+
+{
+    {
+    ?t  :activateRightNow
+            "true"^^xsd:boolean .}  rdf:type log:StableTruth .
+    ?t  :state
+            :Inactive .}  log:becomes {
+            ?t  :state
+                    :Active .        } .
+
+:tB
+    :state
+        :Active .
+
+:tA
+    :state
+        :Active .

@@ -1,0 +1,54 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <math3.n3#> .
+
+<#> rdfs:comment "More tests for math builtins" .
+
+{ 1 math:equalTo 1 } => { :test1 a :SUCCESS } .
+{ "a" math:equalTo 1 } => { :test2 a :FAILURE } .
+{ ?x math:equalTo ?x } => { :test3 a :FAILURE } .
+{ ?x math:equalTo ?y } => { :test4 a :FAILURE } .
+{ ?x math:greaterThan ?x } => { :test5 a :FAILURE } .
+
+:s1 :p 9 . :s2 :p 9 .
+{ :s1 :p ?a . :s2 :p ?b . ?a math:equalTo ?b } => { :test6 a :SUCCESS } .
+
+{ ?l math:sum ?s } => { :test7 :has ?s } .
+{ 1 math:sum 1 } => { :test8 a :FAILURE } .
+{ (1 2) math:sum ?s } => { :test9 :has ?s } .
+{ ("a" 2) math:sum ?s } => { :test10 :has ?s } .
+{ (?e 2) math:sum 3 } => { :test12 :has ?e } .
+{ (?e1 ?e2 3) math:sum 4 } => { :test13 :has ?e1 } .
+{ (?e ?e 3) math:sum 4 } => { :test14 :has ?e } .
+
+{ 1 math:difference 1 } => { :test16 a :FAILURE } .
+{ (1 2) math:difference ?d } => { :test17 :has ?d } .
+{ ("a" 2) math:difference ?d } => { :test18 :has ?d } .
+{ (?e 2) math:difference 3 } => { :test20 :has ?e } .
+{ (1 2) math:difference -1 } => { :test21 a :SUCCESS } .
+{ (1 2 3) math:difference -4 } => { :test22 a :FAILURE } .
+{ (?e1 ?e2) math:difference 4 } => { :test23 :has ?e1 } .
+{ (?e ?e) math:difference 4 } => { :test24 :has ?e } .
+
+{ ?a math:absoluteValue 3 } => { :test25 :has ?a } .
+{ -3 math:absoluteValue ?a } => { :test26 :has ?a } .
+{ -3 math:absoluteValue 3 } => { :test27 a :SUCCESS } .
+
+{ (1 2 3) math:sum ?sum } => { :test36 :has ?sum } .
+{ (1 2.1 3) math:sum ?sum . (?sum 1) math:roundedTo 6.1 } => { :test37 a :SUCCESS } .
+{ (1 "2.1"^^xsd:float 3) math:sum ?sum . (?sum 1) math:roundedTo ?ro } => { :test38 :has ?ro } .
+{ (1 "2.1"^^xsd:double "2.1"^^xsd:decimal) math:sum ?sum . (?sum 1) math:roundedTo ?ro } => { :test39 :has ?ro } .
+# shouldn't work since there's no type juggling in unification
+{ (1 "2.1"^^xsd:float 3) math:sum "6.1"^^xsd:decimal } => { :test40 :has "6.1"^^xsd:decimal } .
+{ (1 "2.1e2" "2.1"^^xsd:decimal) math:sum ?sum . (?sum 1) math:roundedTo ?ro } => { :test41 :has ?ro } .
+
+{ ( "2.12345"^^xsd:decimal 2 ) math:roundedTo ?r } => { :test42 :has ?r } .
+{ ( "2.12345"^^xsd:decimal 0.1 ) math:roundedTo ?r } => { :test43 :has ?r } .
+{ ( "2.12345"^^xsd:decimal 2 ) math:roundedTo "2.12"^^xsd:decimal } => { :test44 :has "2.12"^^xsd:decimal } .
+
+# shouldn't work since there's no type juggling in unification
+{ (1 "2.1"^^xsd:float 3) math:sum "6.1"^^xsd:double } => { :test45 a :FAILURE } .
+{ (1 "2.1"^^xsd:float 3) math:sum ?s . (?s 2) math:roundedTo ?r . ?r math:equalTo "6.1"^^xsd:float } => { :test46 :has ?r } .

@@ -1,0 +1,9 @@
+@prefix test: <http://example.org/> .
+@base <http://example.org/> .
+
+@forSome :c . :a :b :c .
+@forSome :i . :i :j { :i :j :k } .
+:d :e { @forSome :f . :f :g :h } .
+
+?all :is :well .
+:l :m { ?all :as :one } .

@@ -1,0 +1,50 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix math: <http://www.w3.org/2000/10/swap/math#>
+prefix state: <http://niche.cs.dal.ca/ns/state.owl#>
+prefix cond: <http://niche.cs.dal.ca/ns/condition/base.owl#>
+prefix gl: <http://niche.cs.dal.ca/ns/glean/base.owl#>
+prefix cig: <http://niche.cs.dal.ca/ns/cig/cig.owl#>
+prefix in: <http://niche.cs.dal.ca/ns/cig/input/fhir.owl#>
+prefix fhir: <http://hl7.org/fhir/>
+prefix : <http://niche.cs.dal.ca/ns/cig/rbc_match.owl#>
+
+gl:Activated rdf:type owl:NamedIndividual ,
+	<http://niche.cs.dal.ca/ns/state.owl#CompoundState> ;
+ 	<http://niche.cs.dal.ca/ns/state.owl#includes> gl:Active , gl:Completed .
+
+
+gl:Done rdf:type owl:NamedIndividual ,
+	<http://niche.cs.dal.ca/ns/state.owl#CompoundState> ;
+ 	<http://niche.cs.dal.ca/ns/state.owl#includes> gl:Completed , gl:Discarded .
+
+
+gl:Idle rdf:type owl:NamedIndividual ,
+<http://niche.cs.dal.ca/ns/state.owl#CompoundState> ;
+<http://niche.cs.dal.ca/ns/state.owl#includes> gl:Completed , gl:Discarded , gl:Inactive .
+
+
+gl:NewIteration rdf:type owl:NamedIndividual ,
+	<http://niche.cs.dal.ca/ns/state.owl#CompoundState> ;
+	<http://niche.cs.dal.ca/ns/state.owl#includes> gl:Completed , gl:Ready .
+
+
+gl:NotDone rdf:type owl:NamedIndividual ,
+	<http://niche.cs.dal.ca/ns/state.owl#CompoundState> ;
+	<http://niche.cs.dal.ca/ns/state.owl#includes> gl:Active , gl:Inactive , gl:Ready .
+
+
+#{ ?task state:in gl:NotDone } <= { ?task state:in gl:Ready } .
+
+ 
+{   ?cmpdState state:includes ?atomState .
+
+} => {
+    {   ?task state:in ?cmpdState .
+        
+    } <= {  ?task state:in ?atomState }
+} .
+ 

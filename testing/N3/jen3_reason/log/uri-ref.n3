@@ -1,0 +1,3 @@
+<uri.n3#log11> <uri.n3#has> "http://example.org/hello_world" .
+<uri.n3#log12> <uri.n3#has> <http://example.org/hello_world> .
+<uri.n3#log13> a <uri.n3#SUCCESS> .

@@ -1,0 +1,68 @@
+@prefix : <gen_bnodes.n3#> .
+
+_:b4  :blah
+        {
+            :i
+                :am
+                    :cool .        } .
+
+_:b1  :blah
+        {
+            :i
+                :am
+                    :uncool .        } .
+
+_:b10
+    :bloeh
+        {
+            :i
+                :am
+                    :cool .        } .
+
+_:b2  :bloeh
+        {
+            :i
+                :am
+                    :uncool .        } .
+
+_:b3  :other
+        {
+            :i
+                :am
+                    :cool .        } ;
+    :some
+        {
+            :i
+                :am
+                    :cool .        } .
+
+_:b7  :other
+        {
+            :i
+                :am
+                    :uncool .        } ;
+    :some
+        {
+            :i
+                :am
+                    :uncool .        } .
+
+_:b6  :p1
+        :a ;
+    :p2
+        :a .
+        
+_:b5  :p1
+        :d ;
+    :p2
+        :d .
+
+_:b8  :p3
+        :a ;
+    :p4
+        :a .
+
+_:b9  :p3
+        :d ;
+    :p4
+        :d .

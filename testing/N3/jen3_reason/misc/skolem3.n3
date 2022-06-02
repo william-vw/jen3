@@ -1,0 +1,14 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <skolem3.n3#> .
+
+
+{ ?task!:activity a :Activity } a :Clause1 .
+{ ?task!:activity rdfs:label ?label } a :Clause2 .
+
+{	?cl1 a :Clause1 .
+	?cl2 a :Clause2 .
+	
+	( ?cl1 ?cl2 ) log:conjunction ?premise .
+
+} => { ?premise => { :test a :SUCCESS } } .

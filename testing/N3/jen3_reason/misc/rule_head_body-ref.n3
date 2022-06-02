@@ -1,0 +1,17 @@
+@prefix : <rule_head_body.n3#>.
+
+:a
+    :b
+        :c .
+
+:d
+    :e
+        :f .
+
+:i
+    :wrote
+        :war_and_peace .
+
+:g
+    :h
+        :i .

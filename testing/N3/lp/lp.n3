@@ -1,0 +1,7 @@
+prefix : <http://example.org/>
+
+{ ?a :p2 ?b } <= { ?a :p1 ?b } .
+
+{ ?k :p3 ?l } <= { ?k :p2 ?l } .
+
+:x :p1 :y .

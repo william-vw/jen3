@@ -1,0 +1,19 @@
+@prefix : <universals-input.n3#> .
+
+:test6
+    a   :SUCCESS .
+
+:test5
+    :has :taskA .
+
+:test4
+    :has :taskA .
+
+:test3
+    :has ( :d1 :d3 ) .
+
+:test2
+    :has ( :c1 :c3 ) .
+
+:test1
+    :has ( :c1 :c3 ) .

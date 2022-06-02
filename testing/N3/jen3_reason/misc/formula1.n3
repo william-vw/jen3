@@ -1,0 +1,4 @@
+@prefix : <formula1.n3#>.
+
+{ :a :b :c . :x :y :z } :is :true .
+{ { :x :y :z . :a :b :c } :is ?m } => { :it :is ?m } .

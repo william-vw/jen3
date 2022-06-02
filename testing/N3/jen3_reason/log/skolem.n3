@@ -1,0 +1,16 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <skolem.n3#> .
+
+{ ("a" :x { :hello :at :world }) log:skolem ?sk } => { :test1 :has ?sk } .
+{ ("a" :x { :world :at :hello }) log:skolem ?sk } => { :test2 :has ?sk } .
+{ ("a" :x { :world :at :hello }) log:skolem ?sk } => { :test3 :has ?sk } .
+
+{ ("a" :x { ?world :at :hello }) log:skolem ?sk } => { :test4 :has ?sk } .
+{ ("a" :x { ?mars :at :hello }) log:skolem ?sk } => { :test5 :has ?sk } .
+
+{ ( { :hello :at :world } { :hello :at :mars } ) log:skolem ?sk } => { :test6 :has ?sk } .
+{ ( { :hello :at :world } { :hello :at :mars } ) log:skolem ?sk } => { :test7 :has ?sk } .
+{ ( { :hello :at :mars } { :hello :at :world } ) log:skolem ?sk } => { :test8 :has ?sk } .

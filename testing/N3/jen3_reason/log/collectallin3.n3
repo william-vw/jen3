@@ -1,0 +1,29 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+Prefix : <www.example.org#>
+
+
+:tom a :Cat.
+:garfield a :Cat.
+:silvester a :Cat.
+
+:garfield :color :red.
+:tom :color :grey.
+:silvester :color :black, :white.
+
+
+#here, the scoping of ?y and ?x is not only built-in dependent but also context dependent.
+{
+?x a :Cat.
+  (?y {?x :color ?y} ?ys) log:collectAllIn _:x .
+  
+}=>{ 
+?x :colorList ?ys
+}.
+
+#we can also see that the scoping is order dependent. Do we want to include the concept of order here? 
+{
+  (?y {?x :color ?y} ?ys) log:collectAllIn _:x .
+  ?x a :Cat.
+}=>{ 
+?x :colorList2 ?ys
+}.

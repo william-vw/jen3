@@ -1,0 +1,29 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <includes4.n3#> .
+
+
+{	{ :d :e :f . :a :b :c } log:includes { ?x :b :c } .
+
+} => { :test1 :has ?x } .
+
+
+{	{ :d :e :f . :a :b :c } log:includes { ?x :b :c . :d ?y :f } .
+
+} => { :test2 :has ?x , ?y } .
+
+
+{	{ :d :e :f . :a :b :c } log:includes { ?x :b :c . :d :e :q } .
+
+} => { :test3 :has ?x } .
+
+
+{	{ :a1 :b :c . :a2 :b :c } log:includes { ?x :b :c } .
+
+} => { :test4 :has ?x } .
+
+
+{	{ :d :e :f . ?x :b :c } log:includes { :a :b :c } .
+
+} => { :test5 :has ?x } .

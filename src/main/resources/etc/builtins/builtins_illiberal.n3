@@ -1,0 +1,1138 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix time: <http://www.w3.org/2000/10/swap/time#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix graph: <http://www.w3.org/2000/10/swap/graph#> .
+@prefix file: <http://www.w3.org/2000/10/swap/file#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.w3.org/2000/10/swap/builtin#> .  
+@base <http://www.w3.org/2000/10/swap/builtin#> .
+
+:BaseInputConstraint rdfs:subClassOf :InputConstraint .
+:ListInputConstraint rdfs:subClassOf :InputConstraint .
+
+:ConcreteInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:VariableInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:FormulaInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:LiteralInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:NumberableInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:IntableInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:StringableInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:StringInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:RegexInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:IriInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:BaseIriInputConstraint rdfs:subClassOf :BaseInputConstraint .
+:AnyInputConstraint rdfs:subClassOf :BaseInputConstraint .
+
+:concrete a :ConcreteInputConstraint .
+:variable a :VariableInputConstraint .
+:formula a :FormulaInputConstraint .
+:literal a :LiteralInputConstraint .
+:numberable a :NumberableInputConstraint .
+:intable a :IntableInputConstraint .
+:stringable a :StringableInputConstraint .
+:string a :StringInputConstraint .
+:list a :ListInputConstraint .
+:regex a :RegexInputConstraint .
+:iri a :IriInputConstraint .
+:baseIri a :BaseIriInputConstraint .
+:any a :AnyInputConstraint .
+
+:literalOrVariable :oneOf ( :literal :variable ) .
+:numberableOrVariable :oneOf ( :numberable :variable ) .
+:intableOrVariable :oneOf ( :intable :variable ) .
+:stringableOrVariable :oneOf ( :stringable :variable ) .
+:stringOrVariable :oneOf ( :string :variable ) .
+:boolOrVariable :oneOf ( [ :datatype xsd:boolean ] :variable ) .
+:regexOrVariable :oneOf ( :regex :variable ) .
+:iriOrVariable :oneOf ( :iri :variable ) .
+:listOrVariable :oneOf ( :list :variable ) .
+:formulaOrVariable :oneOf ( :formula :variable ) .
+:dateType :oneOf ( [ :datatype xsd:dateTime ] [ :datatype xsd:date ] ) .
+:timeType :oneOf ( [ :datatype xsd:dateTime ] [ :datatype xsd:time ] ) .
+:dateOrTime :oneOf ( [ :datatype xsd:dateTime ] [ :datatype xsd:date ] [ :datatype xsd:time ] ) .
+
+:concreteList a :ListInputConstraint ; 
+	:listElementType :concrete .
+:numberableList a :ListInputConstraint ; 
+	:listElementType :numberable .
+:numberableOrVariableList a :ListInputConstraint ; 
+	:listElementType :numberableOrVariable .
+:stringableList a :ListInputConstraint ; 
+	:listElementType :stringable .
+:stringableOrVariableList a :ListInputConstraint ; 
+	:listElementType :stringableOrVariable .
+
+:concreteNumbers a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :restricts :numberableOrVariable ] ;
+		:object [ :restricts :numberableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :numberable ] ;
+		:object [ :restricts :numberable ]
+	] .
+	
+:concreteNumberListAndNumberOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [
+			:oneOf ( 
+				[ :restricts :numberableOrVariableList ]
+				[ :restricts :variable ]
+			) ] ;
+		:object [ :restricts :numberableOrVariable ] ;
+	] ;
+	:domain [
+		:subject [ :restricts :numberableList ] ;
+		:object [ :restricts :numberableOrVariable ]
+	] .
+
+:twoNumberListAndNumberOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [
+			:oneOf (
+				[ :size [ a :Exact ; rdf:value 2 ] ; :listElementType [ :restricts :numberableOrVariable ] ]
+				[ :restricts :variable ]
+			) ] ;
+		:object [ :restricts :numberableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :size [ a :Exact ; rdf:value 2 ] ; :listElementType [ :restricts :numberableOrVariable ] ] ;
+		:object [ :restricts :numberableOrVariable ]
+	] .
+	
+:intIntListAndIntOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [
+			:oneOf (
+				[ :listElements ( :intableOrVariable :intableOrVariable ) ]
+				[ :restricts :variable ]
+		) ] ;
+		:object :intableOrVariable
+	] ;
+	:domain [
+		:subject [ :listElements ( :intable :intable ) ] ;
+		:object :intableOrVariable
+	] .
+	
+:numberIntListAndNumberOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [
+			:oneOf (
+				[ :listElements ( :numberableOrVariable :intableOrVariable ) ]
+				[ :restricts :variable ]
+		) ] ;
+		:object :numberableOrVariable
+	] ;
+	:domain [
+		:subject [ :listElements ( :numberable :intable ) ] ;
+		:object :numberableOrVariable
+	] .
+	
+:numberOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :restricts :numberableOrVariable ] ;
+		:object [ :restricts :numberableOrVariable ] ;
+	] ;
+	:domain [ 
+		:oneOf ( [ 
+			:subject [ :restricts :numberable ] ; :object [ :restricts :numberableOrVariable ]
+		] [ 
+			:subject [ :restricts :numberableOrVariable ] ; :object [ :restricts :numberable ]
+		] ) ] .
+
+:numberAndNumberOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :restricts :numberableOrVariable ] ;
+		:object [ :restricts :numberableOrVariable ] ;
+	] ;
+	:domain [ 
+		:subject [ :restricts :numberable ] ; 
+		:object [ :restricts :numberableOrVariable ] 
+	] .
+	
+:stringAndRegex a :InputConstraintsDefinition ;
+	:accept [
+			:subject [ :restricts :stringableOrVariable ] ;
+			:object [ :restricts :regexOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :stringable ] ;
+			:object [ :restricts :regex ]
+		] .
+
+:stringAndStringOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :restricts :stringableOrVariable ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :stringable ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] .
+	
+:iriOrVariableAndStringOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :restricts :iriOrVariable ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] ;
+	:domain [
+		:oneOf ( [
+			:subject [ :restricts :iri ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] [
+			:subject [ :restricts :variable ] ;
+			:object [ :restricts :stringable ]
+		] )
+	] .
+	
+:stringAndString a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :restricts :stringableOrVariable ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :stringable ] ;
+		:object [ :restricts :stringable ]
+	] .
+
+:concreteStringListAndStringOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ 
+			:oneOf ( 
+				[ :restricts :stringableOrVariableList ] 
+				[ :restricts :variable ] 
+			) ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] ;
+	:domain [ 
+		:subject [ :restricts :stringableList ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] .
+	
+:timeAndIntableOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :oneOf ( [ :restricts :timeType ] [ :restricts :variable ] ) ]  ;
+		:object [ :restricts :intableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :timeType ] ;
+		:object [ :restricts :intableOrVariable ]
+	] .
+	
+:dateAndIntableOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :oneOf ( [ :restricts :dateType ] [ :restricts :variable ] ) ]  ;
+		:object [ :restricts :intableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :dateType ] ;
+		:object [ :restricts :intableOrVariable ]
+	] .
+
+:dateOrTimeAndIntableOrVariable a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :oneOf ( [ :restricts :dateOrTime ] [ :restricts :variable ] ) ]  ;
+		:object [ :restricts :intableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :dateOrTime ] ;
+		:object [ :restricts :intableOrVariable ]
+	] .
+
+:concreteAndConcreteOrVariable a :InputConstraintsDefinition ;
+	:accept [ 
+		:subject [ :restricts :any ] ;
+		:object [ :restricts :any ] 
+	] ;
+	:domain [ 
+		:oneOf ( [
+			:subject [ :restricts :concrete ] ;
+			:object [ :restricts :any ]
+		] [
+			:subject [ :restricts :any ] ;
+			:object [ :restricts :concrete ]
+		] ) 
+	] .	
+	
+:concreteAndConcrete a :InputConstraintsDefinition ;
+	:accept [ 
+		:subject [ :restricts :any ] ;
+		:object [ :restricts :any ] 
+	] ;
+	:domain [
+		:subject [ :restricts :concrete ] ;
+		:object [ :restricts :concrete ] 
+	] .
+	
+:formulaAndFormula a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :restricts :formulaOrVariable ] ;
+		:object [ :restricts :formulaOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :formula ] ;
+		:object [ :restricts :formula ]
+	] .
+	
+:formulaOrBaseAndFormula a :InputConstraintsDefinition ;
+	:accept [
+		:subject [ :oneOf ( [ :restricts :formula ] [ :restricts :variable ] [ :restricts :baseIri ] ) ] ;
+		:object [ :oneOf ( [ :restricts :formula ] [ :restricts :variable ] [ :restricts :baseIri ] ) ]
+	] ;
+	:domain [
+		:subject [ :oneOf ( [ :restricts :formula ] [ :restricts :baseIri ] ) ] ;
+		:object [ :oneOf ( [ :restricts :formula ] [ :restricts :variable ] [ :restricts :baseIri ] ) ]
+	] .
+
+:formulaAndFormulaOrVariable a :InputConstraints ;
+	:accept [
+			:subject [ :restricts :formulaOrVariable ] ;
+			:object [ :restricts :formulaOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :formula ] ;
+			:object [ :restricts :formulaOrVariable ]
+		] .
+		
+:listAndAny a :InputConstraints ;
+	:accept [
+		:subject [ :restricts :listOrVariable ] ;
+		:object [ :restricts :any ]
+	] ;
+	:domain [
+		:subject [ :restricts :list ] ;
+		:object [ :restricts :any ]
+	] .
+	
+:anyAndList a :InputConstraints ;
+	:accept [
+		:subject [ :restricts :any ] ;
+		:object [ :restricts :listOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :any ] ;
+		:object [ :restricts :list ]
+	] .
+
+:iriAndFormula a :InputConstraints ;
+	:accept [
+		:subject [ :restricts :iriOrVariable ] ;
+		:object [ :restricts :formulaOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :iri ] ;
+		:object [ :restricts :formulaOrVariable ]
+	] .
+	
+:iriAndStringOrVariable a :InputConstraints ;
+	:accept [
+		:subject [ :restricts :iriOrVariable ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :iri ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] .
+
+math:equalTo
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumbers .
+
+math:notEqualTo
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumbers .
+	
+math:greaterThan
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumbers .
+	
+math:notGreaterThan
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumbers .
+	
+math:lessThan
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumbers .
+	
+math:notLessThan
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumbers .
+	
+math:sum
+    a :BuiltinDefinition ;
+	:inputConstraints :concreteNumberListAndNumberOrVariable .
+	
+math:product
+    a :BuiltinDefinition ;
+	:inputConstraints :concreteNumberListAndNumberOrVariable .
+	
+math:quotient
+    a :BuiltinDefinition ;
+	:inputConstraints :twoNumberListAndNumberOrVariable .
+	
+math:difference
+	a :BuiltinDefinition ;
+	:inputConstraints :twoNumberListAndNumberOrVariable .
+	
+math:exponentiation
+	a :BuiltinDefinition ;
+	:inputConstraints :twoNumberListAndNumberOrVariable .
+	
+math:remainder
+	a :BuiltinDefinition ;
+	:inputConstraints :intIntListAndIntOrVariable .
+	
+math:logarithm
+	a :BuiltinDefinition ;
+	:inputConstraints :twoNumberListAndNumberOrVariable .
+
+math:negation
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+	
+math:absoluteValue
+	a :BuiltinDefinition ;
+	:inputConstraints :numberAndNumberOrVariable .
+
+math:rounded
+	a :BuiltinDefinition ;
+	:inputConstraints :numberAndNumberOrVariable .
+	
+math:roundedTo
+	a :BuiltinDefinition ;
+	:inputConstraints :numberIntListAndNumberOrVariable .
+
+math:ceiling
+	a :BuiltinDefinition ;
+	:inputConstraints :numberAndNumberOrVariable .
+	
+math:floor
+	a :BuiltinDefinition ;
+	:inputConstraints :numberAndNumberOrVariable .
+
+math:degrees
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:radians
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:sin
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:asin
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+	
+math:sinh
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+	
+math:asinh
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+	
+math:cos 
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:acos 
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+	
+math:cosh
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:acosh 
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:tan
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:atan
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+	
+math:tanh
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+	
+math:atanh
+	a :BuiltinDefinition ;
+	:inputConstraints :numberOrVariable .
+
+math:min
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumberListAndNumberOrVariable .
+
+math:max
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteNumberListAndNumberOrVariable .
+
+string:scrape
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject 
+				[ :oneOf (
+					[ :listElements ( [ :restricts :stringableOrVariable ] [ :restricts :regexOrVariable ] ) ]
+					[ :restricts :variable ]
+				) ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] ;
+		:domain [
+			:subject [ :listElements ( [ :restricts :stringable ] [ :restricts :regex ] ) ] ;
+			:object [ :restricts :stringableOrVariable ]
+		]  
+	] .
+	
+string:scrapeAll
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject 
+				[ :oneOf (
+					[ :listElements ( [ :restricts :stringableOrVariable ] [ :restricts :regexOrVariable ] ) ]
+					[ :restricts :variable ]
+				) ] ;
+			:object [ :restricts :listOrVariable ]
+		] ;
+		:domain [
+			:subject [ :listElements ( [ :restricts :stringable ] [ :restricts :regex ] ) ] ;
+			:object [ :restricts :listOrVariable ]
+		]  
+	] .
+	
+string:matches
+	a :BuiltinDefinition ;
+	:inputConstraints :stringAndRegex .
+	
+string:notMatches
+	a :BuiltinDefinition ;
+	:inputConstraints :stringAndRegex .
+	
+string:concatenation
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteStringListAndStringOrVariable .
+	
+string:length
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :stringableOrVariable ] ;
+			:object [ :restricts :intableOrVariable ] ;
+		] ;
+		:domain [
+			:subject [ :restricts :stringable ] ;
+			:object [ :restricts :intableOrVariable ] ;
+		] 		
+	] .
+	
+string:upperCase
+	a :BuiltinDefinition ;
+	:inputConstraints :stringAndStringOrVariable .
+
+string:lowerCase
+	a :BuiltinDefinition ;
+	:inputConstraints :stringAndStringOrVariable .
+
+string:capitalize
+	a :BuiltinDefinition ;
+	:inputConstraints :stringAndStringOrVariable .
+
+string:replace
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ 
+				:oneOf ( 
+					[ :listElements ( 
+						[ :restricts :stringableOrVariable ] [ :restricts :regexOrVariable ] [ :restricts :stringableOrVariable ]
+					) ]
+					[ :restricts :variable ] 
+				) ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] ;
+		:domain [ 
+			:subject [ :listElements ( 
+				[ :restricts :stringable ] [ :restricts :regex ] [ :restricts :stringable ]
+			) ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] 
+	] .
+	
+string:replaceAll
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ 
+				:oneOf (
+					[ :listElements (
+						[ :restricts :stringableOrVariable ]
+						[ :oneOf ( [ :listElementType [ :restricts :regexOrVariable ]] [ :restricts :variable ] ) ]
+						[ :oneOf ( [ :listElementType [ :restricts :stringableOrVariable ]] [ :restricts :variable ] ) ]
+					) ]
+					[ :restricts :variable ] 
+				) ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] ;
+		:domain [ 
+			:subject [ :listElements ( 
+				[ :restricts :stringable ]
+				[ :listElementType [ :restricts :regex ] ]
+				[ :listElementType [ :restricts :stringable ] ]
+			) ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] 
+	] .
+	
+string:format a :BuiltinDefinition ;
+	:inputConstraints :concreteStringListAndStringOrVariable .
+
+string:substring a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [
+				:oneOf ( [
+					:listElements ( 
+						[ :restricts :stringableOrVariable ] [ :restricts :intableOrVariable ] [ :restricts :intableOrVariable ] )
+				] [ :restricts :variable ] )
+			] ;
+			:object [ :restricts :stringableOrVariable ]
+		] ; 
+		:domain [
+			:subject [
+				:listElements (
+					[ :restricts :stringable ] [ :restricts :intable ] [ :restricts :intableOrVariable ] )
+			] ;
+			:object [ :restricts :stringableOrVariable ]
+		] 
+	] .
+
+string:lessThan a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+	
+string:notLessThan a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+	
+string:greaterThan a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+	
+string:notGreaterThan a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+	
+string:equalIgnoringCase a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+	
+string:notEqualIgnoringCase a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+
+string:startsWith a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+
+string:endsWith a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+
+string:contains a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+	
+string:containsIgnoringCase a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+
+string:containsRoughly a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+	
+string:notContainsRoughly a :BuiltinDefinition ;
+	:inputConstraints :stringAndString .
+
+string:join a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :listOrVariable ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] ;
+		:domain [
+			:subject [ :listElements ( [ :restricts :stringableList ] [ :restricts :stringable ] ) ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] 
+	] .
+
+list:length
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :listOrVariable ] ;
+			:object [ :restricts :intableOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :list ] ;
+			:object [ :restricts :intableOrVariable ]
+		] 
+	] .
+
+list:member	a :BuiltinDefinition ;
+	:inputConstraints :listAndAny .
+
+list:in	a :BuiltinDefinition ;
+	:inputConstraints :anyAndList .
+	
+list:memberAt
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject 
+				[ :oneOf (
+					[ :listElements ( [ :restricts :listOrVariable ] [ :restricts :intableOrVariable ] ) ]
+					[ :restricts :variable ]
+				) ] ;
+			:object [ :restricts :any ]
+		] ;
+		:domain [
+			:subject [ :listElements ( [ :restricts :list ] [ :restricts :intable ] ) ] ;
+			:object [ :restricts :any ]
+		] 
+	] .
+	
+list:append
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :listOrVariable ] ;
+			:object [ :restricts :listOrVariable ]
+		] ;
+		:domain [ 
+			:subject [ :listElementType [ :restricts :list ] ] ;
+			:object [ :restricts :listOrVariable ]
+		] 	
+	] .
+	
+list:remove
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject 
+				[ :oneOf (
+					[ :listElements ( [ :restricts :listOrVariable ] [ :restricts :any ] ) ]
+					[ :restricts :variable ]
+				) ] ;
+			:object [ :restricts :listOrVariable ]
+		] ;
+		:domain [
+			:subject [ :listElements ( [ :restricts :list ] [ :restricts :concrete ] ) ] ;
+			:object [ :restricts :listOrVariable ]
+		] 
+	] .
+	
+list:removeAt
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject 
+				[ :oneOf (
+					[ :listElements ( [ :restricts :listOrVariable ] [ :restricts :intableOrVariable ] ) ]
+					[ :restricts :variable ]
+				) ] ;
+			:object [ :restricts :listOrVariable ]
+		] ;
+		:domain [
+			:subject [ :listElements ( [ :restricts :list ] [ :restricts :intable ] ) ] ;
+			:object [ :restricts :listOrVariable ]
+		] 
+	] .
+	
+list:iterate
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :listOrVariable ] ;
+			:object [ :oneOf (
+				[ :listElements ( [ :restricts :intableOrVariable ] [ :restricts :any ] ) ]
+				[ :restricts :variable ]
+			) ]
+		] ;
+		:domain [
+			:subject [ :restricts :list ] ;
+			:object [ :oneOf (
+				[ :listElements ( [ :restricts :intableOrVariable ] [ :restricts :any ] ) ]
+				[ :restricts :variable ]
+			) ]
+		]
+	] .
+	
+list:first a :BuiltinDefinition ;
+	:inputConstraints :listAndAny .
+	
+list:last a :BuiltinDefinition ;
+	:inputConstraints :listAndAny .
+	
+list:unique a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :listOrVariable ] ;
+			:object [ :restricts :listOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :concreteList ] ;
+			:object [ :restricts :listOrVariable ]
+		] 
+	] .
+	
+time:inSeconds
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :oneOf ( [ :datatype xsd:dateTime ] [ :restricts :variable ] ) ] ;
+			:object [ :restricts :intableOrVariable ]
+		] ;
+		:domain [
+			# this pattern is typically used for "bi-directional" builtins
+			:oneOf ( [ 
+				:subject [ :datatype xsd:dateTime ] ; 
+				:object [ :restricts :intableOrVariable ] 
+			] [
+				:subject [ :restricts :variable ] ;
+				:object [ :restricts :intable ]
+			] )
+		] 
+	] .
+	
+time:second a :BuiltinDefinition ;
+	:inputConstraints :timeAndIntableOrVariable .
+
+time:minute a :BuiltinDefinition ;
+	:inputConstraints :timeAndIntableOrVariable .
+	
+time:hour a :BuiltinDefinition ;
+	:inputConstraints :timeAndIntableOrVariable .
+	
+time:day a :BuiltinDefinition ;
+	:inputConstraints :dateAndIntableOrVariable .
+
+time:dayOfWeek a :BuiltinDefinition ;
+	:inputConstraints :dateAndIntableOrVariable .
+	
+time:month a :BuiltinDefinition ;
+	:inputConstraints :dateAndIntableOrVariable .
+	
+time:year a :BuiltinDefinition ;
+	:inputConstraints :dateAndIntableOrVariable .
+
+time:timeZone a :BuiltinDefinition ;
+	:inputConstraints :dateOrTimeAndIntableOrVariable .
+	
+time:currentTime a :BuiltinDefinition ;	
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :baseIri ] ;
+			:object [ :oneOf (
+				[ :datatype xsd:dateTime ]
+				[ :restricts :variable]
+			) ]
+		] ;
+		:domain [
+			:subject [ :restricts :baseIri ] ;
+			:object [ :oneOf (
+				[ :datatype xsd:dateTime ]
+				[ :restricts :variable]
+			) ]
+		] 
+	] .
+
+crypto:sha a :BuiltinDefinition ;
+	:inputConstraints :stringAndStringOrVariable .
+
+log:equalTo
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteAndConcreteOrVariable .
+
+log:notEqualTo
+	a :BuiltinDefinition ;
+	:inputConstraints :concreteAndConcrete .
+
+log:dtlit
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :oneOf ( 
+				[ :listElements ( [ :restricts :stringableOrVariable ] [ :restricts :iriOrVariable ] ) ] 
+				[ :restricts :variable ] 
+			) ] ;
+			:object [ :restricts :literalOrVariable ]
+		] ;
+		:domain [ :oneOf ( [
+				:subject [ :listElements ( [ :restricts :stringable ] [ :restricts :iri ] ) ] ;
+				:object [ :restricts :literalOrVariable ]
+			] [
+				:subject [ :listElements ( [ :restricts :variable ] [ :restricts :variable ] ) ] ;
+				:object [ :restricts :literal ]
+			] [
+				:subject [ :restricts :variable ] ;
+				:object [ :restricts :literal ]
+			] ) 
+		] 
+	] .
+
+log:langlit
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :oneOf ( 
+				[ :listElements ( [ :restricts :stringableOrVariable ] [ :restricts :stringableOrVariable ] ) ] 
+				[ :restricts :variable ] 
+			) ] ;
+			:object [ :restricts :literalOrVariable ]
+		] ;
+		:domain [ :oneOf ( [
+				:subject [ :listElements ( [ :restricts :stringable ] [ :restricts :stringable ] ) ] ;
+				:object [ :restricts :literalOrVariable ]
+			] [
+				:subject [ :listElements ( [ :restricts :variable ] [ :restricts :variable ] ) ] ;
+				:object [ :restricts :literal ]
+			] [
+				:subject [ :restricts :variable ] ;
+				:object [ :restricts :literal ]
+			] ) 
+		] 
+	] .
+
+log:uri a :BuiltinDefinition;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :iriOrVariable ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] ;
+		:domain [
+			:oneOf ( [
+			 	:subject [ :restricts :iri ] ;
+				:object [ :restricts :stringableOrVariable ]
+			] [
+				:subject [ :restricts :variable ] ;
+				:object [ :restricts :stringable ]
+			] )
+		] 
+	] .
+	
+log:nameSpace a :BuiltinDefinition ;
+	:inputConstraints :iriAndStringOrVariable .
+
+log:localName a :BuiltinDefinition ;
+	:inputConstraints :iriAndStringOrVariable .
+	
+log:prefix a :BuiltinDefinition ;
+	:inputConstraints :iriOrVariableAndStringOrVariable .
+	
+log:rawType a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :any ] ;
+			:object [ :restricts :iriOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :concrete ] ;
+			:object [ :restricts :iriOrVariable ]
+		] 
+	] .
+
+log:includes a :BuiltinDefinition ;
+	:inputConstraints :formulaOrBaseAndFormula .
+
+log:notIncludes a :BuiltinDefinition ;
+	:inputConstraints :formulaOrBaseAndFormula .
+
+log:content a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :iriOrVariable ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :iri ] ;
+			:object [ :restricts :stringableOrVariable ]
+		] 
+	] ;
+	:isResourceIntensive true .
+	
+log:parsedAsN3 a :BuiltinDefinition ;
+	:inputConstraints [ 
+		:accept [
+			:subject [ :restricts :stringOrVariable ] ;
+			:object [ :restricts :formulaOrVariable ]
+		] ;
+		:domain [ :oneOf ( [
+				:subject [ :restricts :string ] ;
+				:object [ :restricts :formulaOrVariable ]
+			] [
+				:subject [ :restricts :variable ] ;
+				:object [ :restricts :formula ]
+			] )
+		] 
+	] .
+	
+log:semantics a :BuiltinDefinition ;
+	:inputConstraints :iriAndFormula ;
+	:isResourceIntensive true .
+	
+log:semanticsOrError a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :iriOrVariable ] ;
+			:object [ :oneOf ( [ :restricts :formula ] [ :restricts :literal ] [ :restricts :variable ] ) ]
+		] ;
+		:domain [
+			:subject [ :restricts :iri ] ;
+			:object [ :oneOf ( [ :restricts :formula ] [ :restricts :literal ] [ :restricts :variable ] ) ]
+		] 
+	] ;
+	:isResourceIntensive true .
+
+log:conclusion a :BuiltinDefinition ;
+	:inputConstraints :formulaAndFormulaOrVariable .
+	
+log:inferences a :BuiltinDefinition ;
+	:inputConstraints :formulaAndFormulaOrVariable .
+
+log:forAllIn 
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [
+				:oneOf (
+					[ :size [ a :Exact ; rdf:value 2 ] ; :listElementType [ :restricts :formulaOrVariable ] ]
+					[ :restricts :variable ]
+			) ] ;
+			:object [ 
+				:oneOf (
+					[ :restricts :baseIri ] [ :restricts :formula ] [ :restricts :variable ]
+				) ]
+		] ;
+		:domain [
+			:subject [ :size [ a :Exact ; rdf:value 2 ] ; :listElementType [ :restricts :formula ] ] ;
+			:object [ 
+				:oneOf (
+					[ :restricts :baseIri ] [ :restricts :formula ] [ :restricts :variable ]
+				) ]
+		] 
+	] .
+	
+log:collectAllIn 
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [
+				:oneOf (
+					[ :listElements ( [ :restricts :variable ] [ :restricts :formulaOrVariable ] [ :restricts :listOrVariable ] ) ]
+					[ :restricts :variable ]
+				) ] ;
+			:object [ 
+				:oneOf (
+					[ :restricts :baseIri ] [ :restricts :formula ] [ :restricts :variable ]
+				) ]
+		] ;
+		:domain [
+			:subject [ :listElements ( [ :restricts :variable ] [ :restricts :formula ] [ :restricts :listOrVariable ] ) ] ;
+			:object [ 
+				:oneOf (
+					[ :restricts :baseIri ] [ :restricts :formula ] [ :restricts :variable ]
+				) ]
+		] 
+	] .
+	
+log:conjunction a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [
+				:oneOf (
+					[ :listElementType [ :restricts :formulaOrVariable ] ]
+					[ :restricts :variable ]
+				) ] ;
+			:object [ :restricts :formulaOrVariable	]
+		] ;
+		:domain [
+			:subject [ :listElementType [ :restricts :formula ] ] ;
+			:object [ :restricts :formulaOrVariable	]
+		] 
+	] .
+	
+log:outputString a :BuiltinDefinition ;
+	:inputConstraints :stringAndString ;
+	:instantiate false ;
+	:isStatic false .
+	
+log:skolem a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :listOrVariable ] ;
+			:object [ :restricts :any ]
+		] ;
+		:domain [ 
+			:subject [ :restricts :concreteList ] ;
+			:object [ :restricts :any ]
+		] 
+	] .
+	
+log:uuid a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :any ] ;
+			:object [ :restricts :stringOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :any ] ;
+			:object [ :restricts :stringOrVariable ]
+		] 
+	] .
+	
+log:bound a :BuiltinDefinition ;
+#	:isLowPriority true ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :any ] ;
+			:object [ :restricts :boolOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :any ] ;
+			:object [ :restricts :boolOrVariable ]
+		] 
+	] .
+	
+graph:length a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :formulaOrVariable ] ;
+			:object [ :restricts :numberableOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :formula ] ;
+			:object [ :restricts :numberableOrVariable ]
+		] 
+	] .
+	
+graph:difference a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :oneOf (
+				[ :size [ a :Exact ; rdf:value 2 ] ; :listElementType [ :restricts :formulaOrVariable ] ]
+				[ :restricts :variable ]
+			) ] ;
+			:object [ :restricts :formulaOrVariable ]
+		] ;
+		:domain [
+			:subject [ :size [ a :Exact ; rdf:value 2 ] ; :listElementType [ :restricts :formula ] ] ;
+			:object [ :restricts :formulaOrVariable ]
+		] 
+	] .
+	
+file:listFiles a :BuiltinDefinition ;
+	:inputConstraints :iriAndFormula ;
+	:isResourceIntensive true .

@@ -1,0 +1,28 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <collectallin5.n3#> .
+
+:s1 :p 2, 3, 4.
+:s2 :p 6, 7, 8, 9.
+:s3 :p 8, 9, 10, 11.
+
+# - ordering:
+# {(?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc. ?L1 math:sum ?S1. (?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc} => {:test1 :result ?L2}.
+# error: "?S1" should be a variable but is a literal
+
+#{(?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc. ?L1 math:sum ?S1. (?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc} => {:test1 :result ?L2}.
+#{(?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc. (?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc. ?L1 math:sum ?S1} => {:test2 :result ?L2}.
+#{?L1 math:sum ?S1. (?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc. (?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc} => {:test4 :result ?L2}.
+
+# - ordering:
+#{(?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc. (?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc. ?L1 math:sum ?S1.} => {:test3 :result ?L2}.
+# ("?S1" value(s) are not exposed to rest of premise, so no problem if it is later unified with 9)
+
+#{?L1 math:sum ?S1. (?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc. (?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc} => {:test3 :result ?L2}.
+#{(?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc. (?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc. ?L1 math:sum ?S1} => {:test5 :result ?L2}.
+#{(?S1 {?S :p ?S1} ?L2) log:collectAllIn ?Sc. ?L1 math:sum ?S1. (?N1 {:s1 :p ?N1} ?L1) log:collectAllIn ?Sc} => {:test6 :result ?L2}.

@@ -1,0 +1,17 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <https://w3c.github.io/N3/tests/test.n3#> .
+@base <http://example.org/> .
+
+
+{ 	:expected :output ?expected .
+	:actual :output ?actual .
+	?expected log:includes ?actual .
+	
+} => { :expected :includes :actual } .
+
+
+{ 	:expected :output ?expected .
+	:actual :output ?actual .
+	?actual log:includes ?expected .
+	
+} => { :actual :includes :expected } .

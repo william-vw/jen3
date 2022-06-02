@@ -1,0 +1,15 @@
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix math: <http://www.w3.org/2000/10/swap/math#>
+prefix : <infer-rules2.n3#>
+
+{
+    :will
+        :hasHR ?hr .
+    ?hr  math:greaterThan "150"^^xsd:int .}  =>  {
+    :tB  :conditionMet "true"^^xsd:boolean .} .
+
+:test1
+    a   :SUCCESS .
+    
+:tB  :conditionMet "true"^^xsd:boolean ;
+	:state :Ready .

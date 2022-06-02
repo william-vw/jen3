@@ -1,0 +1,29 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix graph: <http://www.w3.org/2000/10/swap/graph#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix : <https://w3c.github.io/N3/tests/test.n3#> .
+@base <http://example.org/> .
+
+# check output
+
+{ 	:expected!:output^log:uri log:semantics ?expected .
+	:actual!:output^log:uri!log:semantics log:inferences ?actual .
+	
+	(?actual ?expected) graph:difference ?extra .
+	(?expected ?actual) graph:difference ?missing .
+	
+} => { :actual :extra ?extra ; :missing ?missing .
+	#:actual :output ?actual . :expected :output ?expected 
+} .
+
+
+{	:actual :missing ?missing .
+	?missing!graph:length math:greaterThan 0 .
+
+} => { :actual :error :notEnoughInferences } .
+
+
+{	:actual :extra ?extra .
+	?extra!graph:length math:greaterThan 0 .
+
+} => { :actual :error :tooManyInferences } . 

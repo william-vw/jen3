@@ -1,0 +1,11 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <langlit.n3#> .
+
+<#> rdfs:comment "Tests for log:langlit" .
+
+{ ("hello" "en") log:langlit ?l } => { :log7 :has ?l } .
+{ (?s ?l) log:langlit "hello"@en } => { :log8 :has (?s ?l) } .
+{ ?l log:langlit "goedendag"@nl } => { :log9 :has ?l } .
+{ ("hello" "en") log:langlit "hello"@en } => { :log10 a :SUCCESS } .

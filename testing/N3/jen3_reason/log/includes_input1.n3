@@ -1,0 +1,26 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <includes_input1.n3#> .
+
+:a :b :c .
+:c :b :a .
+
+
+{	:a :b :c . :c :b :a . # add this part to check sorting of "universal" clauses
+	{ :k :l :m . :d :e :f } log:includes { ?x :l :m } .
+
+} => { :test1 :has ?x } .
+
+
+{	:a :b :c . :c :b :a .
+	<> log:includes { ?x :b :c } .
+
+} => { :test2 :has ?x } .
+
+
+{	:a :b :c . :c :b :a .
+	<> log:includes <> .
+
+} => { :test3 a :SUCCESS } .

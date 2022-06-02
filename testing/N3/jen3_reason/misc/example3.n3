@@ -1,0 +1,7 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://example.org/>.
+
+<#> rdfs:comment "Used by clause-reorder2.n3" .
+
+?a :b :c .

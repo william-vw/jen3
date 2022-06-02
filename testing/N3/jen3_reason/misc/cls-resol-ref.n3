@@ -1,0 +1,2 @@
+<cls-resol.n3#test1> <cls-resol.n3#has> "org.apache.jena.reasoner.rulesys.builtins.n3.math.RoundedTo"^^<http://www.w3.org/2001/XMLSchema#string> .
+<cls-resol.n3#test1> <cls-resol.n3#has> "org.apache.jena.reasoner.rulesys.builtins.n3.string.Concatenation"^^<http://www.w3.org/2001/XMLSchema#string> .
