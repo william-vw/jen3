@@ -70,7 +70,7 @@ public abstract class n3EventHandler extends n3BaseListener {
 		String prefix = pNameNs.getText().trim();
 		prefix = prefix.substring(0, prefix.length() - 1);
 
-		String uri = iri(iriRef);
+		String uri = iriStr(iriRef);
 
 		setPrefix(prefix, uri);
 	}
@@ -162,7 +162,7 @@ public abstract class n3EventHandler extends n3BaseListener {
 		return token.getText().trim();
 	}
 
-	protected String iri(TerminalNode n) {
+	protected String iriStr(TerminalNode n) {
 		String s = text(n);
 		s = s.substring(1, s.length() - 1);
 

@@ -322,6 +322,24 @@ public class N3GraphInserter extends n3EventHandler {
 	}
 
 	@Override
+	public void enterIriPropertyList(n3Parser.IriPropertyListContext ctx) {
+		subState();
+
+		// see exitIri for setting subject of subsequent triples
+		state.iplId = true;
+	}
+
+	@Override
+	public void exitIriPropertyList(n3Parser.IriPropertyListContext ctx) {
+		Node prevIri = state.triple[0];
+
+		popState();
+		// assign the id subject to iri
+		// to be consumed by subject, predicate or object, depending on s/p/o
+		state.setIri(prevIri);
+	}
+
+	@Override
 	public void enterFormula(FormulaContext ctx) {
 		N3ModelSpec spec = N3ModelSpec.get(Types.N3_MEM);
 
@@ -360,12 +378,18 @@ public class N3GraphInserter extends n3EventHandler {
 		TerminalNode iriRef = ctx.IRIREF();
 
 		if (iriRef != null)
-			setIri(iri(iriRef));
+			setIri(iriStr(iriRef));
+
+		if (state.iplId) {
+			// assign id as subject to all predicate-objects in the list
+			state.triple[0] = state.iri;
+			state.iplId = false;
+		}
 	}
 
 	@Override
 	protected void setIri(String iri) {
-		state.setIri(iri);
+		state.setIri(state.iriNode(iri));
 	}
 
 	@Override
@@ -503,6 +527,8 @@ public class N3GraphInserter extends n3EventHandler {
 		protected Node pathStart = null;
 		protected boolean invPath = false;
 
+		protected boolean iplId = false;
+
 		protected CitedFormula currentFormula;
 		// iris from current list
 //		protected Quantifier currentQuantifier;
@@ -619,7 +645,7 @@ public class N3GraphInserter extends n3EventHandler {
 			itemType = IRI;
 		}
 
-		protected void setIri(String iri) {
+		protected Node iriNode(String iri) {
 			Node n = resolveIri(iri);
 			if (spec.hasFeedbackFor(BUILTIN_MISUSE_NS)) {
 
@@ -630,9 +656,9 @@ public class N3GraphInserter extends n3EventHandler {
 //			if (listingIris())
 //				list(n);
 //			else {
-			this.iri = n;
-			itemType = IRI;
 //			}
+
+			return n;
 		}
 
 //		protected Node newExplicitVar(String iri, Quantifier q) {

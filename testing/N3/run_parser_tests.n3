@@ -10,7 +10,6 @@
 @prefix graph: <http://www.w3.org/2000/10/swap/graph#> .
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
 @prefix :     <#>.
-@base <http://example.org/> .
 
 test:N3System rdfs:subClassOf earl:Software .
 test:jen3 a test:N3System .
@@ -60,7 +59,7 @@ test:syntaxPass a test:N3ReasonPass .
 
 {	?syntaxTest a test:TestN3PositiveSyntax ;
 		:testOutput ?testOutput .
-	<#> log:notIncludes { ?syntaxTest mf:result ?testResult } .
+	<> log:notIncludes { ?syntaxTest mf:result ?testResult } .
 		
 	?testOutput log:rawType log:Formula .
 		
