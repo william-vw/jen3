@@ -218,7 +218,7 @@ _:b22
 <file:///home/william-vw/projects/n3/jena_n3/testing/N3/list_tests.n3>
     a   mf:Manifest ;
     mf:name "Notation3 Reasoner tests" ;
-    mf:entries ( <#jen3_reason_string_string1> <#jen3_reason_math_math3> <#jen3_reason_math_math2> <#jen3_reason_math_math1> <#jen3_reason_math_trig1> <#jen3_reason_list_list-iterate> <#jen3_reason_list_list1> <#jen3_reason_log_includes1> <#jen3_reason_log_includes2> <#jen3_reason_log_includes3> <#jen3_reason_log_includes4> <#jen3_reason_log_includes5> <#jen3_reason_log_includes_input1> <#jen3_reason_log_includes_input2> <#jen3_reason_log_universals_input> <#jen3_reason_log_uri> <#jen3_reason_log_forallin> <#jen3_reason_log_langlit> <#jen3_reason_log_collectallin2> <#jen3_reason_log_concl1> <#jen3_reason_log_equalto> <#jen3_reason_log_equalto2> <#jen3_reason_log_rawtype> <#jen3_reason_log_getter-builtins> <#jen3_reason_log_collectallin1> <#jen3_reason_log_dtlit> <#jen3_reason_crypto_crypto1> <#jen3_reason_time_time1> <#jen3_reason_graph_graph1> <#jen3_reason_graph_graph2> <#jen3_reason_misc_containers> <#jen3_reason_misc_data-var> <#jen3_reason_misc_formula1> <#jen3_reason_misc_static-builtin-assert1> <#jen3_reason_misc_var-builtin> <#jen3_reason_misc_rule2> <#jen3_reason_misc_gen-bnodes> <#jen3_reason_misc_rule-match-rule> <#jen3_reason_misc_rule-data-var> <#jen3_reason_misc_rule3> <#jen3_reason_misc_nested-clauses1> <#jen3_reason_misc_clause-reorder> <#jen3_reason_misc_static-builtin-assert2> <#jen3_reason_misc_rule1> <#jen3_reason_misc_infer-rules> <#jen3_reason_misc_infer-rules2> <#jen3_reason_misc_rule4> <#jen3_reason_misc_nested-clauses2> <#jen3_reason_misc_univout1> <#jen3_reason_misc_cls-resol> <#jen3_reason_log_linear1> <#jen3_reason_log_linear2>) .
+    mf:entries ( <#jen3_reason_string_string1> <#jen3_reason_math_math3> <#jen3_reason_math_math2> <#jen3_reason_math_math1> <#jen3_reason_math_trig1> <#jen3_reason_list_list-iterate> <#jen3_reason_list_list-not> <#jen3_reason_list_list1> <#jen3_reason_log_includes1> <#jen3_reason_log_includes2> <#jen3_reason_log_includes3> <#jen3_reason_log_includes4> <#jen3_reason_log_includes5> <#jen3_reason_log_includes_input1> <#jen3_reason_log_includes_input2> <#jen3_reason_log_universals_input> <#jen3_reason_log_uri> <#jen3_reason_log_forallin> <#jen3_reason_log_langlit> <#jen3_reason_log_collectallin2> <#jen3_reason_log_concl1> <#jen3_reason_log_equalto> <#jen3_reason_log_equalto2> <#jen3_reason_log_rawtype> <#jen3_reason_log_getter-builtins> <#jen3_reason_log_collectallin1> <#jen3_reason_log_dtlit> <#jen3_reason_crypto_crypto1> <#jen3_reason_time_time1> <#jen3_reason_graph_graph1> <#jen3_reason_graph_graph2> <#jen3_reason_misc_containers> <#jen3_reason_misc_data-var> <#jen3_reason_misc_formula1> <#jen3_reason_misc_static-builtin-assert1> <#jen3_reason_misc_var-builtin> <#jen3_reason_misc_rule2> <#jen3_reason_misc_gen-bnodes> <#jen3_reason_misc_rule-match-rule> <#jen3_reason_misc_rule-data-var> <#jen3_reason_misc_rule3> <#jen3_reason_misc_nested-clauses1> <#jen3_reason_misc_clause-reorder> <#jen3_reason_misc_static-builtin-assert2> <#jen3_reason_misc_rule1> <#jen3_reason_misc_infer-rules> <#jen3_reason_misc_infer-rules2> <#jen3_reason_misc_rule4> <#jen3_reason_misc_nested-clauses2> <#jen3_reason_misc_univout1> <#jen3_reason_misc_cls-resol> <#jen3_reason_log_linear1> <#jen3_reason_log_linear2>) .
 
 _:b23
     test:conclusions "true"^^xsd:boolean .
@@ -526,6 +526,16 @@ _:b11
     mf:action <jen3_reason/list/list-iterate.n3> ;
     rdfs:comment "Tests for list:iterate" ;
     mf:result <jen3_reason/list/list-iterate-ref.n3> ;
+    rdft:approval rdft:Approved ;
+    test:options _:b24 .
+    
+<#jen3_reason_list_list-not>
+	a   test:TestN3Reason ;
+    a   test:TestN3 ;
+    a   test:TestN3Positive ;
+    mf:action <jen3_reason/list/list-not.n3> ;
+    rdfs:comment "Tests for list:not(In/Member)" ;
+    mf:result <jen3_reason/list/list-not-ref.n3> ;
     rdft:approval rdft:Approved ;
     test:options _:b24 .
 

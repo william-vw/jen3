@@ -64,7 +64,7 @@ public class N3TestRef extends N3TestCase {
 
 		// - individual tests
 
-		test1(root + "jen3_reason/log/subj_var.n3", null); //, root + "jen3_reason/log/equalto3-ref.n3");
+		test(root + "jen3_reason/list/list-not.n3", root + "jen3_reason/list/list-not-ref.n3");
 
 		// - print stats
 

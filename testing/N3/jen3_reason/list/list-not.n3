@@ -1,0 +1,9 @@
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix test: <https://w3c.github.io/N3/tests/test.n3#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <list-not.n3#>.
+
+{ 1 list:notIn (1 2) } => { :list1 a :FAILURE } .
+{ 3 list:notIn (1 2) } => { :list1 a :SUCCESS } .
+{ ( "a" "b" ) list:notMember "c" } => { :list3 a :SUCCESS } .
+{ ( "a" "b" ) list:notMember "b" } => { :list4 a :FAILURE } .

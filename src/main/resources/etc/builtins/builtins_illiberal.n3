@@ -295,10 +295,10 @@
 			:subject [ :restricts :formulaOrVariable ] ;
 			:object [ :restricts :formulaOrVariable ]
 		] ;
-		:domain [
-			:subject [ :restricts :formula ] ;
-			:object [ :restricts :formulaOrVariable ]
-		] .
+	:domain [
+		:subject [ :restricts :formula ] ;
+		:object [ :restricts :formulaOrVariable ]
+	] .
 		
 :listAndAny a :InputConstraints ;
 	:accept [
@@ -318,6 +318,26 @@
 	:domain [
 		:subject [ :restricts :any ] ;
 		:object [ :restricts :list ]
+	] .
+	
+:concreteListAndConcrete a :InputConstraints ;
+	:accept [
+		:subject [ :restricts :listOrVariable ] ;
+		:object [ :restricts :any ]
+	] ;
+	:domain [
+		:subject [ :restricts :concreteList ] ;
+		:object [ :restricts :concrete ]
+	] .
+	
+:concreteAndConcreteList a :InputConstraints ;
+	:accept [
+		:subject [ :restricts :any ] ;
+		:object [ :restricts :listOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :concrete ] ;
+		:object [ :restricts :concreteList ]
 	] .
 
 :iriAndFormula a :InputConstraints ;
@@ -686,6 +706,12 @@ list:member	a :BuiltinDefinition ;
 
 list:in	a :BuiltinDefinition ;
 	:inputConstraints :anyAndList .
+	
+list:notMember a :BuiltinDefinition ;
+	:inputConstraints :concreteListAndConcrete .
+
+list:notIn a :BuiltinDefinition ;
+	:inputConstraints :concreteAndConcreteList .  
 	
 list:memberAt
 	a :BuiltinDefinition ;

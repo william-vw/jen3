@@ -20,6 +20,7 @@ public class AllBuiltinDefinitions {
         allBuiltins.add(new GraphDifference());
         allBuiltins.add(new LogLanglit());
         allBuiltins.add(new LogSemantics());
+        allBuiltins.add(new ListNotIn());
         allBuiltins.add(new LogNameSpace());
         allBuiltins.add(new TimeMonth());
         allBuiltins.add(new CryptoSha());
@@ -40,6 +41,7 @@ public class AllBuiltinDefinitions {
         allBuiltins.add(new MathCeiling());
         allBuiltins.add(new LogUri());
         allBuiltins.add(new StringNotEqualIgnoringCase());
+        allBuiltins.add(new ListNotMember());
         allBuiltins.add(new LogPrefix());
         allBuiltins.add(new TimeDay());
         allBuiltins.add(new LogForAllIn());
