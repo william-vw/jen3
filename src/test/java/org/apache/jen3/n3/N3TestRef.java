@@ -57,14 +57,14 @@ public class N3TestRef extends N3TestCase {
 		// (our own tests)
 //		String root = "D:/git/n3dev/jena-core/testing/N3/";
 //		String root = "/home/william-vw/projects/n3/jena_n3/testing/N3/";
-//		String root = "/Users/wvw/git/n3/jen3/testing/N3/";
+		String root = "/Users/wvw/git/n3/jen3/testing/N3/";
 		// (github repo tests!)
-		String root = "/Users/wvw/git/n3/N3/tests/N3Tests/";
+//		String root = "/Users/wvw/git/n3/N3/tests/N3Tests/";
 //		String root = "/home/william-vw/projects/n3/william-vw/N3/tests/N3Tests/";
 
 		// - individual tests
 
-		test1(root + "iriPropertyList/with_whitespace.n3", null); //, root + "jen3_reason/log/equalto3-ref.n3");
+		test1(root + "jen3_reason/log/subj_var.n3", null); //, root + "jen3_reason/log/equalto3-ref.n3");
 
 		// - print stats
 

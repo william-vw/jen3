@@ -1030,7 +1030,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 			N3Rule rule = new N3Rule(head, body, spec, dir, logic);
 
 			// true =>
-			// {} => (empty rule body)
+			// {} => (i.e., empty rule body)
 			if ((Util.isBoolean(body) && Util.getBooleanValue(body))
 					|| (body.isCitedFormula() && Util.getModelValue(body).isEmpty())) {
 

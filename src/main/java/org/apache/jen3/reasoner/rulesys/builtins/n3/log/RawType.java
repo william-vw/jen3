@@ -9,6 +9,9 @@ public class RawType extends LogBuiltin {
 		super(new BinaryFlowPattern((n, g) -> {
 			switch (n.getType()) {
 			
+			case URI:
+				return N3Log.Uri.asNode();
+			
 			case CITED_FORMULA:
 				return N3Log.Formula.asNode();
 			

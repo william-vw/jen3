@@ -58,6 +58,7 @@ public class N3Log {
 	public static final Resource content = resource("content");
 	public static final Resource semantics = resource("semantics");
 	public static final Resource outputString = resource("outputString");
+	public static final Resource Uri = resource("Uri");
 	public static final Resource Formula = resource("Formula");
 	public static final Resource Literal = resource("Literal");
 	public static final Resource List = resource("List");

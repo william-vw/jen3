@@ -26,6 +26,7 @@ import org.apache.jen3.reasoner.rulesys.builtins.n3.def.BuiltinDefinitionMarshal
 import org.apache.jen3.reasoner.rulesys.builtins.n3.def.BuiltinDefinitionParser;
 import org.apache.jen3.util.IOUtils;
 import org.apache.jen3.vocabulary.N3Log;
+import org.apache.jen3.vocabulary.N3Reason;
 import org.apache.jena.atlas.logging.Log;
 
 public class BuiltinSet {
@@ -36,6 +37,7 @@ public class BuiltinSet {
 
 	private Map<String, N3Builtin> builtins = new HashMap<>();
 	private Set<String> reservedTerms = new HashSet<>();
+	private Set<String> reservedNs = new HashSet<>();
 
 	// due to internal workings of Jena, builtin-set are often saved as a field
 	// (e.g., FRuleEngine) but before the set is loaded, resulting in a nullpointer
@@ -70,13 +72,12 @@ public class BuiltinSet {
 		if (config.isDefaultBuiltinDefPath())
 			try {
 				definSrc = new File(BuiltinConfig.defaultBuiltinDefPath);
-				definIn = IOUtils.getResourceInputStream(BuiltinSet.class,
-						"/" + config.getBuiltinDefPath());
+				definIn = IOUtils.getResourceInputStream(BuiltinSet.class, "/" + config.getBuiltinDefPath());
 
 			} catch (URISyntaxException | IOException e1) {
 				e1.printStackTrace();
 			}
-		
+
 		else {
 			custom = true;
 			definSrc = new File(config.getBuiltinDefPath());
@@ -112,17 +113,8 @@ public class BuiltinSet {
 
 		definitions.stream().forEach((d) -> register(d));
 
-		reservedTerms.add(N3Log.implies.getURI());
-		reservedTerms.add(N3Log.impliedBy.getURI());
-		reservedTerms.add(N3Log.becomes.getURI());
-		reservedTerms.add(N3Log.comesFrom.getURI());
-
-		reservedTerms.add(N3Log.Formula.getURI());
-		reservedTerms.add(N3Log.Literal.getURI());
-		reservedTerms.add(N3Log.List.getURI());
-		reservedTerms.add(N3Log.Set.getURI());
-		reservedTerms.add(N3Log.Other.getURI());
-		reservedTerms.add(N3Log.StableTruth.getURI());
+		reservedNs.add(N3Log.uri);
+		reservedNs.add(N3Reason.uri);
 
 		long end = System.currentTimeMillis();
 		long time = (end - start);
@@ -157,15 +149,15 @@ public class BuiltinSet {
 
 	public boolean isStatic(Node predicate) {
 		if (predicate.isURI())
-			return builtins.containsKey(predicate.getURI())
-					&& builtins.get(predicate.getURI()).isStatic();
+			return builtins.containsKey(predicate.getURI()) && builtins.get(predicate.getURI()).isStatic();
 		else
 			return false;
 	}
 
 	public boolean isBuiltinTerm(Node term) {
 		if (term.isURI())
-			return builtins.containsKey(term.getURI()) || reservedTerms.contains(term.getURI());
+			return builtins.containsKey(term.getURI()) || reservedTerms.contains(term.getURI())
+					|| reservedNs.contains(term.getNameSpace());
 		else
 			return false;
 	}
@@ -188,6 +180,7 @@ public class BuiltinSet {
 	public void from(BuiltinSet loadedSet) {
 		builtins = loadedSet.builtins;
 		reservedTerms = loadedSet.reservedTerms;
+		reservedNs = loadedSet.reservedNs;
 	}
 
 	private static class DummyN3Builtin extends N3Builtin {
