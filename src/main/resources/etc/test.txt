@@ -1,0 +1,24 @@
+
+    ?c29
+        rdf:type <http://hl7.org/fhir/Condition> .
+    ?c29
+        <http://hl7.org/fhir/Condition.patient>
+            ?patient .
+    ?c29
+        <http://hl7.org/fhir/Condition.code>
+            ?code .
+    ?c29
+        <http://hl7.org/fhir/Condition.onsetDateTime>
+            ?time .
+    ?c29
+        <http://hl7.org/fhir/Condition.severity>
+            <http://niche.cs.dal.ca/copd.n3#severity_severe> .
+    ?c30
+        <http://hl7.org/fhir/Reference.reference>
+            ?observation .
+    ?c31
+        <http://hl7.org/fhir/Condition.stage.assessment>
+            ?c30 .
+    ?c29
+        <http://hl7.org/fhir/Condition.stage>
+            ?c31 .

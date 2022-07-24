@@ -64,7 +64,7 @@ public class N3TestRef extends N3TestCase {
 
 		// - individual tests
 
-		test(root + "jen3_reason/list/list-not.n3", root + "jen3_reason/list/list-not-ref.n3");
+		test(root + "jen3_reason/graph/graph-member.n3", root + "jen3_reason/graph/graph-member-ref.n3");
 
 		// - print stats
 

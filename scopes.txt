@@ -1,0 +1,128 @@
+- this scoping business ...
+see setupScope in N3ModelImpl
+	goal is to stop developers from shooting themselves in the foot
+overall, idea is to create qvars & citedformulas using the model where they will be added
+	e.g., the global model or a cited formula's model
+
+
+
+- quantified variable scoping
+to facilitate the (programmatic) creation of quantified variables, 
+	their scope will be set automatically by the model used to create the qvar
+	adding resources to n3 models will check consistency of scoping (N3ModelImpl#setupScope)
+
+
+
+- cited formula scoping
+when adding a cited formula, not created using the containing model, its scope will be updated; 
+	this update will be propagated to the cited formula's contents (N3ModelImpl#setScope)
+this will trigger a warning cause we need to reset scope of all cited formula's statements
+	(config can specify that an exception should be thrown?)
+
+
+
+- quantified variable scope / lexicographic or entire formula?
+this is a problem for printing: should only print quantifier in appropriate place
+	i.e., not before any other non-variable triples with same URI
+
+option 1 (..bad):
+rename variables to unique IDs
+problem: variable names can have meaning; this would be lost in output
+	yet, this seems to be the way that Gregg, Jos are doing it
+
+option 2: 
+dependencies between triples and quantifiers;
+	under; triple has var that has quantifier
+	not-under; triple has iri with same name as quantified var
+(applies to nested formulas as well)
+
+note that a triple may depend on several quantifiers, e.g.,
+	@forAll :y . :x :p3 :y . @forAll :x . :x :p1 :y . @forAll :y . :x :p2 :y . 
+
+buffer dependent triples per quantifier until end of file
+	(even then, not-under relations must be respected) 
+ 
+formula-wide scope is a problem for streaming reasoning
+i.e., can only start reasoning after entire graph is loaded, essentially
+
+but, wouldn't developers be confused that RDF does not have an ordering, but N3 does? ..
+two modes would be possible:
+"strict" mode; quantifiers are placed at start, only one quantifier per formula
+	extend syntax for quantifiers (combine forAll, forSome in one element)
+	or, errors are given when variable is quantified with an already encountered URI 
+"lenient" mode; quantifiers can be placed wherever (current situation)
+
+have the feeling that we are considering "fringe" cases too much
+how often will it occur that in one place, you want a name to be a URI, 
+	but lower down you want it to be @forAll, and even lower possibly @forSome? ..
+
+
+
+- quantifier ID
+ currently, uniquely identified via scope
+(see Node_Quantifier#equals, #hashCode)
+
+
+
+- model scoping 
+Scope (outer graph, cited formulas), QuantifierScope (existentials, universals)
+each scope has: 
+	a parent scope and child scopes
+	a scoped object (e.g., Quantifier, CitedFormula)
+	a level (+ 1 of its parent scope)
+
+when scopeable object is created (N3ModelImpl#create.. methods), scope is attached to the scoped object
+creates a "hierarchy" of scopes, with attached objects
+
+so, a newly created quantifier will have a parent scope of any quantifiers *created* later on
+	we need this temporal coupling since quantifiers are not added separately, but only as attached to added q-vars
+	but, we need to specify a quantifier ordering beyond the adding of respective triples 
+a cited formula will have an ancestor scope of any cited formulas *added* to it
+	if any quantifiers were created in the meantime, they will also be ancestors of the added cited formula
+
+appropriate N3Model must be used to create objects
+	since, at creation time, appropriate scope is attached to object
+when adding qvar to a model, it will check whether its scope is already a child of the model's scope
+	or, it is a child of one of the ancestors of the model's scope 
+	(a variable can be scoped higher that the model, but it should be in the same chain of scopes!)
+there's a reason for why this choice was made - a first version only attached scopes when objects were added
+	so, quantifiers will be numbered in the same order that the triples with associated qvars are added
+	this makes it quite awkward to assign an appropriate order to quantifiers (e.g., forSome > forAll)
+		e.g., one will have to add the first quantifier's associated triples first 
+	
+need access to "outer" scope for easily creating quick-vars at any cited formula
+	see N3ModelImpl#outerScope
+	
+used for printing N3
+	when printing a cited formula (with a scope), will print quantifiers attached to the cf's scope's children   
+	
+used for determining isomorphism
+	QuantifierScope#nr is locally unique to the model ; hence, it is assigned by the parent GraphScope
+	when comparing two models, will check nr of contained quantifiers (to ensure they are in the same order)
+TODO this is insufficient since two subsequent forAlls may be added in any order ; but this system will flag them as non-isomorphic
+	merge subsequent forAlls into one? ..
+	
+	
+	
+- programmatic creation of N3 graphs
+currently, two vars are only the same if same object is used
+	but, this may be inconsistent when same graph is printed to N3
+any automatic consideration depends on interpretation of quantifier scope
+could cache variables and re-use them when needed;
+	so, any same-name variable created afterwards will be same object
+	or, re-visit prior IRIs and change their internal object to a var
+		(i.e., when the IRI is encountered as a quantified var)
+but would it be what the programmer intended? ..
+
+currently, N3ScopeScheme aims to solve this problem
+	different schemes can be plugged in to represent different interpretations 
+	(e.g., lexicographic vs. formula-wide) or simply warn of possible issues
+relies on EnhGraph cache to check whether prior (problematic) nodes were created
+
+would "http://example.org/x" and "?http://example.org/x" cause problems?
+	likely depends on how quick-vars are handled internally
+	i.e., when printed N3 is read by other systems 
+
+TODO: consider caching cited-formulas, collections as well (?)
+	note that cited-formulas can only be cached after they are "closed"
+	since beforehand they won't have a fitting hashcode

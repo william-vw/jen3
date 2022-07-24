@@ -1,0 +1,36 @@
+- current:
+envFrame ; environment stack (AND; nested predicate calls)
+choice-point frame ; choice point stack (OR; backtracking search)
+
+	frame-object <- frame-object ..
+
+trail ; variable binding (to be unwound on backtrack)
+
+ 
+FrameObject
+	< EnvironmentFrame
+	< GenericChoiceFrame; represent OR state of search
+		- ctu; program, arg cntr		
+
+		< ChoicePointFrame; OR part of search tree
+		- argVars
+
+		< GenericTripleMatchFrame; represent state of some triple match
+			< TripleMatchFrame; represent state of concrete triple match
+			< ConsumerChoicePointFrame; represent results of a tabled predicate
+
+bind: add binding to trail
+	var.value = var (isRef)
+unwind:
+	unbind var
+	remove from trail
+deref:
+	find original var
+
+
+
+{ ?a p1 ?b } => { ?a p2 ?b }
+
+{ ?k p2 ?l } => { ?k p3 ?l }
+
+{ ?x p3 ?y }?

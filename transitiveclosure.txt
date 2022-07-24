@@ -1,0 +1,63 @@
+Efficient management of transitive relationships in large data and knowledge bases
+
+predecessor / successor, immediate successor list
+
+compression scheme: range compression
+node numbering that yields maximum compression
+	cover graph w/ spanning trees, use trees to generate node numbers
+
+use interval indexes instead!
+well, think that the algorithms below can be easily adapted for this actually
+
+.. problem is that's not how they will be used in FRuleEngine
+i.e., get all implied statements from cache and try them on rules
+
+
+e.g., 
+Activated , NotDone <-partOf- Active <-state:in- task1 , task2 , ..
+
+
+(.. also need to support removals)
+
+will this have such a large impact on performance in the end? ..
+
+- transitive
+
+map: predicate ->
+	map: subjects (transitive closure)
+	map: objects (co-occurring subjects)
+
+predicates[predicate].subjects[subject] += object
+
+if object in predicates[predicate].subjects
+	predicates[predicate].subjects[subject] += predicates[predicate].subjects[object]
+
+propagate-objects(subject)
+
+fn propagate-objects(subject)
+	subjects2 = predicates[predicate].objects[subject]
+	for each subject2 in subjects2
+		predicates[predicate].subjects[subject2] += predicates[predicate].subjects[subject]
+		propagate-objects(subject2)
+
+
+- property chain
+
+map: predicate ->
+	prior-predicate, next-predicate
+	map: subjects (transitive closure)
+	map: objects (co-occurring subjects)
+
+predicates[predicate].subjects[subject] = object
+
+if object in predicates[predicate.next-predicate].subjects
+	predicates[predicate].subjects[subject] += predicates[predicate.next-predicate].subjects[object]
+
+propagate-objects(predicate, subject)
+
+fn propagate-objects(predicate, subject)
+	subjects2 = predicates[predicate.prior-predicate].objects[subject]
+
+	for each subject2 in subjects2
+		predicates[predicate.prior-predicate].subjects[subject2] += predicates[predicate].subjects[subject]
+		propagate-objects(predicate.prior-predicate, subject2)

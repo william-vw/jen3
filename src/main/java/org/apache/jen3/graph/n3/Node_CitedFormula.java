@@ -33,6 +33,8 @@ import org.apache.jen3.n3.N3Model;
 import org.apache.jen3.n3.N3ModelSpec;
 import org.apache.jen3.rdf.model.ModelFactory;
 import org.apache.jen3.reasoner.rulesys.Node_RuleVariable;
+import org.apache.jen3.reasoner.rulesys.impl.BindingStack;
+import org.apache.jen3.reasoner.rulesys.impl.RuleUtil;
 import org.apache.jen3.shared.PrefixMapping;
 
 /**
@@ -176,7 +178,7 @@ public class Node_CitedFormula extends Node_Compound implements ScopedObject {
 	public boolean includesRuleVars() {
 		return model.getGraph().getStats().includesRuleVars();
 	}
-	
+
 	@Override
 	public List<Node_RuleVariable> getRuleVars() {
 		return model.getGraph().getStats().getRuleVars();
@@ -207,15 +209,16 @@ public class Node_CitedFormula extends Node_Compound implements ScopedObject {
 		// formula node.");
 
 		Node_CitedFormula n = (Node_CitedFormula) o;
-
 		// was possible to generate a hash-code
 		if (hashCode >= 0) {
 			// hashCode is pre-calculated, so quickly rule out non-equals that way
-			if (hashCode() != n.hashCode())
+			if (hashCode() != n.hashCode()) {
 				return false;
+			}
 		}
 
-		boolean ret = (model.getGraph().equals(n.getContents().getGraph()));
+		// TODO need access to engine's rule-context here?
+		boolean ret = RuleUtil.matchCitedFormula(this, n, RuleUtil.configDefault, new BindingStack());
 		return ret;
 	}
 

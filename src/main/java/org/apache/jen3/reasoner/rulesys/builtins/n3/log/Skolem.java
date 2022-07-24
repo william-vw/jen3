@@ -15,7 +15,6 @@ public class Skolem extends LogBuiltin {
 	public Skolem() {
 		super(new BinaryFlowPattern((n, g) -> {
 			Node_Collection coll = (Node_Collection) n;
-			
 			return gen(coll.getElements());
 
 		}, null), true);

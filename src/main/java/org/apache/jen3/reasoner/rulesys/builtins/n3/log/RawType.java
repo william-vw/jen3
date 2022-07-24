@@ -11,6 +11,9 @@ public class RawType extends LogBuiltin {
 			
 			case URI:
 				return N3Log.Uri.asNode();
+				
+			case BLANK:
+				return N3Log.BlankNode.asNode();
 			
 			case CITED_FORMULA:
 				return N3Log.Formula.asNode();

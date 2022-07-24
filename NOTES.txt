@@ -1,0 +1,733 @@
+- TODO
+
+> run all tests again..
+untested changes:
+	new hashCode implementation in Node_RuleVariable (now relies on superclass)
+	sortOnBoundedness; only recursively ground in specific cases (shouldn't be a big deal..)
+
+
+> implement log:map, more sophisticated log:collectAllIn
+	select variable can be any term (also lists, ..)
+	
+
+> optimize evaluation of universal rules
+somehow..
+
+
+> revisit behavior of log:(not)includes, graph:difference
+standardize-apart blank nodes loaded from different locations?
+	e.g., append number of something - what if a log:conjunction is done
+	well, depends on the blank node scoping I suppose - if its global then no problem?
+
+variables only occurring in the builtin-statement should not be visible in the consequent
+	tailor a feedback type for this
+	 
+
+> rename cited-formula to quoted-graphs everywhere
+
+
+> support rule saliency
+	(e.g., saliency can be indicated in object of univ builtin statement)
+so, object can be var, base IRI, formula, or list with base IRI or formula
+
+for scope, eye accepts list of URLs to be included, rule saliency:
+	http://ppr.cs.dal.ca:3002/n3/editor/s/5gZFO0R7
+
+test case: seems this is needed when printing html (fields.n3, table.n3)
+
+
+> after fixing api, try out programmatic creation of N3 graphs
+
+
+> debug N3 pretty printer
+	
+	
+
+>> SPEC (start)
+
+> keep up to date with accepted proposals:
+	https://docs.google.com/document/d/1UYN4HlAMX4H4_XgzAxGJjnuhDinH7gOer4ctCEyiQF4/edit
+
+
+> builtin proposals:
+log:inferences
+	comparative to log:conclusion, but only returns deductions 
+math:roundedTo
+	to cope with number comparisons
+	not an elementary one, for sure..
+string:(not)matches, string:scrape
+	also support regex's such as "//i" while retaining backward compatibility (i.e., not requiring the syntax)
+string:replace
+	(also) support regex as second argument? seems much more useful
+	difficult w/ backward compatibility .. special interpretation of characters in regex
+	different builtin? ..
+
+
+> issues
+- expected behavior of log/content.n3 in case of <> as subject
+cwm, eye behave differently: http://ppr.cs.dal.ca:3002/n3/editor/s/T7Y2NFhl
+
+- in general: in case <> is the subject, how do log:(not)Includes, log:content, log:semantics, .. behave
+
+
+> spec: 
+deconstructing output using formulas (e.g., list_tests.n3)
+{..} -> false: integrity constraint
+true -> {..}: assertion of rule head 
+
+>> SPEC (end)
+
+
+>> TESTS (start)
+
+- support negative reasoning tests
+e.g., static-builtin-assert
+.. not even an option in https://w3c.github.io/N3/tests/test.n3#
+	(only positive reasoning tests)
+	
+should be possible with log:semanticsOrError
+in fact, should likely test that builtin separately too
+
+
+- need to round numbers for double calculation
+e.g., math/sum.n3
+      "4.70000000000000017763568394002504646778106689453125"^^xsd:decimal
+math/product.n3, math/difference.n3, math/combo.n3, math/exponentiation.n3
+
+
+- dateTimes
+in jena, dateTimes are normalized to UTC time (cwm_time/t1.n3)
+	(see XSDDateTimeType#parseValidated)
+so this renders timeZone builtin worthless, really - will always return UTC
+	.. need to muck around in jena internals to change this
+ideally the test should check time builtins for "UTC-normalized" times
+
+string/concatenation.n3: what precision is expected in a string after casting a float, double, decimal?
+
+
+- datatypes
+math/remainder.n3: test2a
+	internally, jena converts "2.0" to 2 (integer)
+see XSDDatatype#parse -> XSDBaseNumericType#cannonicalize
+
+math/product.n3: test3b: is the sign correct on the result?
+math/rounded.n3: shouldn't rounded always return an integer (test3x)
+
+
+> cools' tests? ..
+> try out cases where different formulas (i.e., different # of variables) are pulled into rule
+> testcases; try out rules of named-graph paper; OWL2 RL rules
+
+>> TESTS (end)
+
+
+>> API (start)
+
+> API will not work for searching N3 triple elements with cited formulas or variables
+rule engine machinery uses indexes when possible, and then matches them manually in client code
+	(since potential variables need to be bound in environment)
+but, GraphTripleStoreBase will iterate (unfiltered) over all triples in case of no suitable index value
+	(good if all of them are variables, but others could be containers, possibly with some variables) 
+
+> no longer support jena-specific rule stuff (will likely not work anymore :-(
+	(in fact, have no idea whether TDB, fuseki, .. will still work either)
+so remove those abstractions from this version of Jena? ..
+
+> really need to update API documentation
+
+> put all N3Model-specific parts into N3GraphConfig
+e.g., N3Builtin should not be initialized globally, but per-model
+	keep definitions in N3GraphConfig
+
+> config file to put n3-graph-config stuff?
+e.g., allowed "n3" predicates (implies, Formula, List, etc.)
+
+>> API (end)
+
+
+
+> hybrid reasoner
+
+currently, major problem with rule triggering
+this does not take into account everything that is implied by the backward rules
+
+e.g., trigger triple = 'measure_lipid_profile state:in active'
+	this implies 'state:in activated' via a backward rule
+but in itself the triple won't match a clause required an 'activated' entity
+
+currently, we only check 'backward-implied" triples after a predicate match between a triggering triple & rule clause
+but, for every newly inferred triple, it should be checked what new 'backward-implications' it brings 
+
+currently "optimizing" by:
+
+1) only considering 'lp-continuation' if no matches are found
+	required TripleForMatchIterator (subclass ContinuationOnFailureIterator)
+very little impact on performance, it seems
+
+2) only trying LP if concrete predicate and object of clause are found in goals of backward rules
+	see N3BFRuleInfGraph
+(e.g., only check for 'state:in :activated' if this is found in a goal)
+huge impact on performance; if this is not done, CIGTest takes a very long time
+
+3) backward rules can only infer new facts with the same predicate (e.g., 'state:in')
+	see FRuleEngine#tryRule
+
+so, combined with (2), this means that backward rules really can only introduce additional objects
+for the same subject and object
+
+
+
+> update n3-editor-js
+new n3.g4 (no more explicit quantif)
+look into N3+RDF-star? ..
+
+
+> check TODOs in code
+
+
+
+>> FUTURE WORK
+(not in any particular order)
+
+
+> SERIALIZE not working when called from external project
+but, COMPILE option is better and does work
+
+
+> BindingStack_Cached - not working with pulling-in quoted graphs
+see RuleUtils - N3RuleVisitor.pullInVariables
+	(don't think expand method is being called - RuleUtil#200)
+
+consider re-writing - given original object & variable values, keep cached formula
+	but, would still not play nice with pullInVariables
+	and, clear cache at some point
+
+
+> start scope leakage
+
+- blank nodes: 
+
+{ :will :lives _:b0 . _:b0 :place :buckinham_palace ; :number 12  } a :Lie .
+{ { ?person :lives ?place. ?place :place :buckinham_palace ; :number 12 } a :Lie } => { ?place a :IncorrectPlace } .
+	->
+_:b0 a :IncorrectPlace # no co-referral possible due to _:b0's local scope
+
+when combined with other _:b0s in other scopes, they will currently be (wrongly) co-referred
+	since jen3 does not re-name variables
+
+eye: skolemizes the existentials in cited formulas *once* the scope is leaked
+us: skolemizes existentials (if bound to var, i.e., originating from data) when leaked from a quoted graph
+	(BindingStack#skolemize)
+
+- log:semantics:
+currently, universals in a loaded & parsed cited formula will simply be quantified at same level as all other universals
+.. tragic mistakes will take place when not careful in variable naming
+	(shot myself in the foot quite often)
+
+> end scope leakage
+
+
+
+> most usages of binary-flow-pattern could be replaced by unary-flow-pattern
+	unary-flow-pattern will likey need to be fleshed out better
+
+
+> mostly, "accept" will be "domain" where each <concrete-type> is replaced by ":oneOf (<concrete-type> <variable>)"
+	auto-generate "accept" clause, but allow to be overridden
+
+
+> consider making builtin definitions less verbose
+current method of always using bnodes; for trying to use rules to evaluate builtin definitions
+consider inheritance .. lol
+
+
+> allow builtin predicates be matched to predicate variables
+in misc/var-builtin.n3, test3 doesn't work (due to how clauses are sorted; could be fixable)
+Eye doesn't seem to derive test2 and test3 either: http://ppr.cs.dal.ca:3002/n3/editor/s/x1cfDjFu
+
+
+> using N3CitedGraph vs. fully-fledged Graph
+use latter when # of triples exceeds certain threshold?
+	also, currently no support for rule-vars in graph-mem
+when opening cited-formula with inferencing capabilities: 
+	currently using cited-graph, bound to inference graph
+(also see log:semantics, log:conclusion)
+this is really a issue of N3CitedGraph being used to do more and more ..
+at some point it will really be needed to incorporate it into GraphBase
+
+
+> implement rdf:first, rdf:rest
+	and, convert rdf first/rest ladders to N3 lists ..
+cwm_list/builtin_generated_match.n3, cwm_includes/builtins.n3
+
+	
+> future work: retrieval builtins are problematic when combined with bindings-table
+output can change depending on whether local/online content changed
+	and this can be transitive, of course
+
+local: check timestamps of all involved files
+	(what if <> is the subject - i.e., current document??)
+online: use HTTP HEAD requests (cache functionality)
+	
+now, bindings-table is mostly needed due to how FRuleEngine currently works
+so could change inner workings there - avoids use of bindings-table ..
+
+
+> future work: create a "dependency-graph" instead of current sorting "hack" (?)
+
+	
+> future work: chaining log:semantics + log:conclusion/log:inferences
+	make inferencing model in log:semantics
+	re-use such a model in log:conclusion
+else, first model is rather uselessly created, 
+	since latter will create an inference model
+also, useless work in assigning rule variables to data variables
+	(since data is "pulled into" rule)
+
+
+
+> future work: support adding rules through API
+currently, assumption is that rules were added during a reasoning run
+	(see FRuleEngine#addSetFor)
+
+
+> future work:
+hashcode for cited formulas and collections with variables
+
+
+> unsure why asserting linear logic inferences break the system
+(see BFRuleContext#pendingAssert)
+
+
+> future work: data-variables that have rule-awareness
+	i.e., can be outfitted with rule-index, and so on
+means we don't have to friggin insert them into rules all the time 
+	(for all current tests, ~5000 new formulas are needed for inserting vars) 
+in N3GraphInserter, already decide on rule-var objects, assign them to data-vars
+	(as per insert-rule-var logic; incremental index per rule) 
+same process ensues for programmatically-added rules 
+would still need insert-rule-vars for pulled-in data
+can simply keep separate list of variable-objects per cited formula;
+	~no longer need for visitor objects
+
+
+> future work: per-match consideration of requiresMatching (FRuleEngine)
+in list builtins, in case the member-node is fully concrete:
+	can easily check membership w/o requiring additional matching in FRuleEngine
+	(see note on deconstructing list members)
+
+
+> future work: keep track of included variables; when all are removed, includesVars = false
+	only needed in case of programmatic access really
+
+
+> future work: have no idea how GraphMatcher works internally
+graph-isomorphism no longer works for cited-formulas w/ embedded blank nodes
+(since their equality is calculated in absolute way)
+ideally algorithm would be called recursively on their contents
+
+
+> future work: supporting e:optional may open up a can of worms
+(well, not that big a can of worms)
+ensure that UnivQuantBuiltin, LogCompare, Difference, .. cleanup binding-stack when failing
+	they seem to do this currently
+
+> future work: add hint to warnings on how to disable warnings
+
+> future work: deprecated warning for bi-directional (inverse) use of cos, sin, .. (?) 
+
+> future work: cache downloaded content (?)
+
+
+
+
+-- NOTES
+
+- indexing formulas and collections
+Node#isHashable:
+if no variables, then unique hashcode
+else, use fixed hashcode (-1 for formulas, -2 for collections)
+
+when adding, these will be placed in the same bucket; will have to use equals() to differentiate
+	(in case a triple only has containers w/ variables, this means it won't be ignored)
+Selectivity.chooseIndex chooses a find-index based on same metric
+  
+
+
+- leaving out scope management for now
+to print scopes properly, had to change internal scope structuring
+	became more experimental code than anything else
+but, this meant that quick-vars were no longer working properly
+	added some code to Scope to fix this
+	but didn't test anymore since we're not supporting explicit quantification in first N3 release (other fish to fry..)
+so, threw out most code in Scope class
+created tag "scope-removal" for commit before these changes ; created new branch no-quantifier-scopes
+	should really add old scope stuff piecemeal to stable release - some of it had become quite buggy 
+
+
+
+START BUILTINS
+
+- rules with only builtin-stmts
+	simply needs to be fired once; unless it's a universal (new triples may fire it again)
+
+- "generative" builtins 
+these go beyond binding values in the environment, but also generating additional results 
+	(e.g., member, memberAt)
+required an overhaul of FRuleEngine; "TripleSet" abstraction
+
+check cardinalities both during (MAX) *and* after verifying clause (MIN, EXACT)
+	requires keeping "stack" of cardinalities for clause, check at end
+supports cardinalities in listElementType, subjectObject, ..
+
+special consideration for builtin-statements when sorting clauses
+	(see RuleUtil.sortOnBoundedness; N3ClauseOrderTest)
+pushes builtins that do not return a check_for to the end of the to-do list
+currently, this sorting is not fully outfitted for N3 since it doesn't look into collections, cited formulas
+	i.e., it only checks whether s/p/o are variables or not, not whether they *contain* variables
+afaict, this "looking in" would mostly render the check_for thing redundant
+
+string builtins should allow all types of input, since all types can be converted to string (but not variables!)
+numeric builtins; numeric type constraint also allows strings with "numeric" format
+
+
+- variable bindings
+one should never bind variables within a builtin
+	or, when one does, use env.push & env.unwind (as in UnivQuantBuiltin, for instance)
+general idea is for builtins to generate instantiated triples
+	internal rule-engine mechanics (RuleUtil.match) will bind values within these triples to variables
+
+
+- delay evaluation of builtins with unbound variables
+when sorting rules, push rules with these to end of queue
+problem is that these rules will give different outputs in case of unbound variables
+	(i.e., they will not fail, unfortunately)
+see BuiltinDefinition#delayScore
+	ideal situation is when check_for clause is positive; i.e., it is worthwhile to actually evaluate builtin
+
+
+- universal rules (log:for/collectAllIn; but also log:(not)includes in some cases)
+re log:for/collectAllIn: object can be variable / base IRI, in which case it refers to current document (i.e., "universal")
+	or, a quoted graph: in this case, the builtin will only consider statements in this graph  
+re log:(not)includes: s/o can be base IRI, in which case it refers to current document (i.e., "universal")
+	 or, quoted graphs, which are the main use case for this builtin
+
+universal rules are only executed at the end of a reasoning run, to ensure that all data is available
+	(FRuleEngine#runUniversalRules)
+determining whether a rule is "universal" is based on original (compile-time) constants in the builtin triple pattern
+
+but, builtin statements are delayed based on their _currently bound_ subject/object (N3Builtin#delayScore)
+	log:(not)Includes: these only become "universals" if "<>" is given as s/o
+	log:collect/forAllIn: these are only "universals" if var or "<>" is given as s/o 
+
+
+END BUILTINS
+
+
+- optimization efforts
+
+-- only turn on ICTrace if needed by configured feedback
+see BuiltinConfig#initialize, etc.
+
+
+-- caching grounded compound terms (i.e., collections, formulas w/ rule vars),
+since grounding takes up quite a bit of time 
+(see jen3/profile.txt)
+
+Node_Compound has support for caching during reasoning
+	i.e., keeping "grounded" versions of compound terms (quoted graphs, collections)
+(also see BindingStack_Cached)
+
+generally, visitor needs to make copies each time "ground" is called on compound terms in rules
+	e.g., { ?x :k :l } , { :a :b :c }
+in the first case, ?x could have been bound to a value, and this needs to be considered in rule evaluation
+	e.g., this term could be part of a log:includes statement, and behavior will differ if ?x is bound
+	so, make copy of compound term, and unify ?x with value in this copy
+
+clearly, there's no need to make copy for the second case, as it does not contain variables
+	so, we keep whether a compound term contains a (rule) variable or not, and only copy & visit if it does
+
+however, this still led to many, many compound term copies
+	clearly, first case only requires a *fresh copy* in case value for ?x has changed
+	else, we can simply re-use the prior copy
+
+hence, graph-stats also keeps all rule-vars found in a model (so quoted-graph node has access to it), 
+	and collections are similarly able to return all rule-vars found
+
+1) after copying & visiting a compound term, keep cached copy in the node
+2) map all rule-var (indexes) to this original compound term
+3) whenever a rule-var is bound in an environment:
+	this means associated cached version will be outdated (i.e., that the rule-var has a mapping to)
+	hence, re-set the cached versions of all those associated compound terms 
+	
+	
+
+- "semantic equality"
+currently, this aspect is spread across Jena
+and I likely made it worse
+
+Node.ANY vs. Node_RuleVariable.WILD .. :-(
+see Triple.filterOn, Node.matches ..
+	hope these updates don't break anything else
+
+FRuleEngine: 
+	1) searches for data triples with predicates that also occur in rule clauses
+	2) then, matches these triples one by one to all individual rule clauses
+		in this match, set of methods "matchXXX" perform the matching
+	3) when one of these rule clauses match a triple, try matching rest of rule clauses
+		this entails using the rule clause as a filter to search the graph
+		this is where GraphTripleStoreBase, NodeToTriplesMapMem support comes in
+
+GraphTripleStoreBase: 
+	choose most selective s/p/o position (chooseIndex) - 
+		currently this is only based on whether it's a variable or not (also, s > o > p)
+		if only variables are in rule clause, iterate over all data triples - INCOMPLETE
+
+TODO does iterateAll() work properly with data variables?
+
+NodeToTriplesMapMem:
+	matching data variables: 
+		if the map's s/p/o position has univ variables indexed (i.e., in the data): 
+			include all triples with these variables: Triple#filterWildcardVar
+				currently, this is quite inefficient since it implies iterating over all (!) triples
+				option: keep separate pointers to universal variables
+		include other triples with (data) variables: Triple#filterOn
+
+	now, this is complicated by N3JenaWriterCommon needing to find exact variable matches (i.e., on name)
+		currently: indexing all variables on their name + constant (to distinguish from uris?)
+		checks "matchAbsolute" condition in given subject from s/p/o triple
+	also, "matchAbsolute" is used by BFRuleContext ; when checking whether graph already contains an inferred triple
+
+see also TriplePattern#compatibleWith - may need to change this one as well
+	
+call stack:
+-> GraphMem.graphBaseFind ..
+	-> GraphTripleStoreBase.find
+		-> NodeToTriplesMapMem.iterator
+			indexedVariable?
+
+RuleUtil.match
+builtin triple-sets do their own internal thing: some terms don't have to be matched again
+	e.g., builtin predicate, concrete s/o
+in fact, matching them again may result in false negative (e.g., when juggling data types)
+so it's important to avoid matching them again 
+	(TripleSet.requiresMatching, RuleUtil:onlyBindVars param)  
+when onlyBindVars is set: comparison of cited-formulas becomes a lot easier too (RuleUtil#equalToExact)
+
+
+- nested/inferred rules (i.e., rules embedded in rule heads)
+pre-processing: replacing appropriate vars by jena rule-vars, also in nested cited-formulas
+(N3JenaRuleParser#InsertRuleVarsVisitor)
+post-processing: 
+	instantiate jena rule-vars, 
+	replace non-instantiated rule vars with quick-vars (no jena rule-vars should exist in graph)
+(BindingStack#InstantiateTriplePatternVisitor)
+
+update internal structures with rules:
+rules need to be added: when new log:implies statements are added or deduced
+rules need to be removed: whenever any kind of statements are removed
+	(rules can be inferred as well; so, removing a statement may lead to a rule no longer being inferred)
+
+N3ModelImpl calls onAdd / onRemove whenever statements are added / removed; and, has onDeduction method (DeductionListener)
+(previously, rules were only parsed after reading N3 file)
+
+in case of onAdd: if the triple is a rule, add it to the rule inf graph
+	this will result in adding the rule to internal structures (e.g., FRuleEngine#clauseIndex),
+	and running the rule on all suitable triples (both in raw data & inferred) (FRuleEngine#fastInit(Rule))
+	
+in case of onDeduction: if the deduced triple is a rule, follow same process as above
+	(supports inferring new rules)
+
+in case of onRemove: in all cases (regardless of triple), remove rules that are no longer found in graph
+	in case rules cannot be inferred, could simply remove rule from internal structures and call rebind()
+	but, a bit more housekeeping is needed in our case
+
+
+
+- nested rules (2), i.e., including or referencing cited formulas
+the above solves it for nested formulas, collections in rule clauses *present at compile time*
+but a variable may as well refer to a formula in the data, which itself contains variables
+
+so, whenever data is "pulled into" a rule via var binding:
+any included global-vars (or local bnodes) are replaced with rule-vars, and environment extended if needed (RuleUtil.matchRuleVar)
+	(this new environment is not a problem; if match doesn't work out, it will be rewind'ed)	
+
+this actually had quite some repercussions
+	e.g., system would go into endless loop for rule6 (rule referencing itself), nested_clauses (more evil example) 
+while inserting vars, avoiding vars nested in themselves, is insufficient; as illustrated in nested_clauses
+	i.e., instantiation needed to be outfitted with avoidance of infinite loops
+
+another repercussion: log:semantics pulls in data from file containing rules, 
+	meaning all variables are assigned rule-vars within the rule
+but in down-stream log:conclusion, these rule-vars must be re-assigned per-rule 
+(thinking about combining log:semantics & log:conclusion into one builtin ..)
+
+also, if a bnode (e.g., witness) is inferred by a rule in log:conclusion, 
+	it will be replaced by rule-variable upon binding to output variable ..
+then, when instantiating, will be improperly round-tripped to a quick-var
+	so, keep original node per rule-variable ("original" field)
+
+in log:conclusion, cannot have rule vars in data .. need to round-trip all back to original nodes
+
+
+
+- inferred rules
+Inferred rules may also infer triples, of course. 
+Other rules may be triggered by this inferred triple. 
+Hence, after the inferred rule has been setup and had its initial inferences made, 
+add the triple to the "top-level" context stack so it may trigger any rule (including the inferred rule). 
+
+Rules can infer other rules (recursively), which may be linear logic rules.
+Such an inferred linear logic rule may withdraw a triple that is still on the stacks of 
+	higher-up-in-recursion rules (i.e., being iterated over for those rules).
+So, when removing a triple, cascade that removal up to stacks of the "upper" inferring rules. 
+Remove it directly from the graph, though - so it doesn't lead to redundant rule triggers.
+
+
+
+- "atomicity" of linear logic rules
+currently, deletes are queued up and applied at end of a series of firings of a single rule
+	FRuleEngine#matchRuleBody (flushPending)
+
+surely this queuing was done to avoid concurrent modification errors
+if this is done per rule firing, one would need to dynamically update context, triple set iterators
+
+however, it can be possible that none of the triples ended up being removed (i.e., queued up for removal), 
+	and triples in the consequent are still being inferred 
+this is possible when a number of different triples yield a binding environment, 
+	which resulted in the same triples to be retracted
+
+so, when removing triples from context, check whether they had already been queued up
+	(FRuleEngine#fireRule, BFRuleContext#removeAndCheck)
+if yes, then don't infer rule consequent
+
+
+
+- deconstructing list members
+Member, Iterate take care to "short-cut" only when member nodes are not formulae with variables
+	leaves it up to internal rule engine machinery to bind variables in member nodes with list members 
+ListTripleSet returns true for requiresMatching; since deconstructed formula may not fully match list member
+
+
+
+- blank nodes or unbound universals in rule output
+currently generating "witness" for unbound variables in output (avoid users shooting themselves in the foot)
+
+if a blank node term was given within the rule head, then a skolem should be returned
+a rule variable was bound to a (data) blank node in the rule body, then return that blank node
+	see tests: cwm_reason/double.n3 ; cwm_reason/t8.n3 ; cwm_list/unify5.n3 ; cwm_includes/quant-implies.n3
+
+in the former case:
+for an given bnode term in rule head, we generate unique bnode for each instantiation / firing
+	i.e., in a single firing, if bnode occurs multiple times in rule output, use same bnode term
+	but, for different firing, generate other bnode
+
+however, exact same input (i.e., universal bindings) may lead to multiple rule firings
+	especially with suboptimal code in FRuleEngine
+we need to create the same blank-nodes for the same rule variable bindings
+	(e.g., gen-bnodes.n3; run_reason_tests.n3)
+enter UniqueNodeGenerator and its subclass(es)
+
+
+- skolemization (Skolemizer class)
+quoted graphs are a problem for skolemization:
+cannot use the string form since ordering in cited formulas doesn't matter
+(and we haven't figured out a canonical form)
+
+identical hash-code should be returned for semantically equivalent formulas:
+but a hash collision could occur, i.e., different formulas w/ same hash-code
+
+so we need to keep a map with encountered cited formulas
+(for hash collisions, map should do equals() check as well, so good there)
+
+
+- FRuleEngine: reducing number of times the same rule is executed for the same data 
+especially problematic with log:semantics, log:content (i.e., retrieval) builtins
+(e.g., when running reasoning tests - log:semantics retrieves same file X number of times ..)
+
+this is caused by how FRuleEngine works - using set of relevant "trigger" triples to test rules
+	but, new inferences are added to this set of triggers too, which seems much more efficient
+
+ bindings-table to be used when "resource-intensive" builtins are found in rule body
+ 	(and, N3ModelSpec#useBindingsTable property is set)
+idea is that, if they have all data available (i.e., all var bindings), 
+	and these are same bindings as before, nothing new will come from this
+see FRuleEngine#alreadyDone
+	
+combined with putting resource-intensive builtins at end of queue (delayScore)
+	(queue = set of builtins that passed check-for)
+i.e., even if they pass check-for (i.e., have all data needed), 
+	give them lower score than other builtins that also passed check-for
+hopefully, "cheaper" builtins will fail before having to call these "expensive" ones
+
+(TODO) retrieval builtins are problematic:
+output can change depending on whether local/online content changed
+	and this can be transitive, of course
+
+local: check timestamps of all involved files
+online: use HTTP HEAD requests (cache functionality)
+
+
+- "proper" co-routining (?)
+	currently, doing this via sorting of triple patterns
+
+
+- re-using node cache amongst cited formulas
+	i.e., cache will be used by outer-scope model, cited-formula models
+this allows scoping scheme to work in nested cited-formulas ; also, better caching
+	else, it only works when all resources are created by outer model
+
+
+- cited formula; needs to be immutable
+since it's uniquely identified based on its contents
+how to model this appropriately? ..
+creation of model (N3Model + N3CitedGraph) should be encapsulated
+	startPopulating: returns initial model
+	populatingDone: sets the internal model; makes it immutable
+	copy: copies prior formula (its contents)
++ immutable field in N3Model to ensure it's not modified afterwards
+
+
+- quick-vars
+indexed on in GraphTripleStoreBase
+"indexOn" method that returns true for qvars but false for other vars
+
+qvars are not registered as a quantified universal var
+	instead, as a special quick-var (subclass of quantified var)
+else, following iris with same name will be considered this var as well
+
+
+- lexical (static) vs. dynamic scoping of blank nodes
+from a practical viewpoint, seems most appropriate that blank nodes are:
+	statically scoped when at global level (i.e., retained as "constants")
+	dynamically scoped when nested (i.e., turned into rule variables)
+
+see misc/pull_in_bnodes.n3, misc/pull_in_bnodes2.n3
+.. can easily lead to "accidents" though
+
+could somehow depend on context of use (?)
+we know that bnode scopes are (currently) local within nested formula (or global)
+ when attempting to co-refer bnodes within the same cited formula, retain as constants
+	else, if nested bnodes not used to co-refer in same formula, convert to rule-vars
+very hacky, of course
+and, in some cases, fact that same formula is referenced may only be apparent at runtime
+
+leaning more towards static scoping now .. as it avoids all this mess
+only bnodes originally within premise will be scoped to premise (so, converted into rule-vars)
+	other bnodes are scoped globally (and are thus more like constants)
+problem is, will not be possible to express some cases where rules are inferred (see PA examples)
+	at least, not with current implicit quantification
+also, some use cases (template rules) will be more difficult to express 
+	(cannot use bnodes, and thus resource paths, in component formulas)
+	
+	
+- "marshalling" builtin definitions
+see BuiltinDefinitionMarshaller, -Serializer, -Compiler
+
+serializer was really meant to get away with quick solution but didn't get order-of-magnitude reduction I was hoping (120-150ms time)
+.. then again, "compiled" code still takes 70-100ms but seems to be as quick as we can make it
+	i.e., directly instantiating the appropriate objects based on subclass definitions
+	
+	
+- builtins per model
+different N3Models can load different builtin definitions - see BuiltinConfig, BuiltinSet

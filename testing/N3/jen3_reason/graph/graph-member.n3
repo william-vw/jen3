@@ -1,0 +1,38 @@
+@prefix graph: <http://www.w3.org/2000/10/swap/graph#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <graph-member.n3#> .
+
+<#> rdfs:comment "Tests for graph member builtin" .
+
+
+<> :formula { :a :b :c . :d :e :f } .
+
+{	<> :formula ?formula .
+	?formula graph:member ?triple .
+	
+} => {	<> :test1 ?triple } . 
+
+
+{	<> :formula ?formula .
+	?formula graph:member { :a :b :c } .
+	
+} => {	<> :test2 :SUCCESS } .
+
+
+{	<> :formula ?formula .
+	?formula graph:member { :a :b :c . :d :e :f } .
+	
+} => {	<> :test3 :FAILURE } .
+
+
+{	<> :formula ?formula .
+
+	( ?m
+	{ 
+		?formula graph:member ?m .
+		
+	} ?ms ) log:collectAllIn _:x .
+	
+} => { <> :test4 ?ms } .

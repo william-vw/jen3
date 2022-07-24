@@ -56,6 +56,7 @@ public class AllBuiltinDefinitions {
         allBuiltins.add(new MathGreaterThan());
         allBuiltins.add(new StringScrape());
         allBuiltins.add(new GraphLength());
+        allBuiltins.add(new GraphMember());
         allBuiltins.add(new TimeHour());
         allBuiltins.add(new FileListFiles());
         allBuiltins.add(new ListUnique());

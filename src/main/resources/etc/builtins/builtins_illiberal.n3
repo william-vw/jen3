@@ -1159,6 +1159,18 @@ graph:difference a :BuiltinDefinition ;
 		] 
 	] .
 	
+graph:member a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :formulaOrVariable ] ;
+			:object [ :restricts :formulaOrVariable ]
+		] ;
+		:domain [
+			:subject [ :restricts :formula ] ;
+			:object [ :restricts :formulaOrVariable ]
+		] 
+	] .
+	
 file:listFiles a :BuiltinDefinition ;
 	:inputConstraints :iriAndFormula ;
 	:isResourceIntensive true .

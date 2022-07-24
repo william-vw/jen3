@@ -1,0 +1,69 @@
+- choose some process-intensive application (e.g., glean)
+
+add following to pom.xml:
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>wvw.glean.cig.CIGTest</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+- use mvn to package jar-with-dependencies:
+	(Eclipse export "runnable jar" doesn't work properly)
+
+	mvn clean compile assembly:single
+
+
+- start VisualVM
+VisualVM: Applications > Profile startup (requires "Startup Profiler" plugin)
+
+class to be profiled: e.g., wvw.glean.cig.CIGTest
+
+- run the following in cmd:
+/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java -agentpath:/Applications/VisualVM.app/Contents/Resources/visualvm/visualvm/lib/deployed/jdk16/mac/libprofilerinterface.jnilib=/Applications/VisualVM.app/Contents/Resources/visualvm/visualvm/lib,5140 -jar target/glean-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+
+(try different port number if it complains that the process is already running!)
+
+
+
+- NOTES
+
+lot of time spent on parsing N3 code (over half..)
+comment out Log.info's in FRuleEngine, for pete's sake .. (400ms total time)
+
+second, running transitAll -> .. -> FRUleEngine.fastInit/saturate
+	processTriggerClauses (25.5%)
+		-> tryRule .. matchRuleBody .. matchClauseList (20.8%)
+			-> matchClauseList (11.8%)
+			-> sortOnRuleBoundedness (1.4% + 0.3% + 0.3%)
+	tryUniversalRules (4.5%)
+	
+hot spots:
+highest self-time: NiceIterator.hasNext, FilterIterator.next, RuleUtil.match ..
+	sortOnBoundedness: total time: 2,5s! 
+		InputConstraint.check: 307ms
+		ground: 1.9s
+			InstantiateTriplePatternVisitor.visitNode
+			..visitCitedFormula: 1.6s
+			..visitCollection: 1.4s
+			
+when using compound-term-caching in visitor:
+	 much less time spent on visiting collections, cited-formulas

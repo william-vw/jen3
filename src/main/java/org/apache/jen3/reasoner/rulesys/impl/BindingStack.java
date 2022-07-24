@@ -93,6 +93,7 @@ public class BindingStack implements BindingEnvironment {
 
 	public BindingStack() {
 		index = 0;
+		this.environment = new Node[] {};
 
 		init();
 	}
@@ -433,8 +434,7 @@ public class BindingStack implements BindingEnvironment {
 			} else {
 				inst.varTrace.add(node.getName());
 
-				Node bound = (node.getIndex() < environment.length ? environment[node.getIndex()]
-						: null);
+				Node bound = (node.getIndex() < environment.length ? environment[node.getIndex()] : null);
 
 				if (bound == null)
 					bound = node;
@@ -459,10 +459,8 @@ public class BindingStack implements BindingEnvironment {
 				// only generate witnesses for first level
 				if (level == 0) {
 					N3ModelSpec spec = ((N3Rule) rule).getModelSpec();
-					if (node.getOriginal().isQuickVariable()
-							&& spec.hasFeedbackFor(INFER_UNBOUND_GLOBALS))
-						spec.getFeedback(INFER_UNBOUND_GLOBALS).doDefaultAction(node.getOriginal(),
-								rule);
+					if (node.getOriginal().isQuickVariable() && spec.hasFeedbackFor(INFER_UNBOUND_GLOBALS))
+						spec.getFeedback(INFER_UNBOUND_GLOBALS).doDefaultAction(node.getOriginal(), rule);
 
 					// generate witness
 					Node witness = blankNodePerBindingEnv(node);
@@ -547,8 +545,8 @@ public class BindingStack implements BindingEnvironment {
 			if (it.includesVars()) {
 				nrNewColls++;
 
-				ret = new Node_Collection(it.getElements().stream().map(n -> visitNode(n, inst))
-						.collect(Collectors.toList()));
+				ret = new Node_Collection(
+						it.getElements().stream().map(n -> visitNode(n, inst)).collect(Collectors.toList()));
 
 			} else
 				ret = it;

@@ -1,0 +1,24 @@
+~ temporal coupling
+situation: within the same scope, create an IRI, but later on a same-named variable
+(only possible if IRI is still in cache)
+options: 
+	raise a warning / error
+	from that point onward, consider this name as a var (formula-wide, lexicographic)
+	re-visit all prior same-named nodes and set their internal node as the defined var (formula-wide)
+	
+	
+situation: within the same scope, create a var, but later on a same-named IRI
+options: 
+	raise a warning / error
+	set internal node of IRI as the previously defined var (lexicographic, formula-wide)
+	
+	
+situation: within the same scope, create a variable, but then create another variable with different quantification
+options: 
+	raise a warning / error
+	from that point onward, the var will have the new quantification
+	
+	
+
+NameScopingStrategy
+	
