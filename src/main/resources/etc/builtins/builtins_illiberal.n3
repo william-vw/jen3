@@ -680,11 +680,11 @@ string:join a :BuiltinDefinition ;
 	:inputConstraints [
 		:accept [
 			:subject [ :restricts :listOrVariable ] ;
-			:object [ :restricts :stringableOrVariable ]
+			:object [ :restricts :stringOrVariable ]
 		] ;
 		:domain [
 			:subject [ :listElements ( [ :restricts :stringableList ] [ :restricts :stringable ] ) ] ;
-			:object [ :restricts :stringableOrVariable ]
+			:object [ :restricts :stringOrVariable ]
 		] 
 	] .
 

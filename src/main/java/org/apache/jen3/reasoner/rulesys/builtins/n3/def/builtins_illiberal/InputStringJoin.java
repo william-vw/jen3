@@ -7,6 +7,7 @@ import org.apache.jen3.reasoner.rulesys.builtins.n3.def.ic.stmt.SubjectObjectSta
 import org.apache.jen3.reasoner.rulesys.builtins.n3.def.ic.OneOfIC;
 import org.apache.jen3.reasoner.rulesys.builtins.n3.def.ic.ListIC;
 import org.apache.jen3.reasoner.rulesys.builtins.n3.def.ic.VariableIC;
+import org.apache.jen3.reasoner.rulesys.builtins.n3.def.ic.StringIC;
 import org.apache.jen3.reasoner.rulesys.builtins.n3.def.ic.StringableIC;
 import org.apache.jen3.reasoner.rulesys.builtins.n3.def.ic.stmt.BoolStatementIC;
 
@@ -16,8 +17,8 @@ public class InputStringJoin extends InputConstraintsDefinition {
 
     public InputStringJoin(BuiltinDefinition builtin) {
         super(builtin, null);
-        addClause(ACCEPT, new SubjectObjectStatementIC(this, new OneOfIC(new ListIC(null, null), new VariableIC()), new OneOfIC(new StringableIC(), new VariableIC()), null));
-        addClause(DOMAIN, new SubjectObjectStatementIC(this, new ListIC(null, null, new ListIC(null, new StringableIC()), new StringableIC()), new OneOfIC(new StringableIC(), new VariableIC()), null));
+        addClause(ACCEPT, new SubjectObjectStatementIC(this, new OneOfIC(new ListIC(null, null), new VariableIC()), new OneOfIC(new StringIC(), new VariableIC()), null));
+        addClause(DOMAIN, new SubjectObjectStatementIC(this, new ListIC(null, null, new ListIC(null, new StringableIC()), new StringableIC()), new OneOfIC(new StringIC(), new VariableIC()), null));
         addClause(NOT_BOUND, new BoolStatementIC(this, false));
     }
 }
