@@ -1,7 +1,7 @@
 package org.apache.jen3.reasoner.rulesys.builtins.n3.list;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.jen3.graph.Node;
@@ -15,7 +15,7 @@ public class RemoveDuplicates extends ListBuiltin {
 		super(new BinaryFlowPattern((n, g) -> {
 			Node_Collection c = (Node_Collection) n;
 
-			List<Node> elements2 = new ArrayList<>(new HashSet<>(c.getElements()));
+			List<Node> elements2 = new ArrayList<>(new LinkedHashSet<>(c.getElements()));
 			return NodeFactory.createCollection(elements2);
 
 		}, null), true);
