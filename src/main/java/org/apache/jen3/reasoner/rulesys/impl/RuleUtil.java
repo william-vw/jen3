@@ -492,7 +492,7 @@ public class RuleUtil {
 		BuiltinSet builtinSet = graph.getN3Config().getBuiltinSet();
 
 		Node pred = env.groundShallow(clause.getPredicate());
-		if (builtinSet.isBuiltin(pred)) {
+		if (builtinSet.isBuiltin(pred) && builtinSet.getBuiltin(pred).isStatic()) {
 			N3Builtin builtin = builtinSet.getBuiltin(pred);
 			return builtin.toTripleSet(clause, graph, continuation);
 
