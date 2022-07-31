@@ -114,6 +114,7 @@ public class AllBuiltinDefinitions {
         allBuiltins.add(new StringSubstring());
         allBuiltins.add(new StringStartsWith());
         allBuiltins.add(new LogParsedAsN3());
+        allBuiltins.add(new ListRemoveDuplicates());
         allBuiltins.add(new MathCosh());
         allBuiltins.add(new StringCapitalize());
         allBuiltins.add(new StringScrapeAll());

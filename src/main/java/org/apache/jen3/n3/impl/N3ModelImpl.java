@@ -272,7 +272,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 	 */
 
 	@Override
-	public Model add(Resource s, Resource p, Resource o) {		
+	public Model add(Resource s, Resource p, Resource o) {
 		if (immutable)
 			throw new UnsupportedOperationException("Attempting to change an immutable N3 model.");
 
@@ -331,8 +331,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 		reset(s, p, o);
 
 		// Model m = super.remove(s, p, o);
-		graph.remove((s != null ? s.asNode() : null), (p != null ? p.asNode() : null),
-				(o != null ? o.asNode() : null));
+		graph.remove((s != null ? s.asNode() : null), (p != null ? p.asNode() : null), (o != null ? o.asNode() : null));
 
 		ruleBase.onRemove(s, p, o);
 
@@ -493,10 +492,12 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 	}
 
 	private boolean setup(Resource r, boolean pred) {
-		if (pred && scope.isOuter() && spec.getBuiltinSet().isStatic(r.asNode())) {
+		if (pred && scope.isOuter() && spec.getBuiltinSet().isStatic(r.asNode())
+				&& spec.hasFeedbackFor(BUILTIN_STATIC_DATA)) {
+
 			spec.getFeedback(BUILTIN_STATIC_DATA).doDefaultAction(r.getURI());
 
-			return false;
+//			return false;
 		}
 
 		if (r.isCitedFormula()) {
@@ -676,13 +677,10 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 	 *                  matching statements
 	 */
 	@Override
-	public StmtIterator listStatements(Resource subject, Resource predicate, Resource object,
-			Model posit) {
+	public StmtIterator listStatements(Resource subject, Resource predicate, Resource object, Model posit) {
 		if (graph instanceof InfGraph) {
-			Graph gp = (posit == null ? ModelFactory.createDefaultModel().getGraph()
-					: posit.getGraph());
-			Iterator<Triple> iter = getInfGraph().find(asNode(subject), asNode(predicate),
-					asNode(object), gp);
+			Graph gp = (posit == null ? ModelFactory.createDefaultModel().getGraph() : posit.getGraph());
+			Iterator<Triple> iter = getInfGraph().find(asNode(subject), asNode(predicate), asNode(object), gp);
 			return IteratorFactory.asStmtIterator(iter, this);
 
 		} else {
@@ -866,8 +864,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 	 */
 	@Override
 	public Iterator<Derivation> getDerivation(Statement statement) {
-		return (graph instanceof InfGraph) ? ((InfGraph) graph).getDerivation(statement.asTriple())
-				: null;
+		return (graph instanceof InfGraph) ? ((InfGraph) graph).getDerivation(statement.asTriple()) : null;
 	}
 
 	/**
@@ -906,8 +903,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 
 	@Override
 	public RDFWriter getWriter(String lang) {
-		System.setProperty("http://jena.hpl.hp.com/n3/properties/writer",
-				N3JenaWriter.n3WriterFullPrinter);
+		System.setProperty("http://jena.hpl.hp.com/n3/properties/writer", N3JenaWriter.n3WriterFullPrinter);
 //		System.setProperty("http://jena.hpl.hp.com/n3/properties/writer", N3JenaWriter.n3WriterPrettyPrinter);
 
 		return super.getWriter(lang);
@@ -982,7 +978,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 
 				} else
 					return;
-				
+
 				if (dir == RuleDirs.BACKWARD) {
 					Node tmp = s;
 					s = o;
@@ -1035,8 +1031,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 					|| (body.isCitedFormula() && Util.getModelValue(body).isEmpty())) {
 
 				// => false
-				if (Util.isBoolean(head) && !Util.getBooleanValue(head)
-						&& spec.hasFeedbackFor(INFER_INFERENCE_FUSE))
+				if (Util.isBoolean(head) && !Util.getBooleanValue(head) && spec.hasFeedbackFor(INFER_INFERENCE_FUSE))
 					spec.getFeedback(INFER_INFERENCE_FUSE).doDefaultAction(rule);
 
 				// => {..}
@@ -1044,8 +1039,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 					Node_CitedFormula inf = (Node_CitedFormula) head;
 
 					ForwardRuleInfGraphI ig = (ForwardRuleInfGraphI) getInfGraph();
-					inf.getContents().listStatements()
-							.forEachRemaining(stmt -> ig.addDeduction(stmt.asTriple()));
+					inf.getContents().listStatements().forEachRemaining(stmt -> ig.addDeduction(stmt.asTriple()));
 				}
 
 				return;
@@ -1150,8 +1144,7 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 
 		private Map<N3MistakeTypes, N3Feedback> feedbacks = new HashMap<>();
 
-		public N3GraphConfig(BuiltinConfig builtinConfig,
-				Map<N3MistakeTypes, N3Feedback> feedbacks) {
+		public N3GraphConfig(BuiltinConfig builtinConfig, Map<N3MistakeTypes, N3Feedback> feedbacks) {
 
 			this.builtinConfig = builtinConfig;
 			this.feedbacks = feedbacks;

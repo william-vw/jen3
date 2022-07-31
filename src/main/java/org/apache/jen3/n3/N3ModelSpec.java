@@ -46,6 +46,7 @@ import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jen3.graph.Node;
+import org.apache.jen3.n3.impl.N3ModelImpl.N3GraphConfig;
 import org.apache.jen3.n3.scope.N3ScopeScheme.N3ScopeTypes;
 import org.apache.jen3.rdf.model.Model;
 import org.apache.jen3.rdf.model.ModelFactory;
@@ -86,25 +87,22 @@ public class N3ModelSpec {
 	 * A specification for N3 models that are stored in memory and use the generic
 	 * rule reasoner, with a forward-chaining fixpoint algorithm, for entailments
 	 */
-	private static final N3ModelSpec N3_MEM_FP_INF = new N3ModelSpec(
-			ModelFactory.createMemModelMaker(), GenericRuleReasonerFactory.theInstance(),
-			GenericRuleReasoner.FORWARD);
+	private static final N3ModelSpec N3_MEM_FP_INF = new N3ModelSpec(ModelFactory.createMemModelMaker(),
+			GenericRuleReasonerFactory.theInstance(), GenericRuleReasoner.FORWARD);
 
 	/**
 	 * A specification for N3 models that are stored in memory and use the generic
 	 * rule reasoner, with a forward-chaining RETE algorithm, for entailments
 	 */
-	private static final N3ModelSpec N3_MEM_RETE_INF = new N3ModelSpec(
-			ModelFactory.createMemModelMaker(), GenericRuleReasonerFactory.theInstance(),
-			GenericRuleReasoner.FORWARD_RETE);
+	private static final N3ModelSpec N3_MEM_RETE_INF = new N3ModelSpec(ModelFactory.createMemModelMaker(),
+			GenericRuleReasonerFactory.theInstance(), GenericRuleReasoner.FORWARD_RETE);
 
 	/**
 	 * A specification for N3 models that are stored in memory and use the generic
 	 * rule reasoner, with a LP algorithm for entailments
 	 */
-	private static final N3ModelSpec N3_MEM_LP_INF = new N3ModelSpec(
-			ModelFactory.createMemModelMaker(), GenericRuleReasonerFactory.theInstance(),
-			GenericRuleReasoner.BACKWARD);
+	private static final N3ModelSpec N3_MEM_LP_INF = new N3ModelSpec(ModelFactory.createMemModelMaker(),
+			GenericRuleReasonerFactory.theInstance(), GenericRuleReasoner.BACKWARD);
 
 	/**
 	 * A specification for N3 models that are stored in memory and use the generic
@@ -113,9 +111,8 @@ public class N3ModelSpec {
 	 */
 
 	// NOTE
-	private static final N3ModelSpec N3_MEM_HYBRID_INF = new N3ModelSpec(
-			ModelFactory.createMemModelMaker(), GenericRuleReasonerFactory.theInstance(),
-			GenericRuleReasoner.HYBRID_N3);
+	private static final N3ModelSpec N3_MEM_HYBRID_INF = new N3ModelSpec(ModelFactory.createMemModelMaker(),
+			GenericRuleReasonerFactory.theInstance(), GenericRuleReasoner.HYBRID_N3);
 
 	private ModelMaker maker;
 	private ReasonerFactory reasonerFactory;
@@ -149,8 +146,8 @@ public class N3ModelSpec {
 		this(maker, reasonerFactory, ruleMode, null, null, (N3Feedback[]) null);
 	}
 
-	public N3ModelSpec(ModelMaker maker, ReasonerFactory reasonerFactory, RuleMode ruleMode,
-			N3ScopeTypes scopeType, String builtinDefPath, N3Feedback... feedbacks) {
+	public N3ModelSpec(ModelMaker maker, ReasonerFactory reasonerFactory, RuleMode ruleMode, N3ScopeTypes scopeType,
+			String builtinDefPath, N3Feedback... feedbacks) {
 
 		this.maker = maker;
 		this.reasonerFactory = reasonerFactory;
@@ -171,9 +168,9 @@ public class N3ModelSpec {
 		setupFeedbacks();
 	}
 
-	private N3ModelSpec(ModelMaker maker, ReasonerFactory reasonerFactory, Resource config,
-			RuleMode ruleMode, N3ScopeTypes scopeType, boolean loadBuiltins,
-			BuiltinConfig builtinConfig, Map<N3MistakeTypes, N3Feedback> feedbacks) {
+	private N3ModelSpec(ModelMaker maker, ReasonerFactory reasonerFactory, Resource config, RuleMode ruleMode,
+			N3ScopeTypes scopeType, boolean loadBuiltins, BuiltinConfig builtinConfig,
+			Map<N3MistakeTypes, N3Feedback> feedbacks) {
 
 		this.maker = maker;
 		this.reasonerFactory = reasonerFactory;
@@ -307,8 +304,9 @@ public class N3ModelSpec {
 	}
 
 	public boolean hasFeedbackFor(N3MistakeTypes... mistakes) {
-		return Arrays.stream(mistakes)
-				.anyMatch(m -> feedbacks.containsKey(m) && feedbacks.get(m).getAction() != NONE);
+		return Arrays.stream(mistakes).anyMatch(m -> {
+			return feedbacks.containsKey(m) && feedbacks.get(m).getAction() != NONE;
+		});
 	}
 
 	public N3Feedback getFeedback(N3MistakeTypes mistake) {
@@ -381,12 +379,17 @@ public class N3ModelSpec {
 
 	public N3ModelSpec copy() {
 		// don't copy skolemNs - have to explicitly call from() method
-		return new N3ModelSpec(maker, reasonerFactory, config, ruleMode, scopeType, loadBuiltins,
-				builtinConfig.copy(), feedbacks);
+		return new N3ModelSpec(maker, reasonerFactory, config, ruleMode, scopeType, loadBuiltins, builtinConfig.copy(),
+				feedbacks);
 	}
 
 	public N3ModelSpec from(N3ModelSpec parentSpec) {
 		this.skolemNs = parentSpec.getSkolemNs();
+		return this;
+	}
+
+	public N3ModelSpec from(N3GraphConfig config) {
+		this.builtinConfig = config.getBuiltinConfig();
 		return this;
 	}
 }

@@ -777,6 +777,19 @@ list:removeAt
 		] 
 	] .
 	
+list:removeDuplicates
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :listOrVariable ] ;
+			:object [ :restricts :listOrVariable ]
+		] ;
+		:domain [ 
+			:subject [ :restricts :list ] ;
+			:object [ :restricts :listOrVariable ]
+		] 	
+	] .
+	
 list:iterate
 	a :BuiltinDefinition ;
 	:inputConstraints [

@@ -23,27 +23,19 @@ import java.nio.file.Paths;
 
 public class IOUtils {
 
-	public static File getResourceFromCaller(String relativePath)
-			throws IOException, URISyntaxException {
-
+	public static File getResourceFromCaller(String relativePath) throws IOException, URISyntaxException {
 		return Paths.get("src/main/resources/" + relativePath).toFile();
 	}
 
-	public static InputStream getStreamFromCaller(String relativePath)
-			throws IOException, URISyntaxException {
-
+	public static InputStream getStreamFromCaller(String relativePath) throws IOException, URISyntaxException {
 		return new FileInputStream(getResourceFromCaller(relativePath));
 	}
 
-	public static File getResource(Class<?> cls, String relativePath)
-			throws IOException, URISyntaxException {
-
+	public static File getResource(Class<?> cls, String relativePath) throws IOException, URISyntaxException {
 		return getResourcePath(cls, relativePath).toFile();
 	}
 
-	public static Path getResourcePath(Class<?> cls, String relativePath)
-			throws IOException, URISyntaxException {
-
+	public static Path getResourcePath(Class<?> cls, String relativePath) throws IOException, URISyntaxException {
 		if (!relativePath.startsWith("/"))
 			relativePath = "/" + relativePath;
 
@@ -144,9 +136,7 @@ public class IOUtils {
 		writeFile(filePath, contents, true);
 	}
 
-	public static void writeFile(String filePath, String contents, boolean append)
-			throws IOException {
-
+	public static void writeFile(String filePath, String contents, boolean append) throws IOException {
 		File f = new File(filePath);
 		if (!f.getParentFile().exists())
 			f.getParentFile().mkdirs();
@@ -319,8 +309,7 @@ public class IOUtils {
 		}
 	}
 
-	public static void writeTo(BufferedReader reader, File file, boolean append)
-			throws IOException {
+	public static void writeTo(BufferedReader reader, File file, boolean append) throws IOException {
 		Writer writer = new FileWriter(file, append);
 
 		String line = null;

@@ -92,7 +92,8 @@ public class Member extends GraphBuiltin {
 			public Triple next() {
 				Statement next = elements.next();
 
-				N3Model m2 = ModelFactory.createN3Model(N3ModelSpec.get(Types.N3_MEM));
+				N3ModelSpec spec2 = N3ModelSpec.get(Types.N3_MEM).from(graph.getN3Config());
+				N3Model m2 = ModelFactory.createN3Model(spec2);
 				m2.add(next);
 				Node_CitedFormula cf2 = NodeFactory.createCitedFormula(graph.getScope().sub(Scopes.GRAPH), m2);
 				
