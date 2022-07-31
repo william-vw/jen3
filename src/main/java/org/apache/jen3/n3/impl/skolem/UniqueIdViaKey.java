@@ -6,11 +6,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jen3.graph.Node;
 import org.apache.jen3.graph.NodeFactory;
+import org.apache.jen3.graph.NodeTypes;
+import org.apache.jen3.graph.n3.Node_Collection;
 import org.apache.jen3.graph.n3.scope.Scope;
 import org.apache.jen3.reasoner.rulesys.impl.BindingStack;
 
@@ -18,6 +21,9 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 
 	private static int nextFormulaId = 0;
 	private static Map<Node, Integer> formulaMap = new HashMap<>();
+
+	private static int nextBnodeId = 0;
+	private static Map<Node, Integer> bnodeMap = new HashMap<>();
 
 	private static MessageDigest digester;
 
@@ -44,12 +50,29 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 //		return NodeFactory.createURI(N3Skolem.uri + id);
 //	}
 
-	public static String uniqueId(List<Node> bindings) {
-		return uniqueId(bindings.stream());
+	public static String uniqueId(Node... bindings) {
+		return uniqueId(Arrays.asList(bindings));
 	}
-	
-	public static String uniqueId(Node ... bindings) {
-		return uniqueId(Arrays.stream(bindings));
+
+	public static String uniqueId(List<Node> bindings) {
+		if (bindings.size() == 1) {
+			Node n = bindings.get(0);
+			// make single blank nodes more readable
+			if (n.getType() == NodeTypes.BLANK) {
+
+				int id = 0;
+				if (bnodeMap.containsKey(n)) {
+					id = bnodeMap.get(n);
+				} else {
+					id = nextBnodeId++;
+					bnodeMap.put(n, id);
+				}
+
+				return ":sk_" + id;
+			}
+		}
+
+		return uniqueId(bindings.stream());
 	}
 
 	// based on org.apache.jena.reasoner.rulesys.builtins.MakeSkolem
@@ -57,51 +80,7 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 		StringBuilder key = new StringBuilder();
 
 		bindings.forEach(e -> {
-			if (e == null) {
-				key.append("N");
-				return;
-			}
-
-			switch (e.getType()) {
-
-			case BLANK:
-				key.append("B");
-				key.append(e.getBlankNodeLabel());
-				break;
-
-			case URI:
-				key.append("U");
-				key.append(e.getURI());
-				break;
-
-			case LITERAL:
-				key.append("L");
-				key.append(e.getLiteralLexicalForm());
-				if (e.getLiteralLanguage() != null)
-					key.append("@" + e.getLiteralLanguage());
-				if (e.getLiteralDatatypeURI() != null)
-					key.append("^^" + e.getLiteralDatatypeURI());
-				break;
-
-			// cannot use the string form since ordering in cited formulas doesn't matter
-			// (and we haven't figured out a canonical form)
-
-			// identical hash-code should be returned for semantically equivalent formulas:
-			// but a hash collision could occur, i.e., different formulas w/ same hash-code
-
-			// so we need to keep a map with encountered cited formulas
-			// (for hash collisions, map should do equals() check as well, so good there)
-
-			case CITED_FORMULA:
-				key.append("G");
-				key.append(uniqueFormulaId(e));
-				break;
-
-			default:
-				key.append("O");
-				key.append(e.toString());
-				break;
-			}
+			key.append(idString(e));
 		});
 
 		// we don't really care about the length of the environment
@@ -124,6 +103,65 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 		String label = Base64.encodeBase64URLSafeString(digest);
 
 		return label;
+	}
+
+	private static StringBuffer idString(Node e) {
+		StringBuffer key = new StringBuffer();
+		if (e == null) {
+			key.append("N");
+			return key;
+		}
+
+		switch (e.getType()) {
+
+		case BLANK:
+			key.append("B");
+			key.append(e.getBlankNodeLabel());
+			break;
+
+		case URI:
+			key.append("U");
+			key.append(e.getURI());
+			break;
+
+		case LITERAL:
+			key.append("L");
+			key.append(e.getLiteralLexicalForm());
+			if (e.getLiteralLanguage() != null)
+				key.append("@" + e.getLiteralLanguage());
+			if (e.getLiteralDatatypeURI() != null)
+				key.append("^^" + e.getLiteralDatatypeURI());
+			break;
+
+		// cannot use the string form since ordering in cited formulas doesn't matter
+		// (and we haven't figured out a canonical form)
+
+		// identical hash-code should be returned for semantically equivalent formulas:
+		// but a hash collision could occur, i.e., different formulas w/ same hash-code
+
+		// so we need to keep a map with encountered cited formulas
+		// (for hash collisions, map should do equals() check as well, so good there)
+
+		case CITED_FORMULA:
+			key.append("G");
+			key.append(uniqueFormulaId(e));
+			break;
+
+		case COLLECTION:
+			key.append("L");
+
+			Node_Collection c = (Node_Collection) e;
+			key.append(c.getElements().stream().map(el -> idString(el)).collect(Collectors.joining(" ")));
+
+			break;
+
+		default:
+			key.append("O");
+			key.append(e.toString());
+			break;
+		}
+
+		return key;
 	}
 
 	private static int uniqueFormulaId(Node cf) {

@@ -10,7 +10,7 @@ import org.apache.jen3.reasoner.rulesys.builtins.n3.flow.BinaryFlowPattern;
 
 public class Skolem extends LogBuiltin {
 
-	private static String ns = "http://www.w3.org/2000/10/swap/genid#";
+	public static String ns = "http://www.w3.org/2000/10/swap/genid#";
 	
 	public Skolem() {
 		super(new BinaryFlowPattern((n, g) -> {

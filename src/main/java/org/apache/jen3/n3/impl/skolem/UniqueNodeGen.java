@@ -8,12 +8,13 @@ import org.apache.jen3.reasoner.rulesys.builtins.n3.log.Skolem;
 import org.apache.jen3.reasoner.rulesys.impl.BindingStack;
 
 public abstract class UniqueNodeGen {
-	
+
+
 	public abstract Node uniqueBlankNode(BindingStack env, Node node, Scope scope);
-	
+
 	public Node uniqueSkolem(Node_Blank bnode, N3ModelSpec spec) {
 		return Skolem.gen(bnode);
-		
+
 //		String id = spec.getSkolemNs() + bnode.getBlankNodeLabel();
 //		return NodeFactory.createURI(id);
 	}
