@@ -105,6 +105,10 @@ public class IOUtils {
 		return ret;
 	}
 
+	public static String readResourceString(Class<?> cls, String filePath) throws Exception {
+		return readString(getResourceInputStream(cls, filePath));
+	}
+
 	public static InputStream getURLStream(String url) throws IOException {
 		return new URL(url).openStream();
 	}
@@ -249,6 +253,13 @@ public class IOUtils {
 
 	public static boolean readBool(InputStream in) throws IOException {
 		return (in.read() == 1);
+	}
+
+	public static void writeToResourceFile(String contents, String path) throws IOException {
+		File resDir = new File(System.getProperty("user.dir") + "/src/main/resources/");
+		File file = new File(resDir, path);
+
+		writeToFile(contents, file);
 	}
 
 	public static void writeToFile(String contents, File file) throws IOException {

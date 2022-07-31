@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.codec.binary.Base64;
@@ -58,21 +57,23 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 		if (bindings.size() == 1) {
 			Node n = bindings.get(0);
 			// make single blank nodes more readable
-			if (n.getType() == NodeTypes.BLANK) {
-
-				int id = 0;
-				if (bnodeMap.containsKey(n)) {
-					id = bnodeMap.get(n);
-				} else {
-					id = nextBnodeId++;
-					bnodeMap.put(n, id);
-				}
-
-				return ":sk_" + id;
-			}
+			if (n.getType() == NodeTypes.BLANK)
+				return getBnodeId(n);
 		}
 
 		return uniqueId(bindings.stream());
+	}
+
+	private static String getBnodeId(Node bnode) {
+		int id = 0;
+		if (bnodeMap.containsKey(bnode))
+			id = bnodeMap.get(bnode);
+		else {
+			id = nextBnodeId++;
+			bnodeMap.put(bnode, id);
+		}
+
+		return "_:sk_" + id;
 	}
 
 	// based on org.apache.jena.reasoner.rulesys.builtins.MakeSkolem
@@ -101,6 +102,8 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 
 		byte[] digest = digester.digest(keyStr.getBytes());
 		String label = Base64.encodeBase64URLSafeString(digest);
+
+//		System.out.println("label? " + label);
 
 		return label;
 	}
@@ -151,7 +154,7 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 			key.append("L");
 
 			Node_Collection c = (Node_Collection) e;
-			key.append(c.getElements().stream().map(el -> idString(el)).collect(Collectors.joining(" ")));
+			c.getElements().stream().forEach(el -> key.append(idString(el)));
 
 			break;
 

@@ -513,6 +513,8 @@ public class BindingStack implements BindingEnvironment {
 			if (!requiresGrounding(inst))
 				return it;
 
+			inst.nested = true;
+
 			if (it.includesRuleVars()) {
 				nrNewGraphs++;
 
@@ -540,6 +542,8 @@ public class BindingStack implements BindingEnvironment {
 
 			if (!requiresGrounding(inst))
 				return it;
+
+			inst.nested = true;
 
 			Node_Compound ret = null;
 			if (it.includesVars()) {
@@ -591,6 +595,11 @@ public class BindingStack implements BindingEnvironment {
 				// if this was a blank node term originally given within the rule head,
 				// then return a unique blank node for it
 
+				// (irrelevant if it was nested (i.e, in a formula, collection))
+				// TODO blank nodes that are not nested in output are still showing up as nested
+//				if (inst.nested)
+//					return it;
+
 				if (inst.wasBound)
 					// blank node comes from rule-var (wasBound = true)
 					// (i.e., rule-var was bound to a (data) blank node in rule body)
@@ -616,23 +625,24 @@ public class BindingStack implements BindingEnvironment {
 
 			Node bnode = ((N3Rule) rule).uniqueBlankNode(BindingStack.this, node, curScope);
 //			Log.debug(getClass(), "new bnode: " + bnode + " - " + BindingStack.this);
+//			System.out.println("new bnode: " + bnode);
 
 			return bnode;
 		}
 
 		private Node skolemize(Node_Blank node) {
-			// fine if originated from top-level (i.e., data)
-			if (node.getScope() == null || node.getScope().getLvl() == 0) {
-				return node;
+//			// fine if originated from top-level (i.e., data)
+//			if (node.getScope() == null || node.getScope().getLvl() == 0) {
+//				return node;
+//
+//			} else {
+			// originated from quoted graph
+			// return a unique skolem constant for this blank node
+			Node skolem = ((N3Rule) rule).uniqueSkolem(node);
+			Log.debug(getClass(), "new skolem: " + skolem);
 
-			} else {
-				// originated from quoted graph
-				// return a unique skolem constant for this blank node
-				Node skolem = ((N3Rule) rule).uniqueSkolem(node);
-				Log.debug(getClass(), "new skolem: " + skolem);
-
-				return skolem;
-			}
+			return skolem;
+//			}
 		}
 
 		protected Node visitNode(Node n, GroundCmd ground) {
@@ -653,6 +663,7 @@ public class BindingStack implements BindingEnvironment {
 			public List<String> varTrace = new ArrayList<>();
 			public boolean bindingVar = false;
 			public boolean wasBound = false;
+			public boolean nested = true;
 
 			public InstantiateData(GroundCmd ground) {
 				this.ground = ground;
@@ -666,6 +677,8 @@ public class BindingStack implements BindingEnvironment {
 				// only direct binding should be considered "bound"
 				if (bindingVar)
 					inst.wasBound = true;
+
+				inst.nested = nested;
 
 				return inst;
 			}
