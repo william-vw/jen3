@@ -12,5 +12,5 @@
 <file:///Users/wvw/git/n3/jen3/testing/N3/jen3_reason/list/sort.n3>
     :test2 ( "a" "q" "y" "z" ) ;
     :test3 ( "2"^^xsd:int "3"^^xsd:int "d" :a ) ;
-    :test1 ( "1"^^xsd:int "2"^^xsd:int "3"^^xsd:int "5"^^xsd:int ) .
+    :test1 ( "1"^^xsd:int "2"^^xsd:int "3"^^xsd:int "5"^^xsd:int ) ;
     :test4 :SUCCESS .
