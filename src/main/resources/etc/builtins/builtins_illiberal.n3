@@ -996,6 +996,19 @@ log:localName a :BuiltinDefinition ;
 log:prefix a :BuiltinDefinition ;
 	:inputConstraints :stringOrVariableAndStringOrVariable .
 
+log:hasPrefix a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :restricts :stringableOrVariable ] ;
+			:object [ :restricts :boolOrVariable ]
+		] ;
+		
+		:domain [
+			:subject [ :restricts :stringable ] ;
+			:object [ :restricts :boolOrVariable ]
+		]
+	] .
+
 log:label a :BuiltinDefinition ;
 	:inputConstraints :bnodeAndStringOrVariable .
 	

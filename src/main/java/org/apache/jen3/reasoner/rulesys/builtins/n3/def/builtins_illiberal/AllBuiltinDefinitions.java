@@ -61,6 +61,7 @@ public class AllBuiltinDefinitions {
         allBuiltins.add(new GraphMember());
         allBuiltins.add(new TimeHour());
         allBuiltins.add(new FileListFiles());
+        allBuiltins.add(new LogHasPrefix());
         allBuiltins.add(new ListUnique());
         allBuiltins.add(new ListIn());
         allBuiltins.add(new LogConjunction());
