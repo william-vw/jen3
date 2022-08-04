@@ -9,6 +9,6 @@ public class LogPrefix extends BuiltinDefinition {
 
     public LogPrefix() {
         super("http://www.w3.org/2000/10/swap/log#prefix", new Prefix(), false, true, true);
-        setInputConstraints(new InputIriOrVariableAndStringOrVariable(this));
+        setInputConstraints(new InputStringOrVariableAndStringOrVariable(this));
     }
 }

@@ -178,14 +178,14 @@
 		:object [ :restricts :stringableOrVariable ]
 	] .
 	
-:iriOrVariableAndStringOrVariable a :InputConstraintsDefinition ;
+:stringOrVariableAndStringOrVariable a :InputConstraintsDefinition ;
 	:accept [
-		:subject [ :restricts :iriOrVariable ] ;
+		:subject [ :restricts :stringableOrVariable ] ;
 		:object [ :restricts :stringableOrVariable ]
 	] ;
 	:domain [
 		:oneOf ( [
-			:subject [ :restricts :iri ] ;
+			:subject [ :restricts :stringable ] ;
 			:object [ :restricts :stringableOrVariable ]
 		] [
 			:subject [ :restricts :variable ] ;
@@ -981,7 +981,7 @@ log:localName a :BuiltinDefinition ;
 	:inputConstraints :iriAndStringOrVariable .
 	
 log:prefix a :BuiltinDefinition ;
-	:inputConstraints :iriOrVariableAndStringOrVariable .
+	:inputConstraints :stringOrVariableAndStringOrVariable .
 
 log:label a :BuiltinDefinition ;
 	:inputConstraints :bnodeAndStringOrVariable .

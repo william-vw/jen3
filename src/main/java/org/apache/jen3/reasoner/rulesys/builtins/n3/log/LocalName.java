@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.apache.jen3.graph.NodeFactory;
 import org.apache.jen3.graph.Node_URI;
 import org.apache.jen3.reasoner.rulesys.builtins.n3.flow.BinaryFlowPattern;
+import org.apache.jena.atlas.logging.Log;
 
 public class LocalName extends LogBuiltin {
 
@@ -27,7 +28,7 @@ public class LocalName extends LogBuiltin {
 				return NodeFactory.createLiteral(ln);
 
 			} else {
-				System.err.println("confused about URI " + uriStr);
+				Log.error(LocalName.class, "cannot find localname of URI: " + uriStr);
 				return null;
 			}
 
