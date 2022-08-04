@@ -13,13 +13,13 @@ public abstract class InputConstraint extends ICBase {
 	public enum DefaultICs {
 
 		CONCRETE(BuiltinNS.ConcreteIC, ConcreteIC.class), VARIABLE(BuiltinNS.VariableIC, VariableIC.class),
-		IRI(BuiltinNS.IriIC, IriIC.class), NUMBERABLE(BuiltinNS.NumberableIC, NumberableIC.class),
-		INTABLE(BuiltinNS.IntableIC, IntableIC.class), STRINGABLE(BuiltinNS.StringableIC, StringableIC.class),
-		STRING(BuiltinNS.StringIC, StringIC.class), REGEX(BuiltinNS.RegexIC, RegexIC.class),
-		DATATYPE(BuiltinNS.DatatypeIC, DatatypeIC.class), LITERAL(BuiltinNS.LiteralIC, LiteralIC.class),
-		BASE_IRI(BuiltinNS.BaseIriIC, BaseIriIC.class), FORMULA(BuiltinNS.FormulaIC, FormulaIC.class),
-		ANY(BuiltinNS.AnyIC, AnyIC.class), LIST(BuiltinNS.ListIC, ListIC.class),
-		ONE_OF(BuiltinNS.UnionIC, OneOfIC.class);
+		IRI(BuiltinNS.IriIC, IriIC.class), BNODE(BuiltinNS.BnodeIC, BnodeIC.class),
+		NUMBERABLE(BuiltinNS.NumberableIC, NumberableIC.class), INTABLE(BuiltinNS.IntableIC, IntableIC.class),
+		STRINGABLE(BuiltinNS.StringableIC, StringableIC.class), STRING(BuiltinNS.StringIC, StringIC.class),
+		REGEX(BuiltinNS.RegexIC, RegexIC.class), DATATYPE(BuiltinNS.DatatypeIC, DatatypeIC.class),
+		LITERAL(BuiltinNS.LiteralIC, LiteralIC.class), BASE_IRI(BuiltinNS.BaseIriIC, BaseIriIC.class),
+		FORMULA(BuiltinNS.FormulaIC, FormulaIC.class), ANY(BuiltinNS.AnyIC, AnyIC.class),
+		LIST(BuiltinNS.ListIC, ListIC.class), ONE_OF(BuiltinNS.UnionIC, OneOfIC.class);
 
 		private Resource uri;
 		private Class<?> cls;

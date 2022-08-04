@@ -58,13 +58,13 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 			Node n = bindings.get(0);
 			// make single blank nodes more readable
 			if (n.getType() == NodeTypes.BLANK)
-				return getBnodeId(n);
+				return getSeqBnodeId(n);
 		}
 
 		return uniqueId(bindings.stream());
 	}
 
-	private static String getBnodeId(Node bnode) {
+	public static String getSeqBnodeId(Node bnode) {
 		int id = 0;
 		if (bnodeMap.containsKey(bnode))
 			id = bnodeMap.get(bnode);
@@ -152,6 +152,7 @@ public class UniqueIdViaKey extends UniqueNodeGen {
 
 		case COLLECTION:
 			key.append("L");
+//			System.out.println("skolem: " + e);
 
 			Node_Collection c = (Node_Collection) e;
 			c.getElements().stream().forEach(el -> key.append(idString(el)));

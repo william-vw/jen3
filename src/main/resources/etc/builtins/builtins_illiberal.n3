@@ -40,6 +40,7 @@
 :list a :ListInputConstraint .
 :regex a :RegexInputConstraint .
 :iri a :IriInputConstraint .
+:bnode a :BnodeInputConstraint .
 :baseIri a :BaseIriInputConstraint .
 :any a :AnyInputConstraint .
 
@@ -51,6 +52,7 @@
 :boolOrVariable :oneOf ( [ :datatype xsd:boolean ] :variable ) .
 :regexOrVariable :oneOf ( :regex :variable ) .
 :iriOrVariable :oneOf ( :iri :variable ) .
+:bnodeOrVariable :oneOf ( :bnode :variable ) .
 :listOrVariable :oneOf ( :list :variable ) .
 :formulaOrVariable :oneOf ( :formula :variable ) .
 :dateType :oneOf ( [ :datatype xsd:dateTime ] [ :datatype xsd:date ] ) .
@@ -357,6 +359,16 @@
 	] ;
 	:domain [
 		:subject [ :restricts :iri ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] .
+	
+:bnodeAndStringOrVariable a :InputConstraints ;
+	:accept [
+		:subject [ :restricts :bnodeOrVariable ] ;
+		:object [ :restricts :stringableOrVariable ]
+	] ;
+	:domain [
+		:subject [ :restricts :bnode ] ;
 		:object [ :restricts :stringableOrVariable ]
 	] .
 
@@ -970,6 +982,9 @@ log:localName a :BuiltinDefinition ;
 	
 log:prefix a :BuiltinDefinition ;
 	:inputConstraints :iriOrVariableAndStringOrVariable .
+
+log:label a :BuiltinDefinition ;
+	:inputConstraints :bnodeAndStringOrVariable .
 	
 log:rawType a :BuiltinDefinition ;
 	:inputConstraints [

@@ -353,8 +353,7 @@ public class BindingStack implements BindingEnvironment {
 
 		protected Scope curScope;
 
-		// TODO
-		// generalize this code (see other #instantiate)
+		// TODO generalize this code (see other #instantiate)
 		// requires changes to N3Rule
 
 		public List<Triple> generateData(N3Rule rule) {
@@ -595,20 +594,25 @@ public class BindingStack implements BindingEnvironment {
 				// if this was a blank node term originally given within the rule head,
 				// then return a unique blank node for it
 
-				// (irrelevant if it was nested (i.e, in a formula, collection))
-				// TODO blank nodes that are not nested in output are still showing up as nested
-//				if (inst.nested)
-//					return it;
-
 				if (inst.wasBound)
-					// blank node comes from rule-var (wasBound = true)
-					// (i.e., rule-var was bound to a (data) blank node in rule body)
-					// need to skolemize this blank node (in case it originated from quoted graph)
+					// blank node was bound to rule-var in rule body
+					// (or, from nested binding)
 
-					return skolemize(it);
-				else
-					// (needs to be unique per set of variable bindings)
+					// TODO unsure why this skolemization was needed
+					// (breaks the explainer code and makes things a lot more complicated)
+
+					// in case it originated from quoted graph, need to skolemize it
+//					if (it.getScope() == null || it.getScope().getLvl() == 0)
+					return it;
+//					else {
+//						System.out.println("skolemizing: " + it);
+//						return skolemize(it);
+//					}
+				else {
+					// blank node was explicit term in rule body:
+					// needs to be unique per set of variable bindings
 					return blankNodePerBindingEnv(it);
+				}
 
 			} else
 				return it;
@@ -630,20 +634,14 @@ public class BindingStack implements BindingEnvironment {
 			return bnode;
 		}
 
-		private Node skolemize(Node_Blank node) {
-//			// fine if originated from top-level (i.e., data)
-//			if (node.getScope() == null || node.getScope().getLvl() == 0) {
-//				return node;
+//		private Node skolemize(Node_Blank node) {
+//			// originated from quoted graph
+//			// return a unique skolem constant for this blank node
+//			Node skolem = ((N3Rule) rule).uniqueSkolem(node);
+//			Log.debug(getClass(), "new skolem: " + skolem);
 //
-//			} else {
-			// originated from quoted graph
-			// return a unique skolem constant for this blank node
-			Node skolem = ((N3Rule) rule).uniqueSkolem(node);
-			Log.debug(getClass(), "new skolem: " + skolem);
-
-			return skolem;
-//			}
-		}
+//			return skolem;
+//		}
 
 		protected Node visitNode(Node n, GroundCmd ground) {
 			return n.visitWith(this, new InstantiateData(ground.copy()));
@@ -674,8 +672,11 @@ public class BindingStack implements BindingEnvironment {
 
 				inst.varTrace = new ArrayList<>(varTrace);
 				// bindingVar set to true before visiting a bound value
-				// only direct binding should be considered "bound"
-				if (bindingVar)
+
+				// TODO consider only direct binding "bound"
+				// vs. also considering any nested terms as "bound"
+
+				if (wasBound || bindingVar)
 					inst.wasBound = true;
 
 				inst.nested = nested;

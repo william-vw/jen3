@@ -28,6 +28,7 @@ public class BuiltinNS {
 	public static final Resource ConcreteIC = resource("ConcreteInputConstraint");
 	public static final Resource VariableIC = resource("VariableInputConstraint");
 	public static final Resource IriIC = resource("IriInputConstraint");
+	public static final Resource BnodeIC = resource("BnodeInputConstraint");
 	public static final Resource NumberableIC = resource("NumberableInputConstraint");
 	public static final Resource IntableIC = resource("IntableInputConstraint");
 	public static final Resource DatatypeIC = resource("DatatypeInputConstraint");

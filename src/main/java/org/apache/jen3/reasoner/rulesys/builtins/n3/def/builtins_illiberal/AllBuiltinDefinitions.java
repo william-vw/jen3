@@ -42,6 +42,7 @@ public class AllBuiltinDefinitions {
         allBuiltins.add(new LogUri());
         allBuiltins.add(new StringNotEqualIgnoringCase());
         allBuiltins.add(new ListNotMember());
+        allBuiltins.add(new LogLabel());
         allBuiltins.add(new LogPrefix());
         allBuiltins.add(new TimeDay());
         allBuiltins.add(new LogForAllIn());
