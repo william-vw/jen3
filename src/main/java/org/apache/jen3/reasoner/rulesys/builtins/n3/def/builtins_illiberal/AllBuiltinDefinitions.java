@@ -28,6 +28,7 @@ public class AllBuiltinDefinitions {
         allBuiltins.add(new LogNotIncludes());
         allBuiltins.add(new MathMax());
         allBuiltins.add(new StringEqualIgnoringCase());
+        allBuiltins.add(new ListSort());
         allBuiltins.add(new MathAsinh());
         allBuiltins.add(new MathNotGreaterThan());
         allBuiltins.add(new MathMin());

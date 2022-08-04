@@ -1,0 +1,12 @@
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix test: <https://w3c.github.io/N3/tests/test.n3#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <sort.n3#>.
+
+<#> rdfs:comment "Tests for sort builtin" .
+
+
+{ ( 1 5 2 3 ) list:sort ?sorted } => { <> :test1 ?sorted } .
+{ ( "a" "z" "y" "q" ) list:sort ?sorted } => { <> :test2 ?sorted } .
+{ ( "d" :a 2 3 ) list:sort ?sorted } => { <> :test3 ?sorted } .
+{ ( "a" "z" "y" "q" ) list:sort ( "a" "q" "y" "z" ) } => { <> :test4 :SUCCESS } .

@@ -755,6 +755,19 @@ list:append
 		] 	
 	] .
 	
+list:sort
+	a :BuiltinDefinition ;
+	:inputConstraints [
+		:accept [
+			:subject [ :oneOf ( [ :restricts :concreteList ] [ :restricts :variable ] ) ] ;
+			:object [ :oneOf ( [ :restricts :concreteList ] [ :restricts :variable ] ) ] ;
+		] ;
+		:domain [ 
+			:subject [ :restricts :concreteList ] ;
+			:object [ :oneOf ( [ :restricts :concreteList ] [ :restricts :variable ] ) ]
+		]
+	] .
+	
 list:remove
 	a :BuiltinDefinition ;
 	:inputConstraints [

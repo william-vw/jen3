@@ -1,0 +1,16 @@
+@prefix :        <file:///Users/wvw/git/n3/jen3/testing/N3/jen3_reason/list/sort.n3#> .
+@prefix test:    <https://w3c.github.io/N3/tests/test.n3#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log:     <http://www.w3.org/2000/10/swap/log#> .
+@prefix in:      <http://n3.w3c.org/builtin/input#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix math:    <http://www.w3.org/2000/10/swap/math#> .
+@prefix list:    <http://www.w3.org/2000/10/swap/list#> .
+@base <file:///Users/wvw/git/n3/jen3/testing/N3/jen3_reason/list/sort.n3#> .
+
+<file:///Users/wvw/git/n3/jen3/testing/N3/jen3_reason/list/sort.n3>
+    :test2 ( "a" "q" "y" "z" ) ;
+    :test3 ( "2"^^xsd:int "3"^^xsd:int "d" :a ) ;
+    :test1 ( "1"^^xsd:int "2"^^xsd:int "3"^^xsd:int "5"^^xsd:int ) .
+    :test4 :SUCCESS .
