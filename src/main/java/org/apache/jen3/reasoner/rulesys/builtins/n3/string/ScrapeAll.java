@@ -34,17 +34,17 @@ public class ScrapeAll extends StringBuiltin {
 		}, null), true);
 	}
 
-	public static void main(String[] args) throws Exception {
-		String str = new String(Files.readAllBytes(new File("src/main/resources/etc/test.txt").toPath()));
-		Pattern regex = Pattern.compile("(.+?\\s+.+?\\s+.+?\\s+\\.)");
-		
-		Matcher m = regex.matcher(str);
-		if (m.groupCount() != 1)
-			return;
-
-		while (m.find()) {
-			String scraped = m.group(1);
-			System.out.println(scraped);
-		}
-	}
+//	public static void main(String[] args) throws Exception {
+//		String str = new String(Files.readAllBytes(new File("src/main/resources/etc/test.txt").toPath()));
+//		Pattern regex = Pattern.compile("(.+?\\s+.+?\\s+.+?\\s+\\.)");
+//		
+//		Matcher m = regex.matcher(str);
+//		if (m.groupCount() != 1)
+//			return;
+//
+//		while (m.find()) {
+//			String scraped = m.group(1);
+//			System.out.println(scraped);
+//		}
+//	}
 }

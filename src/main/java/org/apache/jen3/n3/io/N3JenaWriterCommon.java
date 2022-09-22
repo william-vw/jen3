@@ -264,8 +264,8 @@ public class N3JenaWriterCommon implements RDFWriter {
 		write(model, model.getNsPrefixMap(), false, output, base, 0);
 	}
 
-	protected synchronized void write(Model model, Map<String, String> prefixMap, boolean nested,
-			OutputStream output, String base, int initialIndent) {
+	protected synchronized void write(Model model, Map<String, String> prefixMap, boolean nested, OutputStream output,
+			String base, int initialIndent) {
 
 		// unique per top-level N3 model
 		spec = ((N3Model) model).getSpec();
@@ -289,8 +289,8 @@ public class N3JenaWriterCommon implements RDFWriter {
 		}
 	}
 
-	protected void write(Model baseModel, boolean nested, Writer _out, String base,
-			int initialIndent) throws IOException {
+	protected void write(Model baseModel, boolean nested, Writer _out, String base, int initialIndent)
+			throws IOException {
 
 		this.model = baseModel;
 
@@ -343,8 +343,7 @@ public class N3JenaWriterCommon implements RDFWriter {
 	protected void processModel(Model model, boolean nested) throws IOException {
 		if (usePrefixes) {
 			reversePrefixMap.clear();
-			for (Iterator<Entry<String, String>> iter = prefixMap.entrySet().iterator(); iter
-					.hasNext();) {
+			for (Iterator<Entry<String, String>> iter = prefixMap.entrySet().iterator(); iter.hasNext();) {
 				Entry<String, String> e = iter.next();
 				String prefix = e.getKey();
 				String uri = e.getValue();
@@ -423,10 +422,12 @@ public class N3JenaWriterCommon implements RDFWriter {
 		out.incIndent(indentProperty);
 
 		ClosableIterator<Resource> iter = preparePropertiesForSubject(subject);
-		writeSubjectAndProperties(subject, iter);
+		if (iter.hasNext()) {
+			writeSubjectAndProperties(subject, iter);
 
-		out.decIndent(indentProperty);
-		out.println(" .");
+			out.decIndent(indentProperty);
+			out.println(" .");
+		}
 	}
 
 	protected void writeSubjectAndProperties(Resource subj, ClosableIterator<Resource> iter) {
@@ -789,8 +790,7 @@ public class N3JenaWriterCommon implements RDFWriter {
 
 		Iterator<Node_QuantifiedVariable> varIt = q.getVariables();
 		vars.append(Streams.stream(varIt).filter(v -> !v.isQuickVariable())
-				.map(n -> formatURI(((QuantifiedVariable) n).getName()))
-				.collect(Collectors.joining(", ")));
+				.map(n -> formatURI(((QuantifiedVariable) n).getName())).collect(Collectors.joining(", ")));
 
 		if (vars.length() == 0)
 			return null;

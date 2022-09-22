@@ -1165,6 +1165,10 @@ public class N3ModelImpl extends ModelCom implements N3Model, DeductionListener 
 		public N3Feedback getFeedback(N3MistakeTypes mistake) {
 			return feedbacks.get(mistake);
 		}
+
+		public Map<N3MistakeTypes, N3Feedback> getFeedbacks() {
+			return feedbacks;
+		}
 	}
 
 	public interface N3EventListener {

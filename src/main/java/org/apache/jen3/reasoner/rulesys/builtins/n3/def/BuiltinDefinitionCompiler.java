@@ -388,7 +388,7 @@ public class BuiltinDefinitionCompiler extends BuiltinDefinitionMarshaller {
 	public List<BuiltinDefinition> unmarshall(File definSrc, boolean custom, BuiltinConfig config) throws Exception {
 		setGenPck(definSrc, custom, config);
 
-		System.out.println("(loading builtins: " + genPck + ")");
+//		System.out.println("(loading builtins: " + genPck + ")");
 		Class cls = Class.forName(genPck + ".AllBuiltinDefinitions");
 		return (List<BuiltinDefinition>) cls.getDeclaredMethod("getAll").invoke(null);
 	}

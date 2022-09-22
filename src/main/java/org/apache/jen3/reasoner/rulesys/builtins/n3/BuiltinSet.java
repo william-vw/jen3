@@ -64,7 +64,7 @@ public class BuiltinSet {
 	}
 
 	private void loadBuiltins(BuiltinConfig config) {
-		long start = System.currentTimeMillis();
+//		long start = System.currentTimeMillis();
 
 		boolean custom = false;
 		File definSrc = null;
@@ -116,9 +116,9 @@ public class BuiltinSet {
 		reservedNs.add(N3Log.uri);
 		reservedNs.add(N3Reason.uri);
 
-		long end = System.currentTimeMillis();
-		long time = (end - start);
-		Log.warn(BuiltinSet.class, "loaded definitions (" + time + "ms)");
+//		long end = System.currentTimeMillis();
+//		long time = (end - start);
+//		Log.warn(BuiltinSet.class, "loaded definitions (" + time + "ms)");
 	}
 
 	private List<BuiltinDefinition> parseBuiltinDefinitions(InputStream definIn) throws Exception {

@@ -385,11 +385,13 @@ public class N3ModelSpec {
 
 	public N3ModelSpec from(N3ModelSpec parentSpec) {
 		this.skolemNs = parentSpec.getSkolemNs();
+		this.feedbacks = new HashMap<>(parentSpec.getFeedbacks());
 		return this;
 	}
 
 	public N3ModelSpec from(N3GraphConfig config) {
 		this.builtinConfig = config.getBuiltinConfig();
+		this.feedbacks = new HashMap<>(config.getFeedbacks());
 		return this;
 	}
 }
