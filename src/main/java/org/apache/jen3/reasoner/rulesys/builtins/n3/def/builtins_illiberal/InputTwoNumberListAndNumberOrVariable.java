@@ -19,7 +19,7 @@ public class InputTwoNumberListAndNumberOrVariable extends InputConstraintsDefin
     public InputTwoNumberListAndNumberOrVariable(BuiltinDefinition builtin) {
         super(builtin, "http://www.w3.org/2000/10/swap/builtin#twoNumberListAndNumberOrVariable");
         addClause(ACCEPT, new SubjectObjectStatementIC(this, new OneOfIC(new ListIC(new Cardinality(EXACT, 2), new OneOfIC(new NumberableIC(), new VariableIC())), new VariableIC()), new OneOfIC(new NumberableIC(), new VariableIC()), null));
-        addClause(DOMAIN, new SubjectObjectStatementIC(this, new ListIC(new Cardinality(EXACT, 2), new OneOfIC(new NumberableIC(), new VariableIC())), new OneOfIC(new NumberableIC(), new VariableIC()), null));
+        addClause(DOMAIN, new SubjectObjectStatementIC(this, new ListIC(new Cardinality(EXACT, 2), new NumberableIC()), new OneOfIC(new NumberableIC(), new VariableIC()), null));
         addClause(NOT_BOUND, new BoolStatementIC(this, false));
     }
 }
