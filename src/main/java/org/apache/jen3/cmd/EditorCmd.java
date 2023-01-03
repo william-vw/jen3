@@ -25,9 +25,6 @@ import org.apache.jen3.rdf.model.ModelFactory;
 
 public class EditorCmd {
 
-	// example:
-	// -n3 /Users/wvw/git/expl/jen3-explain/src/main/resources/proofs/swap/diabetes_case1.ttl -explain -folder /Users/wvw/git/n3/n3-editor-js/lib/jen3
-
 	public static void main(String[] args) throws Exception {
 		Options options = new Options();
 		options.addOption(Option.builder("n3").argName("n3").hasArg().desc("input N3 code")
